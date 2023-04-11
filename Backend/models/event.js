@@ -8,7 +8,12 @@ const eventSchema = new mongoose.Schema({
   location: { type: String, required: true },
   attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   participants: [],
-  image: { type: String }// new image field,
+  image: { type: String },// new image field,
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
 
 
 });

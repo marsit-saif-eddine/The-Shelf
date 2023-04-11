@@ -1,6 +1,8 @@
 
 const Event = require("../../models/event");
 const user=require("../../models/user")
+const Review = require('../../models/reviewSchema');
+
 var mongoose = require('mongoose');
 const express = require('express');
 const { validationResult } = require('express-validator');
@@ -18,14 +20,20 @@ exports.getallevents = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 // Get an event by ID
 
-exports.geteventsbyid= async (req, res) => {
+exports.geteventsbyid = async (req, res) => {
   try {
     const { id } = req.params;
-    const event = await Event.findById(id);
+    const event = await Event.findById(id).populate('reviews');
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
     res.json(event);
+    console.log(event)
   } catch (err) {
+    console.error(err); // Use `err` instead of `error`
     res.status(500).json({ message: err.message });
   }
 };
@@ -62,20 +70,8 @@ console.log(event)
     res.status(500).json({ message: err.message });
   }
 };
-// exports.addevents=async (req, res) => {
-//   const event = new Event({
-//     name: req.body.name,
-//     description: req.body.description,
-//     startDate: req.body.startDate,
-//     endDate: req.body.endDate,
-//     location: req.body.location
-//   });
-//   try {
-//     const newEvent = await event.save();
-//     res.status(201).json(newEvent);
-//   } catch (err) {
-//     res.status(400).json({ message: err.message });
-//   }};
+
+
 // Update an event by ID
 exports.updateEvent = async (req, res) => {
   // Check for validation errors
@@ -90,17 +86,9 @@ exports.updateEvent = async (req, res) => {
     res.json(event);
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
+  } 
 };
-// exports.updateevents=async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
-//     res.json(event);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+
 
 // Delete an event by ID
 
@@ -175,178 +163,60 @@ event.reported
     res.status(500).send({ message: err.message });
   }
 };
+exports.reviewadd = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    console.log(event._id)
+    const review = new Review({
+      eventId: req.params.id,
+      comment: req.body.comment.comment,
+      rating: req.body.comment.rating,
+    });
+    await review.save();
+    event.reviews.push(review._id); // add the review's _id to the reviews array of the associated event
+    await event.save(); // save the updated event
+    res.json(review);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+exports.reviews=async (req, res) => {
+  try {
+    const reviews = await Review.find({ eventId: req.params.id });
+    res.json({ data: reviews });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.reviewdelete=async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.eventId);
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    const review = await Review.findOneAndDelete({
+      _id: req.params.reviewId,
+      event: event,
+    });
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+    res.json({ message: 'Review deleted' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const Event = require("../models/event.js");
-// const jwt = require('jsonwebtoken');
-// const bcrypt = require("bcryptjs");
-// const { validationResult } = require('express-validator');
-// var mongoose = require('mongoose');
-// app.post('/api/upload-by-link', async (req,res) => {
-//     const {link} = req.body;
-//     const newName = 'photo' + Date.now() + '.jpg';
-//     await imageDownloader.image({
-//       url: link,
-//       dest: '/tmp/' +newName,
-//     });
-//     const url = await uploadToS3('/tmp/' +newName, newName, mime.lookup('/tmp/' +newName));
-//     res.json(url);
-//   });
-  
-//   const photosMiddleware = multer({dest:'/tmp'});
-//   app.post('/api/upload', photosMiddleware.array('photos', 100), async (req,res) => {
-//     const uploadedFiles = [];
-//     for (let i = 0; i < req.files.length; i++) {
-//       const {path,originalname,mimetype} = req.files[i];
-//       const url = await uploadToS3(path, originalname, mimetype);
-//       uploadedFiles.push(url);
-//     }
-//     res.json(uploadedFiles);
-//   });
-  
-
-  
-// app.post('/api/upload', photosMiddleware.array('photos', 100), async (req,res) => {
-//   const uploadedFiles = [];
-//   for (let i = 0; i < req.files.length; i++) {
-//     const {path,originalname,mimetype} = req.files[i];
-//     const url = await uploadToS3(path, originalname, mimetype);
-//     uploadedFiles.push(url);
-//   }
-//   res.json(uploadedFiles);
-// });
-  
-//   app.get('/api/user-events', (req,res) => {
-//     mongoose.connect(process.env.DBADDRESS);
-//     const {token} = req.cookies;
-//     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-//       const {id} = userData;
-//       res.json( await Place.find({owner:id}) );
-//     });
-//   });
-  
-//   app.get('/api/events/:id', async (req,res) => {
-//     mongoose.connect(process.env.DBADDRESS);
-//     const {id} = req.params;
-//     res.json(await Place.findById(id));
-//   });
-  
-//   app.put('/api/events', async (req,res) => {
-//     mongoose.connect(process.env.DBADDRESS);
-//     const {token} = req.cookies;
-//     const {
-//       id, title,address,addedPhotos,description,
-//       perks,extraInfo,checkIn,checkOut,maxGuests,price,
-//     } = req.body;
-//     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-//       if (err) throw err;
-//       const placeDoc = await Place.findById(id);
-//       if (userData.id === placeDoc.owner.toString()) {
-//         placeDoc.set({
-//           title,address,photos:addedPhotos,description,
-//           perks,extraInfo,checkIn,checkOut,maxGuests,price,
-//         });
-//         await placeDoc.save();
-//         res.json('ok');
-//       }
-//     });
-//   });
-  
-//   app.get('/api/events', async (req,res) => {
-//     mongoose.connect(process.env.DBADDRESS);
-//     res.json( await Place.find() );
-//   });
- 
-// async function uploadToS3(path, originalFilename, mimetype) {
-//   const client = new S3Client({
-//     region: 'us-east-1',
-//     credentials: {
-//       accessKeyId: process.env.S3_ACCESS_KEY,
-//       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-//     },
-//   });
-//   const parts = originalFilename.split('.');
-//   const ext = parts[parts.length - 1];
-//   const newFilename = Date.now() + '.' + ext;
-//   await client.send(new PutObjectCommand({
-//     Bucket: bucket,
-//     Body: fs.readFileSync(path),
-//     Key: newFilename,
-//     ContentType: mimetype,
-//     ACL: 'public-read',
-//   }));
-//   return `https://${bucket}.s3.amazonaws.com/${newFilename}`;
-// }
-
-
-
-
-// const express = require('express');
-// const router = express.Router();
-// const Event = require('../models/event');
-
-// // Get all events
-// router.get('/', async (req, res) => {
-//   try {
-//     const events = await Event.find();
-//     res.json(events);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
-
-// const bodyParser = require('body-parser');
-
-// app.use(bodyParser.json());
-
-// app.post('/api/events', (req, res) => {
-//   const { name, description, startDate, endDate, location } = req.body;
-
-//   // Here, you could save the new event to your database or do any other necessary processing
-//   // For example:
-//   const newEvent = {
-//     name,
-//     description,
-//     startDate,
-//     endDate,
-//     location,
-//   };
-
-//   res.status(201).json(newEvent);
-// });
-
-
-// // Update an event by ID
-// router.put('/:id', async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
-//       res.json(event);
-//     } catch (err) {
-//       res.status(500).json({ message: err.message });
-//     }
-//   });
-  
-//   app.listen(5000, () => {
-//     console.log('Server started on port 5000');
-//   });
-// module.exports = router;

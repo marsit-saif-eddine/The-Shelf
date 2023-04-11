@@ -21,6 +21,14 @@ export default [
         action: 'client',
         resource: 'client',
      },
+     {
+      id: 'event',
+      title: 'Events',
+      icon: <MessageSquare />,
+      navLink: '/apps/events',
+      action: 'client',
+      resource: 'client',
+   },
   {
     id: 'apps',
     title: 'Apps',
