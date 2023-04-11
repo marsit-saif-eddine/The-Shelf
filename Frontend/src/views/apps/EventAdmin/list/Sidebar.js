@@ -86,12 +86,12 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
           role,
           avatar: '',
           status: 'active',
-          title: data.,
+          title: data.title,
           currentPlan: plan,
           billing: 'auto debit',
           company: data.company,
           contact: data.contact,
-          fullName: data.fullName,
+          description: data.description,
           username: data.username,
           country: data.country.value
         })

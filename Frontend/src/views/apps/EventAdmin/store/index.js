@@ -25,7 +25,7 @@ export const getData = createAsyncThunk('appEvents/getData', async params => {
   
   return {
     params,
-    data: response.data.events,
+    data: response.data.,
     totalPages: response.data.total
     
   }

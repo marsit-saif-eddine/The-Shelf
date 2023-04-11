@@ -22,7 +22,11 @@ const KBCategoryQuestion = lazy(() => import('../../views/pages/knowledge-base/K
 const PagesRoutes = [
   {
     path: '/pages/profile',
-    element: <Profile />
+    element: <Profile />,
+    meta: {
+      action: 'read',
+      resource: 'ACL'
+    }
   },
   {
     path: '/pages/faq',
