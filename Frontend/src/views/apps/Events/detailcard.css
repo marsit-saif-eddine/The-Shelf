@@ -1,0 +1,82 @@
+.card-app-design {
+    border: 1px solid #851eec4f;
+    border-radius: 5px;
+    overflow: hidden;
+    flex: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: center;
+  }
+  
+  .event-card-header {
+    position: relative;
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .event-card-img {
+    border-radius: 70px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    max-width: 22%;
+    height: auto;
+    width:40%;
+    float: left;
+  }
+
+  
+  .event-card-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .event-card-body {
+    padding: 10px;
+  }
+  
+  .event-card-subtitle {
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0;
+    color: #fff;
+  }
+  
+  .event-card-text {
+    margin: 10px 0;
+    font-weight: bold;
+
+
+  }
+  
+  .event-card-reviews-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .event-card-reviews-text {
+    margin: 10px 0;
+  }
+  
+  .event-card-reviews-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .event-card-review {
+    margin: 10px 0;
+  }
+  
+  .event-card-review-text {
+    margin: 0;
+  }
+  
+  .event-card-review-form {
+    margin-top: 20px;
+  }
+  

@@ -24,6 +24,11 @@ const UserView = lazy(() => import('../../views/apps/user/view'))
 
 const Roles = lazy(() => import('../../views/apps/roles-permissions/roles'))
 const Permissions = lazy(() => import('../../views/apps/roles-permissions/permissions'))
+const Events = lazy(() => import('../../views/apps/Events/EventsCards'))
+const Eventsdetails = lazy(() => import('../../views/apps/Events/EventDetail'))
+const EventsaddForm = lazy(() => import('../../views/apps/Events/NewEventForm'))
+
+const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/EventTable'))
 
 const AppRoutes = [
   {
@@ -66,6 +71,67 @@ const AppRoutes = [
     }
     
   },
+  
+  {
+    path: '/eventsdetail/:id',
+    element: <Eventsdetails />,
+    meta: {
+      appLayout: true,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },
+  {
+    path: '/events/list',
+    element: <Eventsadmin />,
+    meta: {
+      appLayout: true,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+    
+  },
+  {
+    path: '/eventsform',
+    element: <EventsaddForm />,
+    meta: {
+      appLayout: true,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },
+  {
+    path: '/apps/events',
+    element: <Events />,
+    meta: {
+      appLayout: true,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },
+  // {
+  //   path: '/apps/events/update',
+  //   element: <EventsUpdate />,
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'chat-application',
+  //     layout: 'horizontal',
+  //     action: 'client',
+  //     resource: 'client'
+  //   }
+    
+  // },
   {
     element: <Todo />,
     path: '/apps/todo',

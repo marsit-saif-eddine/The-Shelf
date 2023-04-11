@@ -22,7 +22,6 @@ import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper'
 // ** Route Components
 import PublicRoute from '@components/routes/PublicRoute'
 import PrivateRoute from '@components/routes/PrivateRoute'
-
 // ** Utils
 import { isObjEmpty } from '@utils'
 
@@ -63,7 +62,8 @@ const adminRoutes = [
   ...PageLayoutsRoutes,
   ...FormRoutes,
   ...TablesRoutes,
-  ...ChartsRoutes
+  ...ChartsRoutes,
+
 ]
 
 const getRouteMeta = route => {
