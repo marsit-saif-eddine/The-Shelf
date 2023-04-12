@@ -78,8 +78,7 @@ const EventDetail = () => {
 
 //*********************** */
 
-
-
+<div className='card-container'>
 <Card className='card-app-design'>
 <img
       className="event-card-img"
@@ -127,6 +126,7 @@ const EventDetail = () => {
         </div>
       </CardBody>
     </Card>
+    </div>
 
 
 

@@ -59,6 +59,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import '../Events/add.css'
+import '../Events/new.css'
 
 
 
@@ -71,8 +72,15 @@ const NewEventForm = () => {
   const [endDate, setEndDate] = useState('');
   const [location, setLocation] = useState('');
   const [image, setImage] = useState(null);
-  const handleNameChange = e => setName(e.target.value);
-  const handleDescriptionChange = e => setDescription(e.target.value);
+  const [nameError, setNameError] = useState('');
+  const [startDateError, setStartDateError] = useState('');
+  const [endDateError, setEndDateError] = useState('');
+  const [locationError, setLocationError] = useState('');
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    setNameError('');
+  };
+    const handleDescriptionChange = e => setDescription(e.target.value);
   const handleStartDateChange = (event) => {
     const formattedDate = format(new Date(event.target.value), 'yyyy-MM-dd');
     setStartDate(formattedDate);
@@ -138,7 +146,16 @@ const NewEventForm = () => {
 //   // );
 //   // };
 const handleSubmit = (event) => {
+  
   event.preventDefault();
+     // validate inputs
+     let errors = false;
+
+     if (name.trim() === "") {
+      window.alert("Name is required");
+      setNameError("Name is required");
+      return;
+    }
   const formData = new FormData();
   formData.append('name', name);
   formData.append('startDate', startDate);
@@ -154,7 +171,7 @@ const handleSubmit = (event) => {
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      navigate('/eventcards');
+      navigate('/pages/profile');
     })
     .catch(error => console.log(error));
 }
@@ -201,6 +218,8 @@ const handleSubmit = (event) => {
       <div className="form-group">
         <label htmlFor="name">Name:</label>
         <input type="text" className="form-control" id="name" value={name} onChange={handleNameChange} required />
+        {nameError && <div className="error">{nameError}</div>}
+
       </div>
       <div className="form-group">
         <label htmlFor="description">Description:</label>

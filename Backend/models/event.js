@@ -13,7 +13,8 @@ const eventSchema = new mongoose.Schema({
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }]
+  }],
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 
 
 });
