@@ -7,6 +7,7 @@ const Todo = lazy(() => import('../../views/apps/todo'))
 const Email = lazy(() => import('../../views/apps/email'))
 const Kanban = lazy(() => import('../../views/apps/kanban'))
 const Calendar = lazy(() => import('../../views/apps/calendar'))
+const Quiz = lazy(() => import('../../views/apps/quiz'))
 
 const InvoiceAdd = lazy(() => import('../../views/apps/invoice/add'))
 const InvoiceList = lazy(() => import('../../views/apps/invoice/list'))
@@ -29,6 +30,7 @@ const Eventsdetails = lazy(() => import('../../views/apps/Events/EventDetail'))
 const EventsaddForm = lazy(() => import('../../views/apps/Events/NewEventForm'))
 
 const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/EventTable'))
+const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
 
 const AppRoutes = [
   {
@@ -132,6 +134,31 @@ const AppRoutes = [
   //   }
     
   // },
+  {
+    path: '/apps/quiz',
+    element: <Quiz />,
+    meta: {
+      appLayout: true,
+      className: 'quiz-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },
+  {
+    path: '/pages/profile/quiz',
+    element: <MyQuizzes />,
+    meta: {
+      appLayout: true,
+      className: 'quiz-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },
+ 
   {
     element: <Todo />,
     path: '/apps/todo',

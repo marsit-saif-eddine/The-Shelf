@@ -18,11 +18,20 @@ const NotAuthorized = lazy(() => import('../../views/pages/misc/NotAuthorized'))
 const KnowledgeBase = lazy(() => import('../../views/pages/knowledge-base/KnowledgeBase'))
 const KnowledgeBaseCategory = lazy(() => import('../../views/pages/knowledge-base/KnowledgeBaseCategory'))
 const KBCategoryQuestion = lazy(() => import('../../views/pages/knowledge-base/KnowledgeBaseCategoryQuestion'))
+const MyQuiz = lazy(() => import('../../views/pages/profile/MyQuizzes'))
 
 const PagesRoutes = [
   {
     path: '/pages/profile',
     element: <Profile />,
+    meta: {
+      action: 'read',
+      resource: 'ACL'
+    }
+  },
+  {
+    path: '/pages/profile/quiz',
+    element: <MyQuiz />,
     meta: {
       action: 'read',
       resource: 'ACL'

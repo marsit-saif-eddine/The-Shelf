@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+const quizController = require("../../controllers/quiz-management/quiz");
+
+router.post("/addquiz", quizController.addQuiz);
+router.get("/allquiz", quizController.getAllQuiz);
+router.get("/:id", quizController.getQuizById);
+router.delete("/delete/:id", quizController.deleteQuiz);
+
+module.exports = router;

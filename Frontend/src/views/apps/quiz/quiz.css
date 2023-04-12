@@ -1,0 +1,42 @@
+.add-ques{
+    border-radius: 8px;
+    padding: 25px 22px;
+    display: flex;
+    flex-direction: column;
+    width: 93%;
+    margin-left: 10px;
+    padding-top: 0px;
+}
+.add-ques-top{
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 10px;
+} 
+.container{
+    overflow-y: scroll ;
+}
+.select{
+    height: 40px;
+    width:230px;
+    padding: 5px 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 3px;
+    border-color: rgb(176, 175, 175);
+    background: transparent;
+}
+.add-ques-body{
+    display: flex;
+    flex-direction: row;
+}
+.add-footer{
+    display: flex;
+    flex-direction: row;
+}
+
+.ques-input{
+    padding-bottom: 5px;
+}
+.add-option{
+    padding-bottom: 5px;
+}

@@ -60,6 +60,7 @@ module.exports = {
     // 'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true }],
     // 'quote-props': ['error', 'as-needed'],
     // // quotes: ['error', 'prefer-single'],
+    // quotes: ['error', 'prefer-single'],
     // semi: ['error', 'never'],
     // 'semi-spacing': 'error',
     // 'space-before-blocks': 'error',

@@ -59,6 +59,12 @@ const ProfileHeader = ({ data }) => {
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
               </Nav>
               <Button color='primary'>
                 <Edit className='d-block d-md-none' size={14} />

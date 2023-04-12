@@ -6,6 +6,8 @@ dotenv.config();
 const chatRouter = require("./routes/chat/chat.js")
 const userssRouter = require("./routes/user.js");
 const eventsRouter= require("./routes/event");
+const quizRouter = require("./routes/quiz/quiz.js");
+
 const booksRouter = require("./routes/book/book.js");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -34,7 +36,8 @@ app.use(
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const proxy = require("http-proxy-middleware");
 const user = require("./models/user.js");
-const book = require("../backend/models/book.js");
+const book = require("./models/book.js");
+const quiz = require("./models/quiz.js");
 //const book = require("../../models/book.js");
 
 
@@ -50,6 +53,7 @@ app.use("/signUp",signUpRoutes);
 app.use("/user",userssRouter);
 app.use("/events",eventsRouter)
 app.use("/book",booksRouter);
+app.use("/quiz",quizRouter);
 // app.use("/appChat",chatRouter);
 
 
