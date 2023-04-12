@@ -1,0 +1,31 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .form-wrapper {
+    width: 50%;
+  }
+  
+  /* add hover effect to form inputs */
+  .form-control:hover {
+    border-color: #0069d9;
+  }
+  .form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+  }
+  /* add hover effect to submit button */
+  .btn:hover {
+    background-color: #0069d9;
+    border-color: #0069d9;
+  }
+  
+  /* add animation to submit button */
+  .btn {
+    transition: all 0.3s ease;
+  }
+  
