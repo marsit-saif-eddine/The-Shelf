@@ -1,4 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import AspectRatio from '@mui/joy/AspectRatio';
+import Card from '@mui/joy/Card';
+import CardOverflow from '@mui/joy/CardOverflow';
+import Divider from '@mui/joy/Divider';
+import Typography from '@mui/joy/Typography';
+import IconButton from '@mui/joy/IconButton';
+import Favorite from '@mui/icons-material/Favorite';
 import axios from 'axios';
 import UpdateEventForm from "../Events/UpdateEventForm"
 import './events.css';
@@ -143,19 +150,8 @@ function EventsCards() {
 
   return (
 
-    <div>
      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-  <Link
-    className="inline-flex gap-1 bg-primary text-white py-1 px-4 rounded-full ml-auto"
-    to={'/eventsform'}
-    style={{ borderRadius: '999px', fontSize: '0.7rem', padding: '0.5rem' }}
-    >
-    <svg xmlns="http://www.w3.org/2000/svg" width={10} viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-      <path fillRule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clipRule="evenodd" />
-    </svg>
-    Add new event
-  </Link>
-</div>
+
 
     {/* Render the error message if it exists */}
     {errorMessage && (
@@ -163,43 +159,48 @@ function EventsCards() {
         {errorMessage}
       </div>
     )}
-  
-    <div className="card-container">
+<div className="card-container">
       {events.map((event) => (
-        <div key={event._id} className="card-rectangular">
-          <div className="card-rectangular-image">
-            <img src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`} alt={event.name} />
-          </div>
-          <div className="card-rectangular-content">
-            <h5 className="card-title">
-              <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
-            </h5>
-            <h6 className="card-subtitle mb-2 text-muted">{event.startDate}</h6>
-            <h6 className="card-subtitle mb-2 text-muted">{event.endDate}</h6>
-            <p className="card-text">{event.description}</p>
-            <p className="card-text">{event.location}</p>
-            <div className="card-rectangular-buttons">
-              <button className="btn btn-pastel-warning btn-sm" onClick={() => handleUpdate(event)}>
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-              <button className="btn btn-pastel-danger btn-sm" onClick={() => handleDelete(event._id)}>
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </button>
-              <button className="btn btn-pastel-info btn-sm" onClick={() => reportEvent(event._id)}>
-                <FontAwesomeIcon icon={faFlag} />
-              </button>
-              {event.participants.includes(localStorage.getItem('userId')) ? (
-                <button className="btn btn-pastel-success btn-sm" onClick={() => unparticipateEvent(event._id)}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-              ) : (
-                <button className="btn btn-pastel-primary btn-sm" onClick={() => participateEvent(event._id)}>
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+<Card sx={{ width: 320, backgroundColor: '#161d31' }}>
+      <CardOverflow sx={{  backgroundColor: '#161d31' }}>
+        <AspectRatio ratio="2">
+          <img
+            src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`} alt={event.name} 
+            loading="lazy"
+            
+          />
+        </AspectRatio>
+   
+      </CardOverflow>
+
+      <Typography level="h1" sx={{ fontSize: 'md', mt: 2 }}>
+      <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
+
+      </Typography>
+      
+
+      <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
+        {/* <Link href="#multiple-actions">{event.location}</Link> */}
+      </Typography>
+      <Divider inset="context" />
+      <CardOverflow
+        variant="soft"
+        sx={{
+          display: 'flex',
+          gap: 1.5,
+          py: 1.5,
+          px: 'var(--Card-padding)',
+          bgcolor: '#161d31',
+        }}
+      >
+        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+          {event.startDate}
+        </Typography>
+        <Divider orientation="vertical" />
+        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+        {event.endDate}        </Typography>
+      </CardOverflow>
+    </Card>
       ))}
       {selectedEvent && <UpdateEventForm event={selectedEvent} onSubmit={updateEvent} onEventUpdate={handleEventUpdate} />}
     </div>
@@ -216,8 +217,3 @@ function EventsCards() {
 }
 
 export default EventsCards;
-
-
-
-
-

@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 // ** Icons Imports
 import { AlignJustify, Rss, Info, Image, Users, Edit } from 'react-feather'
+import { Link } from 'react-router-dom';
 
 // ** Reactstrap Imports
 import { Card, CardImg, Collapse, Navbar, Nav, NavItem, NavLink, Button } from 'reactstrap'
@@ -61,9 +62,14 @@ const ProfileHeader = ({ data }) => {
                 </NavItem>
               </Nav>
               <Button color='primary'>
-                <Edit className='d-block d-md-none' size={14} />
-                <span className='fw-bold d-none d-md-block'>Edit</span>
-              </Button>
+  <Edit className='d-block d-md-none' size={14} />
+  <span className='fw-bold d-none d-md-block'>
+    <Link to='/eventsform'>
+      Add new event
+    </Link>
+  </span>
+</Button>
+
             </div>
           </Collapse>
         </Navbar>
@@ -73,3 +79,6 @@ const ProfileHeader = ({ data }) => {
 }
 
 export default ProfileHeader
+
+
+

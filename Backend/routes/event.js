@@ -9,6 +9,7 @@ const {authorize} = require('../middleware/authorize');
 const middlewareupload= require('../middleware/uploadimage')
 const Review = require('../models/reviewSchema');
 const {validateEvent}= require('../middleware/validateEvent');
+const event = require('../models/event');
 
 
 router.get("/",eventController.getallevents);
@@ -82,5 +83,29 @@ router.post('/events/favorite', authorize(["user"]), async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+router.get('/search', async (req, res) => {
+  const searchText = req.query.query;
+if (!searchText) {
+  res.status(400).json({ message: 'Query parameter is required' });
+} else {
+  const regex = new RegExp(searchText, 'i');
+  try {
+    const events = await event.find({
+      $or: [
+        { name: { $regex: regex } },
+        { description: { $regex: regex } },
+        { location: { $regex: regex } }
+      ],
+    });
+    res.status(200).json(events);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to retrieve offers' });
+  }
+}
+});  
+
+
 
 module.exports = router
