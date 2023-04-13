@@ -5,3 +5,4 @@ const chatController = require('../../controllers/chat/chat');
 
 
 router.post('/getChatContacts', chatController.getChatAndContacts)
+module.exports = router;

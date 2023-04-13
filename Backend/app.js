@@ -54,7 +54,7 @@ app.use("/user",userssRouter);
 app.use("/events",eventsRouter)
 app.use("/book",booksRouter);
 app.use("/quiz",quizRouter);
-// app.use("/appChat",chatRouter);
+app.use("/appChat",chatRouter);
 
 
 
