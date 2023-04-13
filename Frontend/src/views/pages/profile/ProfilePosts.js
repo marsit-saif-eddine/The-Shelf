@@ -34,21 +34,13 @@ const ProfilePosts = ({ data }) => {
 
   //** ComponentDidMount
   useEffect(() => {
-    
     if (isUserLoggedIn() !== null) {
-      setUserData(JSON.parse(localStorage.getItem('userData')))
-     
+      setUserData(JSON.parse(localStorage.getItem('userData')));
     }
-  }, [])
+  }, []);
+  
 
-  useEffect(() => {
-      axios.get(`/pages/profile?userconnected=${userData.id}`).then(({data}) => {
-        setEvents(data);})
-    }
-  , [])
-
-  console.log(userData)
-
+  console.log(userData);
 
 
   const handleUpdate = (event) => {
@@ -57,11 +49,13 @@ const ProfilePosts = ({ data }) => {
   };
 
   useEffect(() => {
-    fetch('http://localhost:5000/events')
-      .then(response => response.json())
-      .then(data => setEvents(data))
-      .catch(error => console.log(error));
-  }, []);
+    if (userData !== null) {
+      fetch(`http://localhost:5000/events?userconnected=${userData.id}`)
+        .then(response => response.json())
+        .then(data => setEvents(data))
+        .catch(error => console.log(error));
+    }
+  }, [userData]);
 
 
   // const handleUpdate = async (_id) => {
