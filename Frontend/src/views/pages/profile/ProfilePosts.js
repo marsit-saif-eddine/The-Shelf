@@ -40,7 +40,6 @@ const ProfilePosts = ({ data }) => {
   }, []);
   
 
-  console.log(userData);
 
 
   const handleUpdate = (event) => {
@@ -55,6 +54,7 @@ const ProfilePosts = ({ data }) => {
         .then(data => setEvents(data))
         .catch(error => console.log(error));
     }
+    console.log(events)
   }, [userData]);
 
 
@@ -295,8 +295,7 @@ const ProfilePosts = ({ data }) => {
   //   }
   //   return renderPosts()
   // }
-
-    return events.map(event => {
+    return events.length > 0 ?  events.map(event => {
       return (
         
         <Card key={event._id}>
@@ -425,7 +424,7 @@ const ProfilePosts = ({ data }) => {
         
 
       )
-    })
+    }) : <></>;
   }
   return renderPosts()
 }

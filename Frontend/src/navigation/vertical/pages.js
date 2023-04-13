@@ -19,7 +19,7 @@ export default [
         title: 'Profile',
         icon: <Circle size={12} />,
         permissions: ['admin', 'editor'],
-        navLink: '/pages/profile',
+        navLink: '/pages/profile/:id',
         collapsed: true
       },
       {

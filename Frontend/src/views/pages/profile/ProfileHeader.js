@@ -8,23 +8,59 @@ import { Link } from 'react-router-dom';
 // ** Reactstrap Imports
 import { Card, CardImg, Collapse, Navbar, Nav, NavItem, NavLink, Button } from 'reactstrap'
 
-const ProfileHeader = ({ data }) => {
+
+// ** Custom Components
+import Avatar from '@components/avatar'
+
+const ProfileHeader = ({ data,selectedUser }) => {
   // ** States
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen(!isOpen)
-
+ // ** render user img
+ const renderUserImg = () => {
+  if (selectedUser !== null && selectedUser.profile_photo) {
+    return (
+      <img
+      width= '100%'
+          height= '100%'
+        alt='user-avatar'
+        src={selectedUser.profile_photo}
+        className='rounded img-fluid'
+      />
+    )
+  } else {
+    return (
+      <Avatar
+        initials
+        color={'light-primary'}
+        className='rounded img-fluid'
+        content={selectedUser.firstname}
+        contentStyles={{
+          borderRadius: 0,
+          fontSize: 'calc(48px)',
+          width: '100%',
+          height: '100%'
+        }}
+        style={{
+          height: '110px',
+          width: '110px'
+        }}
+      />
+    )
+  }
+}
   return (
     <Card className='profile-header mb-2'>
       <CardImg src={data.coverImg} alt='User Profile Image' top />
       <div className='position-relative'>
         <div className='profile-img-container d-flex align-items-center'>
           <div className='profile-img'>
-            <img className='rounded img-fluid' src={data.avatar} alt='Card image' />
+          {renderUserImg()}
           </div>
           <div className='profile-title ms-3'>
-            <h2 className='text-white'>{data.username}</h2>
-            <p className='text-white'>{data.designation}</p>
+            <h2 className='text-white'>{selectedUser.firstname} {selectedUser.lastname}</h2>
+            <p className='text-white'>Reader</p>
           </div>
         </div>
       </div>
