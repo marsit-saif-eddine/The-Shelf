@@ -129,7 +129,7 @@ const AppRoutes = [
     path: '/eventsdetail/:id',
     element: <Eventsdetails />,
     meta: {
-      appLayout: true,
+      appLayout: false,
       className: 'chat-application',
       layout: 'horizontal',
       action: 'client',
@@ -141,7 +141,7 @@ const AppRoutes = [
     path: '/events/list',
     element: <Eventsadmin />,
     meta: {
-      appLayout: true,
+      appLayout: false,
       className: 'chat-application',
       layout: 'vertical',
       action: 'admin',
@@ -153,7 +153,7 @@ const AppRoutes = [
     path: '/eventsform',
     element: <EventsaddForm />,
     meta: {
-      appLayout: true,
+      appLayout: false,
       className: 'chat-application',
       layout: 'horizontal',
       action: 'client',
@@ -165,7 +165,7 @@ const AppRoutes = [
     path: '/apps/events',
     element: <Events />,
     meta: {
-      appLayout: true,
+      appLayout: false,
       className: 'chat-application',
       layout: 'horizontal',
       action: 'client',
@@ -189,7 +189,7 @@ const AppRoutes = [
     path: '/apps/quiz',
     element: <Quiz />,
     meta: {
-      appLayout: true,
+      appLayout: false,
       className: 'quiz-application',
       layout: 'horizontal',
       action: 'client',
@@ -201,7 +201,7 @@ const AppRoutes = [
     path: '/pages/profile/quiz',
     element: <MyQuizzes />,
     meta: {
-      appLayout: true,
+      appLayout: false,
       className: 'quiz-application',
       layout: 'horizontal',
       action: 'client',

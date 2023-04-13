@@ -20,7 +20,7 @@ function Quiz ({quiz}) {
       <Card style={{ width: "28rem" }}  border="secondary">
         <CardHeader>
           <CardTitle>
-          {quiz.questionName}
+          {quiz.quizName}
           </CardTitle>
        
           <CardImg
@@ -31,7 +31,7 @@ function Quiz ({quiz}) {
         />
         </CardHeader>
     <CardBody>
-<CardText> {quiz.questionDescription} </CardText>   
+<CardText> {quiz.quizDescription} </CardText>   
 <a href="#" className="btn btn-outline-primary" onClick={()=>{navigate_to(quiz)}}>Take Quiz</a>     
  </CardBody>
     </Card>

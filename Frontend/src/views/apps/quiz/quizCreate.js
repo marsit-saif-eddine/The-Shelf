@@ -182,7 +182,10 @@ function commitToDb(){
     toast.success('Quiz created successfully!');
 
     }
-
+//
+var user = JSON.parse(localStorage.getItem('userData'));
+console.log("your user id is :"+user.id);
+var userId = user.id;
    
 /////// show book in select /////////////
 const [books, setBooks] = useState([])
@@ -212,8 +215,7 @@ const [books, setBooks] = useState([])
 
       ///////////// current user id/////////////////
      // const [userId, setUserId] = useState(null);
-     const userId = localStorage.getItem("userId");
-     console.log("current user id is "+userId); // current user ID
+    
     //   useEffect(() => {
     //     const token = localStorage.getItem('token');
     

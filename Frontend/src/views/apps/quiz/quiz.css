@@ -12,9 +12,7 @@
     flex-direction: row;
     padding-bottom: 10px;
 } 
-.containers{
-    overflow-y: scroll ;
-}
+
 .select{
     height: 40px;
     width:230px;
