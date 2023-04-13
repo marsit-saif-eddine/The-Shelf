@@ -27,7 +27,7 @@ export default [
      {
       id: 'event',
       title: 'Events',
-      icon: <MessageSquare />,
+      icon: <FileText />,
       navLink: '/apps/events',
       action: 'client',
       resource: 'client',

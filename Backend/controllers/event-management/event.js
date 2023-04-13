@@ -14,10 +14,10 @@ const router = express.Router();
 
 exports.getallevents = async (req, res) => {
   try {
-    const userConnected=req.query('userconnected')
+    const {userconnected}=req.query
     const filter={}
-    if(userConnected){
-      filter._id=userConnected
+    if(userconnected){
+      filter.owner=userconnected
     }
     const events = await Event.find(filter);
     res.json(events);
@@ -53,7 +53,7 @@ exports.addEvent = async (req, res) => {
 
   try {
  
-    const { name, startDate,endDate, description, location ,img} = req.body;
+    const { name, startDate,endDate, description, location ,img,owner} = req.body;
    const updatepath=await img.split('//').join('/');
    console.log(updatepath)
     const event = new Event({
@@ -64,6 +64,7 @@ exports.addEvent = async (req, res) => {
       location,
       participants: [],
       image: updatepath,
+      owner
 
 
     });
