@@ -10,7 +10,9 @@ import {
   CheckSquare,
   ShoppingCart,
   MessageSquare,
-  Award
+  Award,
+  Book
+
 } from 'react-feather'
 
 export default [
@@ -35,6 +37,14 @@ export default [
       title: 'quiz',
       icon: <Award />,
       navLink: '/apps/quiz',
+      action: 'client',
+      resource: 'client',
+   },
+        {
+      id: 'books',
+      title: 'Books',
+      icon: <Book />,
+      navLink: '/apps/books',
       action: 'client',
       resource: 'client',
    },

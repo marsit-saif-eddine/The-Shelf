@@ -26,6 +26,7 @@
     "animate.css": "4.1.1",
     "apexcharts": "^3.35.2",
     "apexcharts-clevision": "^3.28.5",
+    "availity-reactstrap-validation": "^2.7.1",
     "axios": "^0.27.2",
     "axios-mock-adapter": "^1.20.0",
     "bootstrap": "5.1.0",

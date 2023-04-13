@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext , useEffect } from 'react'
+import { useContext , useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 // ** Custom Hooks
@@ -26,7 +26,8 @@ import InputPasswordToggle from '@components/input-password-toggle'
 import { getHomeRouteForLoggedInUser } from '@utils'
 
 // ** Reactstrap Imports
-import { Row, Col, Form, Input, Label, Alert, Button, CardText, CardTitle, UncontrolledTooltip } from 'reactstrap'
+import { Row, Col, Form, Input, Label, Alert, Button, CardText, CardTitle, UncontrolledTooltip, FormFeedback } from 'reactstrap'
+import { AvForm, AvField } from 'availity-reactstrap-validation';
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
@@ -59,6 +60,7 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const ability = useContext(AbilityContext)
+  const [ form, setForm ] = useState({})
   const {
     control,
     setError,
@@ -67,8 +69,7 @@ const Login = () => {
   } = useForm({ defaultValues })
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
-
-
+  
     useEffect(() => {
       
       const query = new URLSearchParams(window.location.search);
@@ -190,8 +191,8 @@ const Login = () => {
               Welcome to TheShelf! 👋
             </CardTitle>
             <CardText className='mb-2'>Please sign-in to your account and start the adventure</CardText>
-            
-            <Form className='auth-login-form mt-2' onSubmit={handleSubmit(onSubmit)}>
+            <AvForm>
+            <Form  className='auth-login-form mt-2' onSubmit={handleSubmit(onSubmit)} noValidate >
               <div className='mb-1'>
                 <Label className='form-label' for='login-email'>
                   Email
@@ -199,15 +200,21 @@ const Login = () => {
                 <Controller
                   id='loginEmail'
                   name='loginEmail'
+                  rules={{ required: true }}
                   control={control}
                   render={({ field }) => (
-                    <Input
+                    <AvField 
                       autoFocus
                       type='email'
                       placeholder='john@example.com'
                       invalid={errors.loginEmail && true}
                       {...field}
+                      validate={{
+                        required: {value: true, errorMessage: 'Please enter your email'},
+                        email: {value: true, errorMessage: 'Please enter a valid email'}
+                      }}
                     />
+                    
                   )}
                 />
               </div>
@@ -225,7 +232,13 @@ const Login = () => {
                   name='password'
                   control={control}
                   render={({ field }) => (
-                    <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
+                    <AvField  className='input-group-merge' type='password' invalid={errors.password && true} {...field}
+                    validate={{
+                      required: {value: true, errorMessage: 'Please enter your password'},
+                      //minLength: {value: 6, errorMessage: 'Your password must be between 6 and 16 characters long'},
+                      //maxLength: {value: 16, errorMessage: 'Your password must be between 6 and 16 characters long'}
+                    }}
+                    />
                   )}
                 />
               </div>
@@ -239,6 +252,7 @@ const Login = () => {
                 Sign in
               </Button>
             </Form>
+            </AvForm>
             <p className='text-center mt-2'>
               <span className='me-25'>New on our platform?</span>
               <Link to='/register'>
