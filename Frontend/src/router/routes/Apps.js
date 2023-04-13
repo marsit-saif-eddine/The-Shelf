@@ -32,6 +32,14 @@ const EventsaddForm = lazy(() => import('../../views/apps/Events/NewEventForm'))
 const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/EventTable'))
 const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
 
+
+const Books = lazy(() => import('../../views/apps/books/index'))
+const AddBook = lazy(() => import('../../views/apps/books/addBook'))
+const Book = lazy(() => import('../../views/apps/books/detail/index'))
+
+
+
+
 const AppRoutes = [
   {
     element: <Email />,
@@ -73,7 +81,50 @@ const AppRoutes = [
     }
     
   },
-  
+  {
+    element: <Books />,
+    path: '/apps/books',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+
+  {
+    element: <AddBook/>,
+    path: '/addBook',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+
+  {
+    element: <Book/>,
+    path: '/bookdetail/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+
+
+
+
+
+
+
+
+
   {
     path: '/eventsdetail/:id',
     element: <Eventsdetails />,
@@ -262,7 +313,7 @@ const AppRoutes = [
     }
   },
   {
-    element: <UserList />,
+    element: <UserList/>,
     path: '/users/list',
     meta: {
       action: 'admin',
