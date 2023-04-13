@@ -171,7 +171,7 @@ export default [
         id: 'profile',
         title: 'Profile',
         icon: <User />,
-        navLink: '/pages/profile',
+        navLink: '/pages/profile/:id',
         collapsed: true
       },
       {

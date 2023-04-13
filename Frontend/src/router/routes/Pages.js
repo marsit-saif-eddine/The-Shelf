@@ -22,7 +22,7 @@ const MyQuiz = lazy(() => import('../../views/pages/profile/MyQuizzes'))
 
 const PagesRoutes = [
   {
-    path: '/pages/profile',
+    path: '/pages/profile/:id',
     element: <Profile />,
     meta: {
       action: 'read',

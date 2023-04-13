@@ -211,7 +211,7 @@ export const searchArr = [
         isBookmarked: false,
         title: 'Profile Page',
         icon: 'Users',
-        link: '/pages/profile',
+        link: '/pages/profile/:id',
         collapsed: true
       },
       {
