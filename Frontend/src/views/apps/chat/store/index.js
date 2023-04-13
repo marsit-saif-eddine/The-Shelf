@@ -10,7 +10,8 @@ export const getUserProfile = createAsyncThunk('appChat/getTasks', async () => {
 })
 
 export const getChatContacts = createAsyncThunk('appChat/getChatContacts', async () => {
-  const response = await axios.get('/apps/chat/chats-and-contacts')
+  const response = await axios.get('/appChat/getChatContacts')
+  console.log(response.data)
   return response.data
 })
 
