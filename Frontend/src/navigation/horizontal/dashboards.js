@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Home, Activity, ShoppingCart } from 'react-feather'
+import { Home, Activity, ShoppingCart, Book } from 'react-feather'
 
 export default [
   {
