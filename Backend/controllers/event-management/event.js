@@ -14,7 +14,12 @@ const router = express.Router();
 
 exports.getallevents = async (req, res) => {
   try {
-    const events = await Event.find();
+    const userConnected=req.query('userconnected')
+    const filter={}
+    if(userConnected){
+      filter._id=userConnected
+    }
+    const events = await Event.find(filter);
     res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });

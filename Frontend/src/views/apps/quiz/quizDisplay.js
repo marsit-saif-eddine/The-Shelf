@@ -47,7 +47,7 @@ function QuizDisplay () {
 //   history.push("/"+qname[0])
 // }
 return (
-    <Container className="container" style={{ marginTop: "30px" }}>
+  <div className="containers">
     <Row>
     {Quizs.map(quiz => (
         <Col md={4} >
@@ -57,8 +57,7 @@ return (
     ))}
           </Row>       
 
-</Container>
-
+          </div>
  
 
   );

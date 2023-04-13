@@ -3,7 +3,7 @@
 //Template config options
 const themeConfig = {
   app: {
-    appName: 'Vuexy',
+    appName: 'THE SHELF',
     appLogoImage: require('@src/assets/images/logo/logo.svg').default
   },
   layout: {

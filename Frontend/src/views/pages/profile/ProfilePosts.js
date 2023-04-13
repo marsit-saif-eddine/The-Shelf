@@ -18,6 +18,7 @@ import UpdateEventForm from "../../apps/Events/UpdateEventForm"
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFlag, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { isUserLoggedIn } from '@utils'
 
 const ProfilePosts = ({ data }) => {
 
@@ -27,11 +28,28 @@ const ProfilePosts = ({ data }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [showForm, setShowForm] = useState(true); // add state variable to track form visibility
+
+
+  const [userData, setUserData] = useState(null)
+
+  //** ComponentDidMount
   useEffect(() => {
-    axios.get('/pages/profile').then(({data}) => {
-      setEvents(data);
-    });
-  }, []);
+    
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')))
+     
+    }
+  }, [])
+
+  useEffect(() => {
+      axios.get(`/pages/profile?userconnected=${userData.id}`).then(({data}) => {
+        setEvents(data);})
+    }
+  , [])
+
+  console.log(userData)
+
+
 
   const handleUpdate = (event) => {
     setSelectedEvent(event);
@@ -283,10 +301,7 @@ const ProfilePosts = ({ data }) => {
   //   }
   //   return renderPosts()
   // }
-  // const userDataString = localStorage.getItem("userData");
-  // const userDataObject = JSON.parse(userDataString);
-  // const userId = userDataObject.id;
-  // console.log(userId);
+
     return events.map(event => {
       return (
         
