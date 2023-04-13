@@ -183,7 +183,7 @@ function ViewOffers() {
     <>
    
 
-      <div className="cards-container">
+      <div className="cards-containers">
 
       {/* <div className="search-container">
   <Input
