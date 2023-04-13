@@ -65,13 +65,13 @@ const Profile = () => {
         <div id='user-profile'>
           <Row>
             <Col sm='12'>
-            <ProfileHeader data={data.header} selectedUser={store.selectedUser ? store.selectedUser : null}/>
+            <ProfileHeader data={data.header} selectedUser={store.selectedUser}/>
             </Col>
           </Row>
           <section id='profile-info'>
             <Row>
               <Col lg={{ size: 3, order: 1 }} sm={{ size: 12 }} xs={{ order: 2 }}>
-                <ProfileAbout selectedUser={store.selectedUser ? store.selectedUser : null} />
+                <ProfileAbout selectedUser={store.selectedUser} />
                 <ProfileSuggestedPages data={data.suggestedPages} />
                 <ProfileTwitterFeeds data={data.twitterFeeds} />
               </Col>

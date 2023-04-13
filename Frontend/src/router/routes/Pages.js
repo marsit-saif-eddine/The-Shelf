@@ -26,8 +26,10 @@ const PagesRoutes = [
     element: <Profile />,
     meta: {
       action: 'read',
-      resource: 'ACL'
+      resource: 'ACL',
+      layout: 'horizontal',
     }
+   
   },
   {
     path: '/pages/profile/quiz',
