@@ -1,4 +1,4 @@
-.cards-containers {
+.cards-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -6,19 +6,19 @@
     overflow-y: scroll;
     
   }
-  .cards-containers::-webkit-scrollbar {
+  .cards-container::-webkit-scrollbar {
     width: 8px;
   }
   
-  .cards-containers::-webkit-scrollbar-track {
+  .cards-container::-webkit-scrollbar-track {
     background-color: #1d1d1d;
   }
   
-  .cards-containers::-webkit-scrollbar-thumb {
+  .cards-container::-webkit-scrollbar-thumb {
     background-color: #5d07de98;
     border-radius: 10px;
   }
   
-  .cards-containers::-webkit-scrollbar-thumb:hover {
+  .cards-container::-webkit-scrollbar-thumb:hover {
     background-color: #999;
   }
