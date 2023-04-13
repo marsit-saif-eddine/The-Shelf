@@ -14,7 +14,7 @@ const event = require('../models/event');
 
 router.get("/",eventController.getallevents);
 router.get('/detail/:id', eventController.geteventsbyid);
-router.post('/add',middlewareupload.uploadPhotoMiddleware,eventController.addEvent,(req,res)=>{
+router.post('/add',eventController.addEvent,(req,res)=>{
     console.log(upload)
 })
 //router.get('/eventsdetail/:id', eventController.geteventsbyid);
@@ -40,7 +40,7 @@ router.post('/add',middlewareupload.uploadPhotoMiddleware,eventController.addEve
 //     ],
 //     eventController.addEvent
 //   );
-  router.put('/update/:id',validateEvent,eventController.updateEvent
+  router.put('/update/:id',middlewareupload.uploadPhotoMiddlewareUpdate,validateEvent,eventController.updateEvent
   );
   router.delete("/delete/:id",eventController.deleteevents);
 

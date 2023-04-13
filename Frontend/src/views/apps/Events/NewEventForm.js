@@ -54,10 +54,12 @@
 // export default EventForm;
 
 
-import { React, useState } from 'react';
+import { React, useState,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { isUserLoggedIn } from '@utils'
+
 import '../Events/add.css'
 import '../Events/new.css'
 
@@ -72,10 +74,19 @@ const NewEventForm = () => {
   const [endDate, setEndDate] = useState('');
   const [location, setLocation] = useState('');
   const [image, setImage] = useState(null);
+
   const [nameError, setNameError] = useState('');
   const [startDateError, setStartDateError] = useState('');
   const [endDateError, setEndDateError] = useState('');
   const [locationError, setLocationError] = useState('');
+  const [userData, setUserData] = useState(null)
+
+  useEffect(() => {
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')));
+    }
+  }, []);
+  
   const handleNameChange = (e) => {
     setName(e.target.value);
     setNameError('');
@@ -163,7 +174,8 @@ const handleSubmit = (event) => {
   formData.append('description', description);
   formData.append('location', location);
   formData.append('image', image);
- 
+  formData.append('owner', userData.id);
+
   fetch('http://localhost:5000/events/add', {
     method: 'POST',
     body: formData
