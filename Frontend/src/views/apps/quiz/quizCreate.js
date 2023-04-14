@@ -68,7 +68,7 @@ function quizCreate(){
 
 const [quizname,setQuizname]=useState("quiz name")
 const [quizdesc,setQuizdesc]=useState("quiz desc")
-const [selectedBookId, setSelectedBookId] = useState("book id here");
+const [selectedBookId, setSelectedBookId] = useState("");
 
 
 function changeQuestion(text, i){
@@ -191,7 +191,7 @@ var userId = user.id;
 const [books, setBooks] = useState([])
     useEffect(() => {
         axios.get(`/book/books`)
-          .then(response => setBooks(response.data.books))
+          .then(response => {console.log(response.data.books) ; setBooks(response.data.books)})
           .catch(error => console.error(error));
           console.log(books)
     
@@ -200,6 +200,7 @@ const [books, setBooks] = useState([])
 
 
       function handleSelectChange(event) {
+        console.log(event.target.value)
         setSelectedBookId(event.target.value);
       }
       const [nameError, setNameError] = useState('');
@@ -462,7 +463,7 @@ return(
              <select name="book_id"  value={selectedBookId} onChange={handleSelectChange} className="select">
   <option value="">Select a book</option>
   {books.map((book) => (
-    <option key={book.id} value={book.id}>
+    <option key={book._id} value={book._id}>
       {book.name}
     </option>
   ))}
