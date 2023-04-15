@@ -31,9 +31,11 @@ function QuizDisplay () {
 
 
               const [Quizs, setQuizs] = useState([])
-
+const approved="approved";
   useEffect(() => {
-    axios.get(`/quiz/allquiz`)
+    axios.get(`/quiz/allquiz?status=${approved}`)
+   // axios.get(`/quiz/allquiz/`)
+
       .then(response => setQuizs(response.data))
       .catch(error => console.error(error));
       console.log(Quizs)

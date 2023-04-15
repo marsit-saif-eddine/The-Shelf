@@ -44,10 +44,11 @@ import classnames from 'classnames'
   const params = useParams();
   console.log(params); // Check the console to see what `params` contains
   const productId = params.id;
+  const approved="approved";
 
 useEffect(() => {
     if (productId !== null) {
-        fetch(`http://localhost:5000/quiz/allquiz?book=${productId}`)
+        fetch(`http://localhost:5000/quiz/allquiz?book=${productId}&status=${approved}`)
         .then(response => response.json())
         .then(data => setQuizzes(data))
         .catch(error => console.log(error));

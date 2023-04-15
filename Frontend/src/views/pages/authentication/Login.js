@@ -249,24 +249,24 @@ const Login = () => {
               <div className='divider-text'>or</div>
             </div>
             <div className='auth-footer-btn d-flex justify-content-center'>
-              <Button color='facebook'>
+              {/* <Button color='facebook'>
                 <Facebook size={14} />
               </Button>
               <Button color='twitter'>
                 <Twitter size={14} />
-              </Button>
+              </Button> */}
              
 
               <Form action="http://localhost:5000/auth/google">
 
               <Button color="google"  type="submit">
-                <Mail size={14} />
+                <Mail size={20} />
               </Button>
               </Form>
        
-              <Button className='me-0' color='github'>
+              {/* <Button className='me-0' color='github'>
                 <GitHub size={14} />
-              </Button>
+              </Button> */}
             </div>
           </Col>
         </Col>

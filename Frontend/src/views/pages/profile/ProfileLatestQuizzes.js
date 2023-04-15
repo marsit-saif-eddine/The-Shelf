@@ -19,10 +19,11 @@ const ProfileLatestPhotos = ({ data }) => {
   
 }, []);
 const userid = useParams().id
+const approved="approved";
 
 useEffect(() => {
     if (userid !== null) {
-      fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userid}`)
+      fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userid}&status=${approved}`)
         .then(response => response.json())
         .then(data => setQuizzes(data))
         .catch(error => console.log(error));

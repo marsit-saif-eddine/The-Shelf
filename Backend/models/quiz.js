@@ -11,8 +11,16 @@ const quizSchema = new Schema(
     quizDescription : {
     type:String
     },
-book_id:{},
-user_id:{},
+    book_id:{},
+    user_id:{},
+    quiz_status:{    type: String,
+        
+        enum: {
+            values: ['approved','pending'],
+            message: '{VALUE} is not supported'
+          },
+          default:"pending"
+    },
     questions :[
         {
         questionText: {

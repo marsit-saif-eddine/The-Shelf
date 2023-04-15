@@ -38,15 +38,21 @@ exports.addQuiz = async (req, res, next) => {
     try {
       const {userconnected}=req.query
       const {book}=req.query
+      const{status}=req.query
       const filter={}
+     
       if(userconnected){
         filter.user_id=userconnected
       }
       if (book) {
         filter.book_id = book;
       }
+      if (status) {
+        filter.quiz_status = status;
+      }
       const quizzes = await Quiz.find(filter);
       res.json(quizzes);
+    
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -98,4 +104,19 @@ exports.addQuiz = async (req, res, next) => {
     return res.status(200).json({ message: "quiz Successfully Deleted" });
   };
 
-  
+  exports.approveQuiz=async(req,res,next)=>{
+    const quizId = req.params.id;
+    try {
+        const quiz = await Quiz.findById(quizId);
+        if (quiz) {
+          quiz.quiz_status = "approved";
+          quiz.save();
+            res.status(200).json({ "message": "quiz approved" });
+        } else {
+            res.status(404).json({ "message": "quiz not found" });
+        }
+    } catch (err) {
+        res.status(400).json({ "message": err.message })
+    }
+
+  }

@@ -17,16 +17,23 @@ import {
     Form,
     InputGroup,
     InputGroupText,
-    Label
+    Label,
+    Badge, 
+    UncontrolledDropdown, 
+    DropdownToggle, 
+    DropdownMenu,
+     DropdownItem 
   } from "reactstrap";
+
   import Select from 'react-select'
   import DataTable from 'react-data-table-component'
-
+  import Swal from 'sweetalert2';
+  import 'sweetalert2/dist/sweetalert2.min.css';
   import InputGroupAddon  from 'reactstrap';
   import ReactPaginate from "react-paginate";
   import axios from "axios";
   import { Fragment, useState, useEffect } from 'react'
-import { Trash2 } from 'react-feather';
+import { Trash2 , MoreVertical, FileText,Archive} from 'react-feather';
 import quiz from '..';
 
 const quizTable = () => {
@@ -35,17 +42,30 @@ const quizTable = () => {
     const [Quizs, setQuizs] = useState([])
     const[change,setChange]=useState(false)
 
+    const get = ()=>{
+        axios.get('http://localhost:5000/quiz/allquiz')
+        .then(response => setQuizs(response.data))
+    .catch(error => console.error(error));
+    }
+
     useEffect(() => {
   
         setChange(false)
-            axios.get('http://localhost:5000/quiz/allquiz')
-          .then(response => setQuizs(response.data))
-      .catch(error => console.error(error));
+        get();
       console.log(Quizs)
       }, [change]);
        
-    
+  
       const Delete = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this item!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel',
+          }).then((result) => {
+            if (result.isConfirmed) {
         axios.delete(`http://localhost:5000/quiz/delete/${id}`)
         .then(() => {
           // Remove the deleted quiz from the quizzes array
@@ -53,10 +73,41 @@ const quizTable = () => {
           setQuizs(updatedQuizs);
           setChange(true)
         });
+    }
+});
+      }
+
+      const approve=(id)=>{
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'do you want to approve this quiz',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, approve it it!',
+            cancelButtonText: 'No, cancel',
+          }).then((result) => {
+            if (result.isConfirmed) {
+        axios.put(`http://localhost:5000/quiz/approvequiz/${id}`)
+     
+       .then(response => {
+        console.log(response.data);
+        setChange(true)   
+     console.log(response);
+      })
+      .catch(error => {
+        // handle error
+        console.log(error);
+      });
+    }
+});   
       }
 
 
-
+      const statusObj = {
+        approved: 'light-success',
+        pending: 'light-warning'
+      }
+      
 
   return (
 
@@ -80,14 +131,14 @@ const quizTable = () => {
                                             <th>id</th>
                                             <th>Quiz Name</th>
                                             <th>Description</th>
-                                      
+                                            <th>status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     
                                       
-                                        {Quizs .map((quiz) => (
+                                        {Quizs.map((quiz) => (
                                          <tr key={quiz._id} >
                                             <td>{quiz._id}</td>
                                             <td>
@@ -95,7 +146,40 @@ const quizTable = () => {
                                             </td>
                                             <td>{quiz.quizDescription}</td>
                                             <td>
-                                             <Trash2 onClick={() => Delete(quiz._id)}/>
+                                                <Badge className='text-capitalize' color={statusObj[quiz.quiz_status]} pill>
+                                                  {quiz.quiz_status}
+                                              </Badge>
+                                            </td>
+                                            <td>
+                                             <div className='column-action'>
+        <UncontrolledDropdown>
+          <DropdownToggle tag='div' className='btn btn-sm'>
+            <MoreVertical size={14} className='cursor-pointer' />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem
+             
+              className='w-100'
+             
+            >
+              <FileText size={14} className='me-50' />
+              <span className='align-middle'>Details</span>
+            </DropdownItem>
+            <DropdownItem  onClick={() => approve(quiz._id)}>
+              <Archive size={14} className='me-50' />
+              <span className='align-middle'>approve</span>
+            </DropdownItem>
+            <DropdownItem
+             
+              className='w-100'
+              onClick={() => Delete(quiz._id)}
+            >
+              <Trash2 size={14} className='me-50' />
+              <span className='align-middle'>Delete</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
                                             </td>
                                         </tr>
                        ))}
