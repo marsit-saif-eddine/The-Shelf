@@ -34,7 +34,7 @@ function QuizDisplay () {
 
   useEffect(() => {
     axios.get(`/quiz/allquiz`)
-      .then(response => setQuizs(response.data.quizs))
+      .then(response => setQuizs(response.data))
       .catch(error => console.error(error));
       console.log(Quizs)
 

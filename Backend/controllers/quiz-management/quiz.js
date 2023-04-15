@@ -19,20 +19,42 @@ exports.addQuiz = async (req, res, next) => {
   };
 
 
-  exports.getAllQuiz = async (req, res, next) => {
-    let quizs;
+  // exports.getAllQuiz = async (req, res, next) => {
+  //   let quizs;
+  //   try {
+  //     quizs = await Quiz.find();
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  
+  //   if (!quizs) {
+  //     return res.status(404).json({ message: "No quiz found" });
+  //   }
+  //   return res.status(200).json({ quizs });
+
+  // };
+
+  exports.getAllQuiz = async (req, res) => {
     try {
-      quizs = await Quiz.find();
+      const {userconnected}=req.query
+      const {book}=req.query
+      const filter={}
+      if(userconnected){
+        filter.user_id=userconnected
+      }
+      if (book) {
+        filter.book_id = book;
+      }
+      const quizzes = await Quiz.find(filter);
+      res.json(quizzes);
     } catch (err) {
-      console.log(err);
+      res.status(500).json({ message: err.message });
     }
-  
-    if (!quizs) {
-      return res.status(404).json({ message: "No quiz found" });
-    }
-    return res.status(200).json({ quizs });
   };
+
   
+
+
   exports.getQuizById = async (req, res, next) => {
     const id = req.params.id;
     let quiz;
@@ -46,7 +68,21 @@ exports.addQuiz = async (req, res, next) => {
     }
     return res.status(200).json({ quiz });
   };
-  
+ 
+  exports.getQuizByBook = async (req, res, next) => {
+    const id = req.params.id;
+    let quiz;
+    try {
+      quiz = await Quiz.findById(id);
+    } catch (err) {
+      console.log(err);
+    }
+    if (!quiz) {
+      return res.status(404).json({ message: "No quiz found" });
+    }
+    return res.status(200).json({ quiz });
+  };
+ 
 
   exports.deleteQuiz = async (req, res, next) => {
     const id = req.params.id;

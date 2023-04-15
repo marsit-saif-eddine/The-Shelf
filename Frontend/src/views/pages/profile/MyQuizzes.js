@@ -17,7 +17,7 @@ import ProfileAbout from './ProfileAbout'
 import ProfilePosts from './ProfilePosts'
 import ProfileHeader from './ProfileHeader'
 import ProfileTwitterFeeds from './ProfileTwitterFeeds'
-import ProfileLatestPhotos from './ProfileLatestPhotos'
+import ProfileLatestPhotos from './ProfileLatestQuizzes'
 import ProfileSuggestedPages from './ProfileSuggestedPages'
 import ProfileFriendsSuggestions from './ProfileFriendsSuggestions'
 

@@ -450,10 +450,7 @@ return(
           <Form  onSubmit={handleSubmit}>
             <Card>
             <Row className='gy-1 pt-75'>
-            <label>
-        User ID:{userId}
-        {/* <input type="text" value={userId || ''} disabled /> */}
-      </label>
+            
              <Input type="text" className="quiz-title" placeholder="enter your quiz title here" onChange={(e)=>{setQuizname(e.target.value)}} required></Input>
              {nameError && <span>{nameError}</span>}
              <Input type="text" className="quiz-desc" placeholder="enter your quiz desrpition here" onChange={(e)=>{setQuizdesc(e.target.value)}}></Input>

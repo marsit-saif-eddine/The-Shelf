@@ -52,7 +52,9 @@ const ProfilePosts = ({ data }) => {
       fetch(`http://localhost:5000/events?userconnected=${userData.id}`)
         .then(response => response.json())
         .then(data => setEvents(data))
+        
         .catch(error => console.log(error));
+        console.log("sii"+ userData.id);
     }
     console.log(events)
   }, [userData]);

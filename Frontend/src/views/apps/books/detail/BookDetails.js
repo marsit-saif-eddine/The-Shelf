@@ -1,10 +1,10 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 // ** Third Party Components
 import classnames from 'classnames'
-import { Star, ShoppingCart, DollarSign, Heart, Share2, Facebook, Twitter, Youtube, Instagram } from 'react-feather'
+import { Star, ShoppingCart, DollarSign, Heart, Share2, Facebook, Twitter, Youtube, Instagram, Award } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
@@ -46,7 +46,7 @@ const BookDetails = props => {
     dispatch(getProduct(productId))
   }
 
-  // ** Condition btn tag
+ 
 
   return (
     <Row className='my-2'>
@@ -135,6 +135,25 @@ const BookDetails = props => {
                 </UncontrolledButtonDropdown>
               </div>
             </Col>
+
+            <div className='item-features'>
+      <Row className='text-center'>
+            <Col className='mb-12 mb-md-0' md='12' xs='12'>
+          <div className='w-75 mx-auto'>
+            <Award />
+            <h4 className='mt-2 mb-1'>Test your knowledge</h4>
+            <Button
+                    color='info'
+                    className='btn-cart move-cart'>
+                       <Link to={`/quiz/allquiz/quizByBook/${productId}`}>
+                      {/* <Link to='/pages/profile/quiz'> */}
+                  <span>View Quizzes</span>
+                  </Link>
+                </Button>   
+                       </div>
+        </Col>
+        </Row>
+        </div>
           </>
       )}
 
