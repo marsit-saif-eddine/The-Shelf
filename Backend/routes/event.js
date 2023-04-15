@@ -10,7 +10,9 @@ const middlewareupload= require('../middleware/uploadimage')
 const Review = require('../models/reviewSchema');
 const {validateEvent}= require('../middleware/validateEvent');
 const event = require('../models/event');
+const { JsonWebTokenError } = require('jsonwebtoken');
 
+router.patch('/participateEvent/:id', eventController.participateEvent);
 
 router.get("/",eventController.getallevents);
 router.get('/detail/:id', eventController.geteventsbyid);

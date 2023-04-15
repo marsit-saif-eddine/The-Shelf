@@ -40,6 +40,7 @@ const Books = lazy(() => import('../../views/apps/books/index'))
 const AddBook = lazy(() => import('../../views/apps/books/addBook'))
 const Book = lazy(() => import('../../views/apps/books/detail/index'))
 
+const VideoConferance = lazy(() => import('../../views/apps/Events/chatvideoconf'))
 
 
 
@@ -95,7 +96,17 @@ const AppRoutes = [
       resource: 'client'
     }
   },
-
+  {
+    element: < VideoConferance/>,
+    path: '/apps/videoconf',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
   {
     element: <AddBook/>,
     path: '/addBook',

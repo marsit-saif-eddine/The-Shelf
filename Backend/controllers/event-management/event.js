@@ -140,28 +140,53 @@ exports.deleteevents=async (req, res) => {
 // };
 //participate
 //participate
+exports.participateEvent =async (req, res) => {
+  try{
+      const{id}=req.params;
+      const{userId }=req.body;
+      const event = await Event.findById(id);
+      const isParticipate = event.participants.get(userId);
+  
+      if (isParticipate){
+          event.participants.delete(userId);
+      }else{
+          event.participants.set(userId,true);
+      }
 
-exports.participateEvent = async (req, res) => {
-  const userId = req.query.id;
+      const updatedEvent = await Event.findByIdAndUpdate(
+          id,
+          {participants:event.participants},
+          {new:true}
+      )
 
-  try {
-    const event = await Event.findById(req.params.id);
-    if (!event) {
-      return res.status(404).send({ message: 'Event not found' });
-    }
+      res.status(200).json(updatedEvent);
 
-    if (event.participants.includes(userId)) {
-      return res.status(409).send({ message: 'User is already participating in this event' });
-    }
-
-    event.participants.push(userId);
-    await event.save();
-
-    res.status(200).json(event);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  }catch(err){
+          res.status(404).json({error:err.message});
   }
-};
+  }
+
+// exports.participateEvent = async (req, res) => {
+//   const userId = req.query.id;
+
+//   try {
+//     const event = await Event.findById(req.params.id);
+//     if (!event) {
+//       return res.status(404).send({ message: 'Event not found' });
+//     }
+
+//     if (event.participants.includes(userId)) {
+//       return res.status(409).send({ message: 'User is already participating in this event' });
+//     }
+
+//     event.participants.push(userId);
+//     await event.save();
+
+//     res.status(200).json(event);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 //unparticipate
 

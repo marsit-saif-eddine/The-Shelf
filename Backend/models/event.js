@@ -7,8 +7,10 @@ const eventSchema = new mongoose.Schema({
   endDate: { type: Date, required: true },
   location: { type: String, required: true },
   attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  participants: [],
   image: { type: String },// new image field,
+  participants :{
+    type: Map, of: Boolean, default: new Map() ,
+  },
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,

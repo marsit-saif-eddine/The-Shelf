@@ -7,6 +7,25 @@
   width: 100%;
   
 }
+
+.card-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.img-container {
+  width: 20%;
+  margin-right: 16px;
+    border-radius: 50%;
+
+}
+
+.ecommerce-card {
+  flex: 1;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
 .card-container::-webkit-scrollbar {
   width: 8px;
 }
@@ -50,10 +69,36 @@
 
 .btn-pastel-primary {
   color: #fff;
-  background-color: #b19cd9;
+  background-color: #4b1da1;
   border-color: #b19cd9;
 }
+.card-wrapper {
+  transition: all 0.3s ease-in-out;
+}
 
+.card-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.participate-btn {
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  background-color: #8907fc84;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+
+.participate-btn:hover {
+  background-color: #707a84;
+}
+
+.participate-btn:active {
+  transform: scale(0.95);
+}
 .card-rectangular {
    margin: 20px;
   width: 400px;

@@ -95,19 +95,25 @@ function ViewOffers() {
     };
 
 
-    // const deleteOffer = async (id) => {
-    //   const result = window.confirm("Are you sure you want to delete?");
-    //   await axios.delete(`http://localhost:5000/Offer/DeleteOffer/${id}`, {
-    //     withCredentials: true
-    //   })
-    //   .then((res) => {
-    //     history.push("/admin/viewOffer");
-    //   });
-    //   getUsers();
 
-    // }
+    const deleteOffer = async (_id) => {
+      try {
+        const result = window.confirm("Are you sure you want to delete?");
 
-
+        const res = await axios.delete(`/events/delete/${_id}`);
+        console.log(res.data);
+        setTimeout(() => setSuccessMessage(null), 3000);
+  
+  
+        // Remove the deleted event from the list of events
+        setEvents(events.filter(event => event._id !== _id));
+  
+      } catch (err) {
+        console.error(err);
+  
+        // Implement logic to show an error message
+      }
+    };
 
     //------------------ Search ------------------------------------//
     // const handleSearch = async() => {
@@ -253,6 +259,7 @@ function ViewOffers() {
                       <th>EndDate</th>
                       <th>Location</th>
                       <th>Image</th>
+                      <th>Actions</th>
 
 
 
@@ -275,11 +282,11 @@ function ViewOffers() {
 
 
 
-                     {/* <td><Button
+                     <td><Button
                       style={{marginTop: "22px" }}
                       variant="danger"
-                      onClick={()=> deleteOffer(offer._id)}
-                     >Delete</Button></td> */}
+                      onClick={()=> deleteOffer(event._id)}
+                     >Delete</Button></td>
 
                      {/* <td>
                       <Button

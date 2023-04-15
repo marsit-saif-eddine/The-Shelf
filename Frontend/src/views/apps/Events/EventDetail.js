@@ -101,19 +101,19 @@ const EventDetail = () => {
         </div>
         <div className='design-group pt-25'>
           <h6 className='section-label'>
-          <h2 className="event-card-reviews-title">Reviews</h2>
-        {reviews.length === 0 ? (
-          <p className="event-card-reviews-text">No reviews yet.</p>
-        ) : (
-          <ul className="event-card-reviews-list">
-            {reviews.map((review) => (
-              <li className="event-card-review" key={review._id}>
-                <p className="event-card-review-text">{review.comment}</p>
-                <StarRating rating={review.rating} />
-              </li>
-            ))}
-          </ul>
-        )}
+          <h2 className="event-card-review-text">Reviews</h2>
+          {reviews && reviews.length > 0 ? (
+  <ul className="event-card-review-text">
+    {reviews.map((review) => (
+      <li className="event-card-review" key={review._id}>
+        <p className="event-card-review-text">{review.comment}</p>
+        <StarRating rating={review.rating} />
+      </li>
+    ))}
+  </ul>
+) : (
+  <p className="event-card-reviews-text">No reviews yet.</p>
+)}
         <div></div>
         <ReviewForm className="event-card-review-form" onReviewSubmit={handleReviewSubmit} />
           </h6>

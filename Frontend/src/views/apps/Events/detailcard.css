@@ -1,105 +1,72 @@
-.card-app-design {
-    border: 1px solid #851eec4f;
-    border-radius: 5px;
-    overflow: hidden;
-    flex: auto;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
-  }
-  /* .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    width: 100%;
-    overflow-y: scroll;
-    
-  }
-  .card-container::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .card-container::-webkit-scrollbar-track {
-    background-color: #fff9f9;
-  }
-  
-  .card-container::-webkit-scrollbar-thumb {
-    background-color: #5d07de98;
-    border-radius: 10px;
-  }
-  
-  .card-container::-webkit-scrollbar-thumb:hover {
-    background-color: #999;
-  } */
-  .event-card-header {
-    position: relative;
-    height: 200px;
-    display: flex;
-    align-items: flex-end;
-  }
-  .event-card-img {
-    border-radius: 70px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    max-width: 22%;
-    height: auto;
-    width:40%;
-    float: left;
-  }
+ .card-app-design {
 
-  
-  .event-card-title {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    padding: 10px;
-    margin: 0;
-  }
-  
-  .event-card-body {
-    padding: 10px;
-  }
-  
-  .event-card-subtitle {
-    font-size: 16px;
-    font-weight: normal;
-    margin: 0;
-    color: #fff;
-  }
-  
-  .event-card-text {
-    margin: 10px 0;
-    font-weight: bold;
+ 
+  /* center the card horizontally */
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
 
+.event-card-img {
+  object-fit: cover;
+  width: 30%;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
 
-  }
-  
-  .event-card-reviews-title {
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .event-card-reviews-text {
-    margin: 10px 0;
-  }
-  
-  .event-card-reviews-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .event-card-review {
-    margin: 10px 0;
-  }
-  
-  .event-card-review-text {
-    margin: 0;
-  }
-  
-  .event-card-review-form {
-    margin-top: 20px;
-  }
-  
+.event-card-reviews-title {
+  margin-top: 0;
+}
+
+.event-card-reviews-text {
+  margin-bottom: 0;
+}
+
+.event-card-reviews-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.event-card-review {
+  margin-bottom: 1rem;
+}
+
+.event-card-review-text {
+  margin-bottom: 0.25rem;
+}
+
+.event-card-review-form {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.design-group {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+
+.section-label {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.pt-25 {
+  padding-top: 0.25rem;
+}
+
+.pt-50 {
+  padding-top: 0.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.font-small-2 {
+  font-size: 0.875rem;
+}

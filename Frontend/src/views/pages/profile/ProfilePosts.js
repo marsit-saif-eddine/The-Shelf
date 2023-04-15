@@ -15,7 +15,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import UpdateEventForm from "../../apps/Events/UpdateEventForm"
 // import './events.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFlag, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { isUserLoggedIn } from '@utils'
@@ -31,6 +31,11 @@ const ProfilePosts = ({ data }) => {
 
 
   const [userData, setUserData] = useState(null)
+
+  const {id}=useParams();
+
+
+
 
   //** ComponentDidMount
   useEffect(() => {
@@ -49,7 +54,7 @@ const ProfilePosts = ({ data }) => {
 
   useEffect(() => {
     if (userData !== null) {
-      fetch(`http://localhost:5000/events?userconnected=${userData.id}`)
+      fetch(`http://localhost:5000/events?userconnected=${id}`)
         .then(response => response.json())
         .then(data => setEvents(data))
         
@@ -327,7 +332,6 @@ const ProfilePosts = ({ data }) => {
                     //   'profile-likes': post.youLiked === true
                     // })}
                   />
-                  <span>{event.participants}</span>
                 </div>
                 <div className='d-flex align-items-center'>
                   <div className='avatar-group ms-1'>
@@ -357,15 +361,18 @@ const ProfilePosts = ({ data }) => {
                   </a> */}
                 </div>
               </Col>
+              {userData && event.owner == userData.id && (
+
               <Col className='d-flex justify-content-between justify-content-sm-end align-items-center mb-2' sm='6'>
-                <a href='/' className='text-nowrap'>
-                  <MessageSquare size={18} className='text-body me-50'></MessageSquare>
+                {/* <a href='/' className='text-nowrap'>
+                  <MessageSquare size={18} className='text-body me-50'></MessageSquare> */}
                   {/* <span className='text-muted me-1'>{reviews?.comments}</span> */}
-                </a>
-                <a className='text-nowrap share-post' onClick={() => handleUpdate(event)}>
+                {/* </a> */}
+                {/* <a className='text-nowrap share-post' onClick={() => handleUpdate(event)}>
                   <Share2 size={18} className='text-body mx-50'></Share2>
                   <span className='text-muted me-1'></span>
-                </a>
+                </a> */}
+
                 <button className="btn btn-pastel-warning btn-sm" onClick={() => handleUpdate(event)}>
                 <FontAwesomeIcon icon={faEdit} />
               </button>
@@ -375,16 +382,8 @@ const ProfilePosts = ({ data }) => {
               <button className="btn btn-pastel-info btn-sm" onClick={() => reportEvent(event._id)}>
                 <FontAwesomeIcon icon={faFlag} />
               </button>
-              {event.participants.includes(localStorage.getItem('userId')) ? (
-                <button className="btn btn-pastel-success btn-sm" onClick={() => unparticipateEvent(event._id)}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
-              ) : (
-                <button className="btn btn-pastel-primary btn-sm" onClick={() => participateEvent(event._id)}>
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-             )}
-              </Col>
+          
+              </Col>)}
             </Row>
             {/* {post.detailedComments.map(comment => (
               <div key={comment.username} className='d-flex align-items-start mb-1'>

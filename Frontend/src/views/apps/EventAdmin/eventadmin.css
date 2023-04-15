@@ -3,7 +3,6 @@
     flex-wrap: wrap;
     gap: 20px;
     width: 100%;
-    overflow-y: scroll;
     
   }
   .cards-container::-webkit-scrollbar {

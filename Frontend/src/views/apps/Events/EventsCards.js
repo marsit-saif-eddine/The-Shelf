@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Card from '@mui/joy/Card';
 import CardOverflow from '@mui/joy/CardOverflow';
@@ -6,25 +6,90 @@ import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import Favorite from '@mui/icons-material/Favorite';
+
 import axios from 'axios';
 import UpdateEventForm from "../Events/UpdateEventForm"
 import './events.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFlag, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {  useCookies } from "react-cookie";
+import {  CardBody, CardText, Button, Badge } from 'reactstrap'
+
 function EventsCards() {
+  const [cookies, _]=useCookies(['access_token'])
+
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [showForm, setShowForm] = useState(true); // add state variable to track form visibility
+  const [participatedCount, setParticipatedCount] = useState(0);
+  const [isparticipated, setIsParticipated] = useState(false);
+  const [user, setUser] = useState('');
+  const [change, setChange] = useState(false);
+  const [eventData, setEventData] = useState(null);
+
+
+
   useEffect(() => {
     axios.get('/eventcards').then(({data}) => {
       setEvents(data);
     });
   }, []);
-
+  const handleUserInput = (event) => {
+    setUser(event.target.value);
+  }
+  
+  // const patchParticipate = useCallback(async (eventId) => {
+  //   const response = await fetch(`http://localhost:5000/events/participateEvent/${eventId}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: Cookies.access_token
+  //     },
+  //     body: JSON.stringify({ userId: user }),
+  //   });
+  
+  //   setChange(true)
+  //   setIsParticipated(!isparticipated);
+  // }, [user, isparticipated]);
+  
+  const patchParticipate = async (eventId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/events/participateEvent/${eventId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: cookies.access_token
+        },
+        body: JSON.stringify({ userId: user }),
+      }
+      );
+      const data = await response.json();
+      setEventData(data);
+    
+      // Update the isParticipating property of the event object
+      const updatedEvents = events.map((event) => {
+        if (event._id === eventId) {
+          return {
+            ...event,
+            isParticipating: !event.isParticipating,
+          };
+        } else {
+          return event;
+        }
+      });
+  
+      // Update the events state
+      setEvents(updatedEvents);
+      setParticipatedCount( Object.keys(data.participants).length)
+  
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleUpdate = (event) => {
     setSelectedEvent(event);
     setShowForm(true)
@@ -146,13 +211,12 @@ function EventsCards() {
     setSelectedEvent(null); // Clear the selectedEvent state to hide the update form
 
   };
+  // setParticipatedCount( Object.keys(data.participants).length);
 
 
   return (
 
-     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-
-
+    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
     {/* Render the error message if it exists */}
     {errorMessage && (
       <div className="alert alert-danger" role="alert">
@@ -160,60 +224,103 @@ function EventsCards() {
       </div>
     )}
 <div className="card-container">
-      {events.map((event) => (
-<Card sx={{ width: 320, backgroundColor: '#161d31' }}>
-      <CardOverflow sx={{  backgroundColor: '#161d31' }}>
-        <AspectRatio ratio="2">
-          <img
-            src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`} alt={event.name} 
-            loading="lazy"
-            
+  {events.map((event) => (
+    <div className="card-wrapper" key={event._id}>
+      <div className="img-container">
+        <img
+          src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`}
+          alt={event.name}
+          loading="lazy"
+          style={{ width: '100%', height: '60%', borderRadius: '10px' }}
+          
           />
-        </AspectRatio>
-   
-      </CardOverflow>
-
-      <Typography level="h1" sx={{ fontSize: 'md', mt: 2 }}>
-      <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
-
-      </Typography>
-      
-
-      <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
-        {/* <Link href="#multiple-actions">{event.location}</Link> */}
-      </Typography>
-      <Divider inset="context" />
-      <CardOverflow
-        variant="soft"
-        sx={{
-          display: 'flex',
-          gap: 1.5,
-          py: 1.5,
-          px: 'var(--Card-padding)',
-          bgcolor: '#161d31',
-        }}
-      >
-        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-          {event.startDate}
-        </Typography>
-        <Divider orientation="vertical" />
-        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-        {event.endDate}        </Typography>
-      </CardOverflow>
-    </Card>
-      ))}
-      {selectedEvent && <UpdateEventForm event={selectedEvent} onSubmit={updateEvent} onEventUpdate={handleEventUpdate} />}
-    </div>
-  
-    {successMessage && (
-      <div className="alert alert-success" role="alert">
-        {successMessage}
       </div>
-    )}
-  </div>
-  
+      <Card className='ecommerce-card'>
+        <CardBody>
+          <h6 className='item-name'>
+            <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
+            <CardText tag='span' className='item-company'></CardText>
+          </h6>
+          <CardText className='item-description'>{event.location}</CardText>
+          <button
+            className="participate-btn"
+            variant="contained"
+            color="primary"
+            onClick={() => patchParticipate(event._id)}
+          >
+            {event.isParticipating ? "Cancel participation" : "Participate"}
+          </button>
+            
+        </CardBody>
+      </Card>
+    </div>
+  ))}
+</div>
 
-  )
+{successMessage && (
+  <div className="alert alert-success" role="alert">
+    {successMessage}
+  </div>
+)}
+</div>
+
+
+)
 }
 
 export default EventsCards;
+
+
+
+
+
+
+      //   <Card key={event._id} sx={{ width: 320, backgroundColor: '#161d31' }}>
+      //     <CardOverflow sx={{  backgroundColor: '#161d31' }}>
+      //       <AspectRatio ratio="2">
+      //         <img
+      //           src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`} alt={event.name} 
+      //           loading="lazy"
+      //         />
+      //       </AspectRatio>
+      //     </CardOverflow>
+
+      //     <Typography level="h1" sx={{ fontSize: 'md', mt: 2 }}>
+      //       <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
+      //     </Typography>
+
+      //     <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
+      //       {/* <Link href="#multiple-actions">{event.location}</Link> */}
+      //     </Typography>
+      //     <Divider inset="context" />
+      //     <CardOverflow
+      //       variant="soft"
+      //       sx={{
+      //         display: 'flex',
+      //         gap: 1.5,
+      //         py: 1.5,
+      //         px: 'var(--Card-padding)',
+      //         bgcolor: '#161d31',
+      //       }}
+      //     >
+      //       <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+      //         {event.startDate}
+      //       </Typography>
+      //       <Divider orientation="vertical" />
+      //       <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+      //         {event.endDate}
+      //       </Typography>
+
+      //       <button
+      //         variant="contained"
+      //         color="primary"
+      //         onClick={() => patchParticipate(event._id)}
+      //       >
+      //         {event.isParticipating ? "Cancel participation" : "Participate"}
+              
+      //       </button>
+            
+      //     </CardOverflow>
+      //   </Card>
+      // ))}
+     
