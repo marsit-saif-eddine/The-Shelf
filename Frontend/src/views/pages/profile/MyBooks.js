@@ -26,11 +26,14 @@ import ProfileTwitterFeeds from './ProfileTwitterFeeds'
 import ProfileLatestPhotos from './ProfileLatestQuizzes'
 import ProfileSuggestedPages from './ProfileSuggestedPages'
 import ProfileFriendsSuggestions from './ProfileFriendsSuggestions'
+import ProfileBooks from './ProfileBooks'
+
+
 
 // ** Styles
 import '@styles/react/pages/page-profile.scss'
 
-const Profile = () => {
+const MyBooks = () => {
   // ** States
   const [data, setData] = useState(null)
  
@@ -73,16 +76,12 @@ const Profile = () => {
             <Row>
               <Col lg={{ size: 3, order: 1 }} sm={{ size: 12 }} xs={{ order: 2 }}>
                 <ProfileAbout selectedUser={store.selectedUser} />
-                <ProfileSuggestedPages data={data.suggestedPages} />
-                <ProfileTwitterFeeds data={data.twitterFeeds} />
               </Col>
               <Col lg={{ size: 6, order: 2 }} sm={{ size: 12 }} xs={{ order: 1 }}>
-                <ProfilePosts data={data.post} />
+                <ProfileBooks data={data.post} />
               </Col>
               <Col lg={{ size: 3, order: 3 }} sm={{ size: 12 }} xs={{ order: 3 }}>
                 <ProfileLatestPhotos data={data.latestPhotos} />
-                <ProfileFriendsSuggestions data={data.suggestions} />
-                <ProfilePoll data={data.polls} />
               </Col>
             </Row>
             <Row>
@@ -102,4 +101,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default MyBooks

@@ -33,8 +33,6 @@ router.put('/rateUser', userController.rateUser);
 // })
 
 
-
-
 router.get("/usersForAdmin",  userController.getUsersForAdmin);
 router.get("/AllusersForAdmin",  userController.getAllUsersForAdmin);
 router.get("/users", authorize(["client"]), userController.getUsers);

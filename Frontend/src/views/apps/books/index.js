@@ -32,7 +32,7 @@ const Shop = () => {
 
   // ** Get products
   useEffect(() => {
-      fetchHandler().then((data) => setBooks(data.books));
+      fetchHandler().then((data) => setBooks(data));
   }, [])
 
   return (

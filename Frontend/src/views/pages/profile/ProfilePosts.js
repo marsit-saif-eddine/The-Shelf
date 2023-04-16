@@ -181,7 +181,6 @@ const ProfilePosts = ({ data }) => {
 
 
   const renderPosts = () => {
-
   //   const renderPosts = () => {
 
   //     const currentUser = localStorage.getItem('userId');
@@ -304,7 +303,6 @@ const ProfilePosts = ({ data }) => {
   // }
     return events.length > 0 ?  events.map(event => {
       return (
-        
         <Card key={event._id}>
           <CardBody>
           {selectedEvent &&showForm && <UpdateEventForm event={selectedEvent} onSubmit={updateEvent} onEventUpdate={handleEventUpdate} />}
@@ -425,7 +423,7 @@ const ProfilePosts = ({ data }) => {
         
 
       )
-    }) : <></>;
+    }) : <>There is no posts to show</>;
   }
   return renderPosts()
 }

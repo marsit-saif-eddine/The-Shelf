@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 
 // ** Product components
 import ProductCards from './BookCards'
-import ProductsHeader from './ProductsHeader'
+import ProductsHeader from './BooksHeader'
 import ProductsSearchbar from './ProductsSearchbar'
 
 // ** Third Party Components
@@ -43,7 +43,8 @@ const ProductsPage = props => {
   // ** Render pages
   const renderPageItems = () => {
     const arrLength = 3
-
+  
+                    
     return new Array(Math.trunc(arrLength)).fill().map((item, index) => {
       return (
         <PaginationItem

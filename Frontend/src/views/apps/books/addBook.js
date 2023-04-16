@@ -8,12 +8,20 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {Input, Select} from "reactstrap";
 
 
 
 const addBook = () => {
+
+    var user = JSON.parse(localStorage.getItem('userData'));
+    console.log("your user is :"+user.username);
+    const ownerId = user.id;
+    //owner1 = user.email
+    
+
     const history = useNavigate();
     const [inputs, setInputs] = useState({
         name: "",
@@ -21,9 +29,13 @@ const addBook = () => {
         price: "",
         author: "",
         image: "",
+        owner: user.username,
+        owner_Id: ownerId,
+        for_sale:null
+        
     });
-
-    //const cookies = new Cookies();
+    //useEffect(()=>{},[inputs.for_sale])
+   
    /*
    // const [selectedFile, setSelectedFile] = useState(null);
    function handleFileInput(e) {
@@ -49,12 +61,13 @@ const addBook = () => {
 */
 
     const [checked, setChecked] = useState(false);
+    const [selsctedType, setSelsctedType] = useState(false);
+
     const handleChange = (e) => {
         setInputs((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
         }));
-        // console.log(e.target.name, "Value", e.target.value);
     };
 
  const sendRequest = async () => {
@@ -66,6 +79,11 @@ const addBook = () => {
          price: Number(inputs.price),
          image: String(inputs.image),
          available: Boolean(checked),
+         for_sale: Boolean(inputs.for_sale),
+         accepted: Boolean("false"),
+         owner: user.username,
+         owner_Id: ownerId
+
      }
         await axios
             .post("http://localhost:5000/book/addbook", dataToSend)
@@ -92,52 +110,67 @@ const addBook = () => {
                 marginTop={10}
             >
                 <FormLabel>Name</FormLabel>
-                <TextField
+                <Input
                     value={inputs.name}
                     onChange={handleChange}
                     margin="normal"
-                    fullWidth
                     variant="outlined"
                     name="name"
                 />
                 <FormLabel>Author</FormLabel>
-                <TextField
+                <Input
                     value={inputs.author}
                     onChange={handleChange}
                     margin="normal"
-                    fullWidth
                     variant="outlined"
                     name="author"
                 />
-                <FormLabel>Description</FormLabel>
-                <TextField
-                    value={inputs.description}
-                    onChange={handleChange}
-                    margin="normal"
-                    fullWidth
-                    variant="outlined"
-                    name="description"
-                />
-                <FormLabel>Price</FormLabel>
-                <TextField
-                    value={inputs.price}
-                    onChange={handleChange}
-                    type="number"
-                    margin="normal"
-                    fullWidth
-                    variant="outlined"
-                    name="price"
-                />
+
+                <FormLabel>Rent/ Sale</FormLabel>
+                <Input
+                id="for_sale"
+                name="for_sale"
+                type="select"
+                value={inputs.for_sale} onChange={handleChange} 
+                >
+                        <option value=''>Select</option>
+                        <option value='true'>For sale</option>
+                        <option value='false'>For rent</option>
+                </Input>
+                
+                {inputs.for_sale === 'true' && 
+                    <>
+                    <FormLabel>Price</FormLabel>
+                    <Input
+                        value={inputs.price}
+                        onChange={handleChange}
+                        type="number"
+                        margin="normal"
+                        variant="outlined"
+                        name="price"
+                    />
+                    </>
+                
+                }
+                
                 <FormLabel>Image</FormLabel>
-                <TextField
+                <Input
                     value={inputs.image}
                     onChange={handleChange}
                     margin="normal"
-                    fullWidth
                     variant="outlined"
                     name="image"
                 />
-
+                <FormLabel>Description</FormLabel>
+                <Input
+                type='textarea'
+                rows="5"
+                value={inputs.description}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                name="description"
+                />
                 <FormControlLabel
                     control={
                         <Checkbox checked={checked} onChange={() => setChecked(!checked)} />

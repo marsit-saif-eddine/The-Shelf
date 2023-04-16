@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 // ** Reactstrap Imports
 import { Card, CardImg, Collapse, Navbar, Nav, NavItem, NavLink, Button } from 'reactstrap'
 
-
+import { useLocation } from "react-router-dom";
 // ** Custom Components
 import Avatar from '@components/avatar'
 
@@ -50,6 +50,11 @@ const ProfileHeader = ({ data,selectedUser }) => {
     )
   }
 }
+
+const location = useLocation();
+
+//destructuring pathname from location
+const { pathname } = location;
   return (
     <Card className='profile-header mb-2'>
       <CardImg src={data.coverImg} alt='User Profile Image' top />
@@ -73,7 +78,7 @@ const ProfileHeader = ({ data,selectedUser }) => {
             <div className='profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0'>
               <Nav className='mb-0' pills>
                 <NavItem>
-                  <NavLink className='fw-bold' active>
+                  <NavLink href={`/pages/profile/${selectedUser._id}`} className='fw-bold' active>
                     <span className='d-none d-md-block'>Feed</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
@@ -96,17 +101,27 @@ const ProfileHeader = ({ data,selectedUser }) => {
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-              
+                <NavItem>
+                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' active>
+                    <span className='d-none d-md-block'>Books</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
               </Nav>
               <Button color='primary'>
-  <Edit className='d-block d-md-none' size={14} />
-  <span className='fw-bold d-none d-md-block'>
-    <Link to='/eventsform'>
-      Add new event
-    </Link>
-  </span>
-</Button>
-
+              <Edit className='d-block d-md-none' size={14} />
+              <span className='fw-bold d-none d-md-block'>
+                <Link to='/eventsform'>
+                  Add new event
+                </Link>
+              </span>
+            </Button>
             </div>
           </Collapse>
         </Navbar>

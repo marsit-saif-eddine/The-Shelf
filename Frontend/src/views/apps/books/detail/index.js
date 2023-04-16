@@ -1,7 +1,7 @@
 // ** React Imports
 import {useEffect, Fragment, useState} from 'react'
 import { useParams } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 // ** Product detail components
 import ItemFeatures from './ItemFeatures'
 import BookDetails from './BookDetails'
@@ -12,17 +12,20 @@ import BreadCrumbs from '@components/breadcrumbs'
 
 // ** Reactstrap Imports
 import { Card, CardBody } from 'reactstrap'
+import {
+  BreadcrumbItem
+} from 'reactstrap'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
 import { getProduct, deleteWishlistItem, addToWishlist, addToCart } from '../store'
 
 import '@styles/base/pages/app-ecommerce-details.scss'
-const URL = "http://localhost:5000/book";
+//const URL = "http://localhost:5000/book";
 const Details = () => {
   // ** Vars
     const bookId = useParams().id
-    console.log('bookId', bookId)
+    //console.log('bookId', bookId)
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.ecommerce)
@@ -32,17 +35,16 @@ const Details = () => {
     };
   // ** ComponentDidMount : Get product
   useEffect(() => {
-    console.log('test one one')
       fetchHandler().then((data) => {
-          console.log('dattttta', data)
-          console.log('dataauserrr', data)
+          //console.log('this is data', data)
           setBook(data)
       });
   }, [])
 
   return (
     <Fragment>
-      <BreadCrumbs title='Book Details' data={[{ title: 'Books' }, { title: book && book.name }]} />
+    
+      <BreadCrumbs title='Book Details' data={[{ title: book && book.name }]} />
       <div className='app-ecommerce-details'>
           <Card>
             <CardBody>
