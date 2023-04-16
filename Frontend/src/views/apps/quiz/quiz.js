@@ -15,8 +15,7 @@ function Quiz ({quiz}) {
 
 
     return (
-     
-
+    
       <Card style={{ width: "28rem" }}  border="secondary">
         <CardHeader>
           <CardTitle>

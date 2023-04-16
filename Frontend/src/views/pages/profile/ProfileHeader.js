@@ -96,17 +96,27 @@ const ProfileHeader = ({ data,selectedUser }) => {
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-              
+                <NavItem>
+                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink to="/pages/profile/mybooks" className='fw-bold'>
+                    <span className='d-none d-md-block'>Books</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
               </Nav>
               <Button color='primary'>
-  <Edit className='d-block d-md-none' size={14} />
-  <span className='fw-bold d-none d-md-block'>
-    <Link to='/eventsform'>
-      Add new event
-    </Link>
-  </span>
-</Button>
-
+              <Edit className='d-block d-md-none' size={14} />
+              <span className='fw-bold d-none d-md-block'>
+                <Link to='/eventsform'>
+                  Add new event
+                </Link>
+              </span>
+            </Button>
             </div>
           </Collapse>
         </Navbar>

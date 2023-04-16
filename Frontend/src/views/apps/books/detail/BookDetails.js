@@ -38,6 +38,13 @@ const BookDetails = props => {
     dispatch(getProduct(productId))
   }
 
+  const CheckForSale = (forSale) => {
+    let saleStatus ;
+    forSale === true ?
+    saleStatus = 'For Sale' :  saleStatus = 'For Rent'
+    return saleStatus
+  }
+
   // ** Handle Move/Add to cart
   const handleCartBtn = (id, val) => {
     if (val === false) {
@@ -50,6 +57,7 @@ const BookDetails = props => {
 
   return (
     <Row className='my-2'>
+      {console.log("dtaaaa", data)}
       {data && (
           <>
             <Col className='d-flex align-items-center justify-content-center mb-2 mb-md-0' md='5' xs='12'>
@@ -65,11 +73,13 @@ const BookDetails = props => {
                   {` ${data.author}`}
                 </a>
               </CardText>
-<br/>
+              <br/>
               <CardText tag='span' className='item-company'>
                 Owner
                 <a className='company-name' href='/' onClick={e => e.preventDefault()}>
-                  {` ${data.userId}`}
+                <Link className='text-body' to={`/pages/profile/${data.owner_Id}`}>
+                {` ${data.owner}`}
+                </Link>
                 </a>
               </CardText>
               <br/><br/>
@@ -78,6 +88,7 @@ const BookDetails = props => {
 
               </CardText>
               <CardText>{data.description}</CardText>
+              <CardText>{ CheckForSale(data.for_sale)}</CardText>
               <br/>
               <hr />
               <br/>

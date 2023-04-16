@@ -39,6 +39,8 @@ const QuizAdmin=lazy(() => import('../../views/apps/quiz/admin/quizTable.js'))
 const Books = lazy(() => import('../../views/apps/books/index'))
 const AddBook = lazy(() => import('../../views/apps/books/addBook'))
 const Book = lazy(() => import('../../views/apps/books/detail/index'))
+const Booksadmin = lazy(() => import('../../views/apps/BookAdmin/list/index'))
+//const MyBooksProfile=lazy(() => import('../../views/pages/profile/MyBooks'))
 
 const VideoConferance = lazy(() => import('../../views/apps/Events/chatvideoconf'))
 
@@ -85,6 +87,7 @@ const AppRoutes = [
     }
     
   },
+
   {
     element: <Books />,
     path: '/apps/books',
@@ -92,8 +95,10 @@ const AppRoutes = [
       appLayout: false,
       className: 'chat-application',
       layout: 'horizontal',
-      action: 'client',
-      resource: 'client'
+      action: 'read',
+      resource: 'ACL',
+      //action: 'client',
+      //resource: 'client'
     }
   },
   {
@@ -109,7 +114,7 @@ const AppRoutes = [
   },
   {
     element: <AddBook/>,
-    path: '/addBook',
+    path: '/addbook',
     meta: {
       appLayout: false,
       className: 'chat-application',
@@ -126,18 +131,38 @@ const AppRoutes = [
       appLayout: false,
       className: 'chat-application',
       layout: 'horizontal',
-      action: 'client',
-      resource: 'client'
+     // action: 'client',
+     // resource: 'client'
+      action: 'read',
+      resource: 'ACL',
     }
   },
 
+  {
+    path: '/books/list',
+    element: <Booksadmin />,
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+    
+  },
 
-
-
-
-
-
-
+ /* {
+    path: '/pages/profile/mybooks',
+    element: <MyBooksProfile />,
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },*/
 
   {
     path: '/eventsdetail/:id',

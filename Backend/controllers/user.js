@@ -161,6 +161,7 @@ exports.getAllUsersForAdmin = async (req, res, next) => {
         res.status(400).json({ "message": err.message })
     }
 };
+
 exports.getUsersForAdmin = async (req, res) => {
     try {
       // Extract the query parameters from the request

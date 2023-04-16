@@ -10,6 +10,7 @@ const bookSchema = new Schema(
         type: String,
         required: true,
     },
+
     author: {
         type: String,
         required: true,
@@ -29,6 +30,11 @@ const bookSchema = new Schema(
         type: Boolean,
     },
 
+    accepted: {
+        type: Boolean,
+        default: false
+    },
+
     image: {
         type: String,
         required: false,
@@ -39,10 +45,12 @@ const bookSchema = new Schema(
             required: false,
     },
 
-    place: {
-            type: String,
-            required: false,
+    for_sale: {
+        type: Boolean,
     },
+
+    owner: {},
+    owner_Id: {},
 
 });
 

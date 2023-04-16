@@ -85,6 +85,7 @@ export const columns = [
       </div>
     )
   },
+  
   {
     name: 'Role',
     sortable: true,

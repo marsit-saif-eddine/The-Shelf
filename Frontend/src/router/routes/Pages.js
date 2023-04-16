@@ -19,6 +19,8 @@ const KnowledgeBase = lazy(() => import('../../views/pages/knowledge-base/Knowle
 const KnowledgeBaseCategory = lazy(() => import('../../views/pages/knowledge-base/KnowledgeBaseCategory'))
 const KBCategoryQuestion = lazy(() => import('../../views/pages/knowledge-base/KnowledgeBaseCategoryQuestion'))
 const MyQuiz = lazy(() => import('../../views/pages/profile/MyQuizzes'))
+//const MyBooksProfile = lazy(() => import('../../views/pages/profile/MyBooks'))
+
 
 const PagesRoutes = [
   {
@@ -31,6 +33,16 @@ const PagesRoutes = [
     }
    
   },
+
+  /*{
+    path: '/pages/profile/mybooks',
+    element: <MyBooksProfile/>,
+    meta: {
+      action: 'read',
+      resource: 'ACL'
+    }
+  },*/
+
   {
     path: '/pages/profile/quiz',
     element: <MyQuiz />,
@@ -39,6 +51,16 @@ const PagesRoutes = [
       resource: 'ACL'
     }
   },
+
+  {
+    path: '/pages/profile/quiz',
+    element: <MyQuiz />,
+    meta: {
+      action: 'read',
+      resource: 'ACL'
+    }
+  },
+
   {
     path: '/pages/faq',
     element: <Faq />

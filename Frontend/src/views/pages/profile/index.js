@@ -61,7 +61,8 @@ const Profile = () => {
   return (
     <Fragment>
       <Breadcrumbs title='Profile' data={[{ title: 'Pages' }, { title: 'Profile' }]} />
-      {store.selectedUser !== null ? (
+    {data && 
+      store.selectedUser !== null ? (
         <div id='user-profile'>
           <Row>
             <Col sm='12'>
@@ -96,6 +97,7 @@ const Profile = () => {
           </section>
         </div>
       ) : null}
+     
     </Fragment>
   )
 }

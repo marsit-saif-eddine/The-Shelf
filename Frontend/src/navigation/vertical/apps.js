@@ -129,6 +129,15 @@ export default [
       
       
       {
+        id: 'BooksAdmin',
+        title: 'Books',
+        icon: <Circle size={12} />,
+        navLink: 'books/list',
+        action: 'admin',
+        resource: 'admin',
+      },
+
+      {
         id: 'events',
         title: 'Events',
         icon: <Circle size={12} />,
