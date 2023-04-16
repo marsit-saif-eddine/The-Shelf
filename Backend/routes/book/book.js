@@ -19,7 +19,11 @@ router.post("/addbook", booksController.addBook);
 router.get("/:id", booksController.getById);
 router.put("/:id", booksController.updateBook);
 router.delete("/:id", booksController.deleteBook);
-router.put("switch_accepted/:id", booksController.switchBookToaccepted);
+router.put("/switch_accepted/:id", booksController.switchBookToaccepted);
+router.get("/user_book/:id", booksController.getByUserId);
+
+
+
 
 
 //adminbooks

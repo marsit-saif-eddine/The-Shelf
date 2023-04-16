@@ -1,5 +1,7 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2';
+import axios from "axios";
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -52,6 +54,31 @@ const isAccepted = (isAccepted) => {
   return status
 }
 
+const switchAccepted=(id, current)=>{
+  Swal.fire({
+      title: 'Are you sure?',
+      text: 'do you want to approve this book',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, approve it it!',
+      cancelButtonText: 'No, cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+  axios.put(`http://localhost:5000/book/switch_accepted/${id}`, {accepted: !current})
+
+ .then(response => {
+  console.log(response.data);
+  //setChange(true)   
+console.log(response);
+})
+.catch(error => {
+  // handle error
+  console.log(error);
+});
+}
+});   
+}
+
 export const columns = [
    {
      name: 'Name',
@@ -65,7 +92,6 @@ export const columns = [
            <Link
              to={`/bookdetail/${row._id}`}
              className='user_name text-truncate text-body'
-             onClick={() => store.dispatch(getBook(row._id))}
            >
            <span className='fw-bolder'>{row.name}</span>
            </Link>
@@ -104,7 +130,7 @@ export const columns = [
 
     <Badge className='text-capitalize' style={{cursor:'pointer'}}
     color={acceptedObj[row.accepted]}
-    onClick={() => store.dispatch(updateStatusBook(row._id,{accepted: false}))}
+    onClick={() => switchAccepted(row._id,row.accepted)}
     >
       {isAccepted(row.accepted) }
      </Badge>
@@ -123,21 +149,16 @@ export const columns = [
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem
-           
-               tag={Link}
-               className='w-100'
-                to={`/bookdetail/${row.id}`}
-               onClick={() => store.dispatch(getBook(row._id))}
+            className='w-100'
             >
               
-              {/* <Link
+               <Link
             to={`/bookdetail/${row._id}`}
             className='w-100'
-            onClick={() => store.dispatch(getBook(row._id))}
-          > */}
+          > 
             <FileText size={14} className='me-50' />
             <span className='align-middle'>Details</span>
-             {/* </Link> */}
+              </Link> 
               
             </DropdownItem>
             {/* <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>

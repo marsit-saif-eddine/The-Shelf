@@ -40,7 +40,7 @@ const Books = lazy(() => import('../../views/apps/books/index'))
 const AddBook = lazy(() => import('../../views/apps/books/addBook'))
 const Book = lazy(() => import('../../views/apps/books/detail/index'))
 const Booksadmin = lazy(() => import('../../views/apps/BookAdmin/list/index'))
-//const MyBooksProfile=lazy(() => import('../../views/pages/profile/MyBooks'))
+const MyBooksProfile=lazy(() => import('../../views/pages/profile/MyBooks'))
 
 const VideoConferance = lazy(() => import('../../views/apps/Events/chatvideoconf'))
 
@@ -150,20 +150,6 @@ const AppRoutes = [
     }
     
   },
-
- /* {
-    path: '/pages/profile/mybooks',
-    element: <MyBooksProfile />,
-    meta: {
-      appLayout: false,
-      className: 'chat-application',
-      layout: 'horizontal',
-      action: 'client',
-      resource: 'client'
-    }
-    
-  },*/
-
   {
     path: '/eventsdetail/:id',
     element: <Eventsdetails />,

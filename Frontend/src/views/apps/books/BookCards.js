@@ -49,8 +49,7 @@ const BookCards = props => {
         return (
           
           <Card style={{ width: "28rem" }} border="secondary" key={item.name}>
-
-          <CardHeader>
+              <CardHeader>
                 
                   <CardImg
                   variant="top"
@@ -59,50 +58,45 @@ const BookCards = props => {
                   height={200}
                 />
                 </CardHeader>
-        
-        
-         <CardBody>
-        <CardText>  <Link className='text-body' to={`/bookdetail/${item._id}`}>
-                 {item.name} </Link> </CardText>  
-        
-        
-        <CardText>   {' By '}
-                          <a className='company-name' onClick={e => e.preventDefault()}>
-                            {item.author}
-                          </a>
-                        </CardText> 
-        
-        
-        <CardText> {item.description}</CardText>
-        
-        
-        <CardText>  {(item.price && item.price!=="0")  && <h4 className='item-price'>${item.price}</h4>}</CardText>
-        
-        <Button
-                        className='btn-wishlist'
-                        color='light'
-                        onClick={() => handleWishlistClick(item.id, item.isInWishlist)}
-                      >
-                        <Heart
-                          className={classnames('me-50', {
-                            'text-danger': item.isInWishlist
-                          })}
-                          size={14}
-                        />
-                        <span>Wishlist</span>
-                      </Button>
-        
-                      <Link to={`/bookdetail/${item._id}`}>
-                         <Button color='primary'className='btn-cart move-cart' >
-                         View Details</Button>
-                      </Link>
-        
-        
-         </CardBody>
-        
-        
-         </Card>
-        
+                <CardBody>
+                <CardText>  <Link className='text-body' to={`/bookdetail/${item._id}`}>
+                        {item.name} </Link> </CardText>  
+                
+                
+                <CardText>   {' By '}
+                                  <a className='company-name' onClick={e => e.preventDefault()}>
+                                    {item.author}
+                                  </a>
+                                </CardText> 
+                
+                
+                <CardText> {item.description}</CardText>
+                
+                
+                <CardText>  {(item.price && item.price!=="0")  && <h4 className='item-price'>${item.price}</h4>}</CardText>
+                
+                <Button
+                                className='btn-wishlist'
+                                color='light'
+                                onClick={() => handleWishlistClick(item.id, item.isInWishlist)}
+                              >
+                                <Heart
+                                  className={classnames('me-50', {
+                                    'text-danger': item.isInWishlist
+                                  })}
+                                  size={14}
+                                />
+                                <span>Wishlist</span>
+                              </Button>
+                
+                              <Link to={`/bookdetail/${item._id}`}>
+                                <Button color='primary'className='btn-cart move-cart' >
+                                View Details</Button>
+                              </Link>
+                
+                
+                </CardBody>
+          </Card>
         )
       })
     }

@@ -48,13 +48,14 @@ export const addUser = createAsyncThunk('appBooks/addUser', async (user, { dispa
 })*/
 
 export const deleteBook = createAsyncThunk('appBooks/deleteBook', async (id, { dispatch, getState }) => {
-  await axios.delete('book/', { id })
+  await axios.delete('book/', { params:{id:id} })
   await dispatch(getData(getState().books.params))
   await dispatch(getAllData())
   return id
 })
 export const updateStatusBook = createAsyncThunk('appBooks/updatStatus', async (id, accepted, { dispatch, getState }) => {
-  await axios.put('book/switch_accepted', { id }, {accepted})
+  await axios.put(`book/switch_accepted/`, { params:{id:id} },{body: {accepted}})
+  console.log('useeer', id)
   await dispatch(getData(getState().books.params))
   await dispatch(getAllData())
   return id

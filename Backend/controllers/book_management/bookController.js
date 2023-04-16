@@ -153,6 +153,22 @@ const getById = async (req, res, next) => {
   return res.status(200).json({book} );
 };
 
+const getByUserId = async (req, res, next) => {
+  let books;
+  const id = req.params.id;
+  try {
+ books = await Book.find({owner_Id : id});
+console.log('My booklist',books)
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!books) {
+    return res.status(404).json({ message: "No books found" });
+  }
+  return res.status(200).json(books);
+};
+
 const addBook = async (req, res, next) => {
   const { name, author, description, price, available, image, for_sale, owner, owner_Id,accepted } = req.body;
   let book;
@@ -242,3 +258,5 @@ exports.getById = getById;
 exports.updateBook = updateBook;
 exports.deleteBook = deleteBook;
 exports.switchBookToaccepted = switchBookToaccepted;
+exports.getByUserId = getByUserId;
+
