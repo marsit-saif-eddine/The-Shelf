@@ -102,7 +102,23 @@ const quizTable = () => {
 });   
       }
 
+///search////
+const [searchQuery, setSearchQuery] = useState('');
+const [filteredData, setFilteredData] = useState(Quizs);
 
+const handleSearch = (event) => {
+  const query = event.target.value;
+
+  setSearchQuery(query);
+};
+const filteredQuizData = Quizs.filter(
+    (quiz) =>
+      quiz.quizName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      quiz.book_id.toLowerCase().includes(searchQuery.toLowerCase()) 
+
+  );
+
+////////////
       const statusObj = {
         approved: 'light-success',
         pending: 'light-warning'
@@ -122,8 +138,18 @@ const quizTable = () => {
                                 <h4 className="card-title">All quizzes</h4>
                             </div>
                             <div className="card-body">
-                                
+                            <div className='d-flex align-items-center mb-sm-0 mb-1 me-1'>
+            <label className='mb-0' htmlFor='search-invoice'>
+              Search:
+            </label>
+            <Input
+              id='search-invoice'
+              className='ms-50 w-100'
+              type='text' value={searchQuery} onChange={handleSearch}  />
+              </div>
                             </div>
+                     
+
                             <div className="table-responsive">
                                 <table className="table">
                                     <thead>
@@ -138,7 +164,7 @@ const quizTable = () => {
                                     <tbody>
                                     
                                       
-                                        {Quizs.map((quiz) => (
+                                        {filteredQuizData.map((quiz) => (
                                          <tr key={quiz._id} >
                                             <td>{quiz._id}</td>
                                             <td>

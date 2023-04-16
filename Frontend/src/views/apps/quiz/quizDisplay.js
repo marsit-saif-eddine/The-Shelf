@@ -30,17 +30,18 @@ import {  useSelector } from "react-redux";
 function QuizDisplay () {
 
 
-              const [Quizs, setQuizs] = useState([])
+const [Quizs, setQuizs] = useState([])
+const[change,setChange]=useState(false)
+
 const approved="approved";
   useEffect(() => {
     axios.get(`/quiz/allquiz?status=${approved}`)
-   // axios.get(`/quiz/allquiz/`)
-
       .then(response => setQuizs(response.data))
       .catch(error => console.error(error));
       console.log(Quizs)
+      setChange(false)
 
-  }, []);
+  }, [change]);
 
 //const history = useHistory();
 

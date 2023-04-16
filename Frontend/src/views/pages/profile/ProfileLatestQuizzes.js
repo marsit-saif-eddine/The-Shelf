@@ -5,6 +5,7 @@ import { Award } from 'react-feather'
 
 import classnames from 'classnames'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const ProfileLatestPhotos = ({ data }) => {
   const handleUpdate = (event) => {
@@ -20,6 +21,8 @@ const ProfileLatestPhotos = ({ data }) => {
 }, []);
 const userid = useParams().id
 const approved="approved";
+const [maxQuizzes, setMaxQuizzes] = useState(3);
+const filteredQuizzes = quizzes.slice(0, maxQuizzes);
 
 useEffect(() => {
     if (userid !== null) {
@@ -31,34 +34,14 @@ useEffect(() => {
     console.log(quizzes)
   }, [userid]);
 
-/////// fetch book name /////
 
-// const [bookName, setBookName] = useState('');
-
-// const handleBookChange = (event) => {
-//   setBookId(event.target.value);
-// }
-
-// useEffect(() => {
-  
-//   // Fetch the book details using the bookId
-//   if (quiz.book_id !== '') {
-//     fetch(`http://localhost:5000/book/${quiz.book_id}`)
-//       .then(response => response.json())
-//       .then(data => setBookName(data.name))
-//       .catch(error => console.log(error));
-//   } else {
-//     setBookName('');
-//   }
-// }, [quiz.book_id]);
-// /////////
 
   return (
     <Card>
       <CardBody className='profile-suggestion'>
         <h5 className='mb-0'> My Latest Quizzes</h5>
         <br></br>
-        {quizzes.map((quiz, index) => (
+        {filteredQuizzes.map((quiz, index) => (
          
     // <Card key={quiz._id} value={quiz._id}>
      <div
@@ -81,7 +64,11 @@ useEffect(() => {
           </div>
     // </Card>
     ))}
-    
+    <br></br>
+    <Link to="/pages/profile/quiz">
+    <Button className='btn-icon' color='primary' size='m'>  view all </Button>
+</Link>
+   
       </CardBody>
     </Card>
   )

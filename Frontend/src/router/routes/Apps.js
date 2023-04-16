@@ -9,6 +9,7 @@ const Kanban = lazy(() => import('../../views/apps/kanban'))
 const Calendar = lazy(() => import('../../views/apps/calendar'))
 const Quiz = lazy(() => import('../../views/apps/quiz'))
 const QuizByBook = lazy(() => import('../../views/apps/quiz/quizByBook'))
+const QuizById = lazy(() => import('../../views/apps/quiz/quizDetails'))
 
 
 const InvoiceAdd = lazy(() => import('../../views/apps/invoice/add'))
@@ -252,6 +253,17 @@ const AppRoutes = [
     meta: {
       appLayout: false,
       className: 'quizbook-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+  {
+    element: <QuizById/>,
+    path: '/quiz/:id',
+    meta: {
+      appLayout: false,
+      className: 'quizid-application',
       layout: 'horizontal',
       action: 'client',
       resource: 'client'

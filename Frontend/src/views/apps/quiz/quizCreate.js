@@ -112,7 +112,7 @@ function addOption(i){
 }
 
 function copyQuestion(i){
-    // expandCloseAll()
+    
     let qs = [...questions]
     var newQuestion =qs[i]
     setQuestions([...questions,newQuestion])
@@ -191,9 +191,9 @@ var userId = user.id;
 const [books, setBooks] = useState([])
     useEffect(() => {
         axios.get(`/book/books`)
-          .then(response => {console.log(response.data.books) ; setBooks(response.data.books)})
+          .then(response => {console.log(response.data) ; setBooks(response.data)})
           .catch(error => console.error(error));
-          console.log(books)
+          console.log("booook"+ books)
     
       }, []);
 

@@ -101,12 +101,7 @@ const { pathname } = location;
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-                <NavItem>
-                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
-                    <span className='d-none d-md-block'>Quizzes</span>
-                    <Users className='d-block d-md-none' size={14} />
-                  </NavLink>
-                </NavItem>
+               
                 <NavItem>
                   <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' active>
                     <span className='d-none d-md-block'>Books</span>

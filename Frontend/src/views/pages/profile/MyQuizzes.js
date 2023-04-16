@@ -20,40 +20,55 @@ import ProfileTwitterFeeds from './ProfileTwitterFeeds'
 import ProfileLatestPhotos from './ProfileLatestQuizzes'
 import ProfileSuggestedPages from './ProfileSuggestedPages'
 import ProfileFriendsSuggestions from './ProfileFriendsSuggestions'
+import { useParams } from 'react-router-dom'
+import { Card, CardBody } from 'reactstrap'
+import classnames from 'classnames'
+import Quiz from "../../apps/quiz/quiz"
 
 // ** Styles
-import '@styles/react/pages/page-profile.scss'
+//import '@styles/react/pages/page-profile.scss'
 
-const Profile = () => {
-  // ** States
-  const [data, setData] = useState(null)
-  const [block, setBlock] = useState(false)
-
-  const handleBlock = () => {
-    setBlock(true)
-    setTimeout(() => {
-      setBlock(false)
-    }, 2000)
-  }
-
+const MyQuizzes = () => {
+  const [quizzes, setQuizzes] = useState([]);
+  const [userData, setUserData] = useState(null)
   useEffect(() => {
-    axios.get('/profile/data').then(response => setData(response.data))
-  }, [])
+ 
+    setUserData(JSON.parse(localStorage.getItem('userData')));
+  
+}, []);
+const userid = useParams().id
+var user = JSON.parse(localStorage.getItem('userData'));
+var userId = user.id;
+const approved="approved";
+
+
+useEffect(() => {
+    if (userid !== null) {
+      fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userId}&status=${approved}`)
+        .then(response => response.json())
+        .then(data => setQuizzes(data))
+        .catch(error => console.log(error));
+    }
+    console.log(quizzes)
+  }, [userid]);
+
+
+
   return (
-    <Fragment>
-      <Breadcrumbs title='Profile' data={[{ title: 'Pages' }, { title: 'Profile' }]} />
-      {data !== null ? (
-        <div id='user-profile'>
-          <Row>
-            <Col sm='12'>
-              <ProfileHeader data={data.header} />
-            </Col>
-          </Row>
-          
-        </div>
-      ) : null}
-    </Fragment>
+  
+    <div className="containers">
+    <Row>
+        {quizzes.map((quiz, index) => (
+          <Col md={4} >
+ 
+          <Quiz key={quiz._id} quiz={quiz} />
+       </Col> 
+        ))}
+       </Row>
+       </div>
+   
   )
+ 
 }
 
-export default Profile
+export default MyQuizzes
