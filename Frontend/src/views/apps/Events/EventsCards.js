@@ -53,6 +53,22 @@ function EventsCards() {
     });
   }, []);
 
+  const getEvents = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/events");
+      setEvents(response.data);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Failed to fetch events");
+    }
+  };
+  useEffect(() => {
+    // Call getEvents when the component mounts
+    getEvents();
+  }, []);
+
+
+
   // useEffect(() => {
   //   // Fetch the event object from the API
   //   fetch(`http://localhost:5000/events/${eventId}`)
@@ -103,6 +119,8 @@ function EventsCards() {
             return {
               ...event,
               isParticipating: !event.isParticipating,
+              participantCount: event.participantCount + (event.isParticipating ? -1 : 1),
+
             };
           } else {
             return event;
@@ -112,7 +130,8 @@ function EventsCards() {
         // Update the events state
         setEvents(updatedEvents);
         setParticipatedCount( Object.keys(data.participants).length)
-    
+        getEvents();
+
       } catch (error) {
         console.error(error);
       }
@@ -250,8 +269,12 @@ function EventsCards() {
         {errorMessage}
       </div>
     )}
+    
 <div className="card-container">
-  {events.map((event) => (
+  
+{events.map((event) => {
+  let count = event.participants ? Object.keys(event.participants).length : 0;
+  return (
     <div className="card-wrapper" key={event._id}>
       <div className="img-container">
         <img
@@ -259,8 +282,7 @@ function EventsCards() {
           alt={event.name}
           loading="lazy"
           style={{ width: '100%', height: '60%', borderRadius: '10px' }}
-          
-          />
+        />
       </div>
       <Card className='ecommerce-card'>
         <CardBody>
@@ -269,22 +291,23 @@ function EventsCards() {
             <CardText tag='span' className='item-company'></CardText>
           </h6>
           <CardText className='item-description'>{event.location}</CardText>
-          <CardText className='item-description'>     {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""}  TO   {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
-</CardText>
-
+          <CardText className='item-description'>
+            {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} TO {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
+          </CardText>
           <button
             className="participate-btn"
             variant="contained"
             color="primary"
             onClick={() => patchParticipate(event._id)}
-          >
-            {event.isParticipating ? "Cancel participation" : "Participate"}
+          >{count} 
+            {event.isParticipating ? "Cancel participation" : "Participated"}
           </button>
-            
+        
         </CardBody>
       </Card>
     </div>
-  ))}
+  );
+})}
 </div>
 
 {successMessage && (

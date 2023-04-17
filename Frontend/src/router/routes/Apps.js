@@ -35,6 +35,7 @@ const EventsaddForm = lazy(() => import('../../views/apps/Events/NewEventForm'))
 const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/EventTable'))
 const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
 const QuizAdmin=lazy(() => import('../../views/apps/quiz/admin/quizTable.js'))
+const MyEvents=lazy(() => import('../../views/pages/profile/MyEvents'))
 
 
 const Books = lazy(() => import('../../views/apps/books/index'))
@@ -265,6 +266,19 @@ const AppRoutes = [
   {
     path: '/pages/profile/quiz',
     element: <MyQuizzes />,
+    meta: {
+      appLayout: false,
+      className: 'quiz-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+    
+  },
+
+  {
+    path: '/pages/profile/event',
+    element: <MyEvents />,
     meta: {
       appLayout: false,
       className: 'quiz-application',

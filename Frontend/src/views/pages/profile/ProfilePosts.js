@@ -19,6 +19,8 @@ import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFlag, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { isUserLoggedIn } from '@utils'
+import Swal from 'sweetalert2'
+
 
 const ProfilePosts = ({ data }) => {
 
@@ -46,12 +48,22 @@ const ProfilePosts = ({ data }) => {
 
 
 
-
   const handleUpdate = (event) => {
-    setSelectedEvent(event);
-    setShowForm(true)
+    Swal.fire({
+      title: 'Are you sure you want to update this event?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, update it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setSelectedEvent(event);
+        setShowForm(true);
+      }
+    })
   };
-
+  
   useEffect(() => {
     if (userData !== null) {
       fetch(`http://localhost:5000/events?userconnected=${id}`)
@@ -77,20 +89,29 @@ const ProfilePosts = ({ data }) => {
 
   const handleDelete = async (_id) => {
     try {
-      const res = await axios.delete(`/events/delete/${_id}`);
-      console.log(res.data);
-      setSuccessMessage('Successfully deleted the event!');
-      setTimeout(() => setSuccessMessage(null), 3000);
-
-
-      // Remove the deleted event from the list of events
-      setEvents(events.filter(event => event._id !== _id));
-
+      // Show a confirmation message to the user
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this event!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      });
+  
+      if (result.isConfirmed) {
+        const res = await axios.delete(`/events/delete/${_id}`);
+        console.log(res.data);
+        setSuccessMessage('Successfully deleted the event!');
+        setTimeout(() => setSuccessMessage(null), 3000);
+  
+        // Remove the deleted event from the list of events
+        setEvents(events.filter(event => event._id !== _id));
+      }
     } catch (err) {
       console.error(err);
       setErrorMessage('Failed to delete event.');
-
-      // Implement logic to show an error message
     }
   };
   const participateEvent = async (_id) => {
@@ -178,15 +199,15 @@ const ProfilePosts = ({ data }) => {
 
 
   };
-  // const handleReport = (eventId, userId) => {
-  //   setEvents(prevEvent => {
-  //     const reportedBy = Array.isArray(prevEvent.reportedBy) ? prevEvent.reportedBy : [];
-  //     return {
-  //       ...prevEvent,
-  //       reportedBy: [...reportedBy, userId=userData.id]
-  //     };
-  //   });
-  // };
+  const handleReport = (eventId, userId) => {
+    setEvents(prevEvent => {
+      const reportedBy = Array.isArray(prevEvent.reportedBy) ? prevEvent.reportedBy : [];
+      return {
+        ...prevEvent,
+        reportedBy: [...reportedBy, userId=userData.id]
+      };
+    });
+  };
 
 
   const renderPosts = () => {
@@ -379,6 +400,8 @@ const ProfilePosts = ({ data }) => {
                   <Share2 size={18} className='text-body mx-50'></Share2>
                   <span className='text-muted me-1'></span>
                 </a> */}
+
+                
 
                   <button className="btn btn-pastel-warning btn-sm" onClick={() => handleUpdate(event)}>
                     <FontAwesomeIcon icon={faEdit} />

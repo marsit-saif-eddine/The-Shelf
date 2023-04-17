@@ -145,8 +145,7 @@ const EventDetail = () => {
   
        <ReviewForm className="event-card-review-form" onReviewSubmit={handleReviewSubmit} />
           </h6>
-          
-      
+         
           {/* {avatarArr.map((obj, index) => {
             return <Avatar key={index} className={classnames({ 'me-75': index !== avatarArr.length - 1 })} {...obj} />
           })}

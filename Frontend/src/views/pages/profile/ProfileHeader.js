@@ -113,8 +113,9 @@ const { pathname } = location;
               <Edit className='d-block d-md-none' size={14} />
               <span className='fw-bold d-none d-md-block'>
                 <Link to='/eventsform'>
-                </Link>
                 Add new event
+    
+                </Link>
    </span>
             </Button>
             </div>

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import "../EventAdmin/eventadmin.css"
-
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 // reactstrap components
 import {
   Card,
@@ -97,24 +98,31 @@ function ViewOffers() {
 
 
     const deleteOffer = async (_id) => {
-      try {
-        const result = window.confirm("Are you sure you want to delete?");
 
-        const res = await axios.delete(`/events/delete/${_id}`);
-        console.log(res.data);
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this item!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel',
+      }).then((result) => {
+        if (result.isConfirmed) {
+    
+
+         axios.delete(`/events/delete/${_id}`).then(()=>{
         setTimeout(() => setSuccessMessage(null), 3000);
   
   
         // Remove the deleted event from the list of events
         setEvents(events.filter(event => event._id !== _id));
   
-      } catch (err) {
-        console.error(err);
+      });
   
         // Implement logic to show an error message
       }
-    };
-
+    });
+          }
     //------------------ Search ------------------------------------//
     // const handleSearch = async() => {
     //   const query = `title:${searchText} OR type_offre:${searchText} OR duration:${searchText} OR location:${searchText}`;

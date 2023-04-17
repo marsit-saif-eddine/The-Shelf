@@ -90,6 +90,8 @@
   border-radius: 20px;
   padding: 10px 20px;
   margin-top: 10px;
+  left: 0;
+  bottom: 20px; /* adjust as needed */
 }
 
 .participate-btn:hover {

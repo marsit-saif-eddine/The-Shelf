@@ -280,7 +280,7 @@ const NewEventForm = () => {
   const [endDate, setEndDate] = useState('');
   const [location, setLocation] = useState('');
   const [image, setImage] = useState(null);
-
+  const [descriptionError, setDescriptionError] = useState('');
   const [nameError, setNameError] = useState('');
   const [startDateError, setStartDateError] = useState('');
   const [endDateError, setEndDateError] = useState('');
@@ -316,23 +316,43 @@ const NewEventForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // validate inputs*
-    
-    
-    
+    let errors = false;
 
-
- let errors = false;
- if (name.trim() === '') {
-   setNameError('Name is required');
-   errors = true;
- } else {
-   setNameError('');
- }
-
- if (errors) {
-   return;
- }
+    // validate inputs
+    if (name.trim().length < 4 || name.trim().length > 20) {
+      setNameError('Name must be between 4 and 20 characters');
+      errors = true;
+    } else {
+      setNameError('');
+    }
+  
+    if (description.trim().length < 8) {
+      setDescriptionError('Description must be at least 8 characters');
+      errors = true;
+    } else {
+      setDescriptionError('');
+    }
+  
+    if (new Date(startDate) < new Date()) {
+      setStartDateError('Start date must be today or later');
+      errors = true;
+    } else {
+      setStartDateError('');
+    }
+    if (location.trim() === '') {
+      setLocationError('Location is required');
+      errors = true;
+    } else if (location.trim().length < 3) {
+      setLocationError('Location should be at least 3 characters');
+      errors = true;
+    } else {
+      setLocationError('');
+    }
+  
+    if (errors) {
+      return;
+    }
+    
     const formData = new FormData();
     formData.append('name', name);
     formData.append('startDate', startDate);
@@ -361,60 +381,66 @@ const NewEventForm = () => {
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              className="form-control"
-              id="name"
-              value={name}
-              onChange={handleNameChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-    <label htmlFor="description">Description:</label>
-    <textarea
-      className="form-control"
-      id="description"
-      value={description}
-      onChange={handleDescriptionChange}
-      required
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="startDate">Start Date:</label>
-    <input
-      type="date"
-      className="form-control"
-      id="startDate"
-      value={startDate}
-      onChange={handleStartDateChange}
-      required
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="endDate">End Date:</label>
-    <input
-      type="date"
-      className="form-control"
-      id="endDate"
-      value={endDate}
-      onChange={handleEndDateChange}
-      required
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="location">Location:</label>
-    <input
-      type="text"
-      className="form-control"
-      id="location"
-      value={location}
-      onChange={handleLocationChange}
-      required
-    />
-  </div>
+        <div className="form-group">
+  <label htmlFor="name">Name:</label>
+  <input
+    type="text"
+    className="form-control"
+    id="name"
+    value={name}
+    onChange={handleNameChange}
+    required
+  />
+  {nameError && <div className="text-danger">{nameError}</div>}
+</div>
+<div className="form-group">
+  <label htmlFor="description">Description:</label>
+  <textarea
+    className="form-control"
+    id="description"
+    value={description}
+    onChange={handleDescriptionChange}
+    required
+  />
+  {descriptionError && <div className="text-danger">{descriptionError}</div>}
+</div>
+<div className="form-group">
+  <label htmlFor="startDate">Start Date:</label>
+  <input
+    type="date"
+    className="form-control"
+    id="startDate"
+    value={startDate}
+    onChange={handleStartDateChange}
+    required
+  />
+  {startDateError && <div className="text-danger">{startDateError}</div>}
+</div>
+<div className="form-group">
+  <label htmlFor="endDate">End Date:</label>
+  <input
+    type="date"
+    className="form-control"
+    id="endDate"
+    value={endDate}
+    onChange={handleEndDateChange}
+    required
+  />
+  {endDateError && <div className="text-danger">{endDateError}</div>}
+</div>
+<div className="form-group">
+  <label htmlFor="location">Location:</label>
+  <input
+    type="text"
+    className="form-control"
+    id="location"
+    value={location}
+    onChange={handleLocationChange}
+    required
+  />
+  {locationError && <div className="text-danger">{locationError}</div>}
+</div>
+
   <div className="form-group">
     <label htmlFor="image">Image:</label>
     <input
