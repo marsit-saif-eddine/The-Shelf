@@ -197,6 +197,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard"
 import Peer from "simple-peer"
 import io from "socket.io-client"
 import "./chat.css"
+const socket = io("http://localhost:5000");
 
 const Chatvideoconf = () => {
 
@@ -212,9 +213,9 @@ const Chatvideoconf = () => {
   const myVideo = useRef(null);
   const userVideo = useRef(null);
   const connectionRef = useRef();
+	const socket = io("http://localhost:5000");
 
   useEffect(() => {
-	const socket = io("http://localhost:5000");
 
     console.log("loaded");
     navigator.mediaDevices

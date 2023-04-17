@@ -7,6 +7,7 @@ import './detailcard.css';
 import { format } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { Card, CardTitle, CardBody, CardText, Badge, Button } from 'reactstrap'
+import { Cookies } from 'react-cookie';
 
 
 
@@ -21,6 +22,32 @@ const EventDetail = () => {
     const fetchEvent = async () => {
         let Event = await axios.get(`http://localhost:5000/events/detail/${id}`)
         setEvent(Event.data);
+    };
+
+    const [isParticipating, setIsParticipating] = useState(false);
+
+    const handleParticipate = async () => {
+      try {
+        await axios.post(`/events/${id}/participants`, {}, {
+          headers: { Authorization: `Bearer ${Cookies.accessToken}` },
+        });
+        setIsParticipating(true);
+      } catch (error) {
+        console.error(error);
+        // handle error here
+      }
+    };
+    
+    const handleUnparticipate = async () => {
+      try {
+        await axios.delete(`/events/${id}/participants`, {
+          headers: { Authorization: `Bearer ${Cookies.accessToken}` },
+        });
+        setIsParticipating(false);
+      } catch (error) {
+        console.error(error);
+        // handle error here
+      }
     };
     const handleAddToFavorites = async () => {
         try {
@@ -88,6 +115,7 @@ const EventDetail = () => {
 
 
       <CardBody>
+        
         <Badge color='light-primary'>{event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""}  TO   {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
 </Badge>
        
@@ -114,9 +142,11 @@ const EventDetail = () => {
 ) : (
   <p className="event-card-reviews-text">No reviews yet.</p>
 )}
-        <div></div>
-        <ReviewForm className="event-card-review-form" onReviewSubmit={handleReviewSubmit} />
+  
+       <ReviewForm className="event-card-review-form" onReviewSubmit={handleReviewSubmit} />
           </h6>
+          
+      
           {/* {avatarArr.map((obj, index) => {
             return <Avatar key={index} className={classnames({ 'me-75': index !== avatarArr.length - 1 })} {...obj} />
           })}

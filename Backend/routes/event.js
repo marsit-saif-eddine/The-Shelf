@@ -12,6 +12,7 @@ const {validateEvent}= require('../middleware/validateEvent');
 const event = require('../models/event');
 const { JsonWebTokenError } = require('jsonwebtoken');
 
+
 router.patch('/participateEvent/:id', eventController.participateEvent);
 
 router.get("/",eventController.getallevents);
@@ -107,6 +108,65 @@ if (!searchText) {
   }
 }
 });  
+
+
+
+
+// add participant to event
+router.post('/:eventId/addparticipants/:userId', async (req, res) => {
+  try {
+    const { eventId, userId } = req.params;
+    console.log(eventId)
+    const eventt = await event.findById(eventId);
+    if (!eventt) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    eventt.participants.set(userId, true);
+    await event.save();
+    res.json({ message: 'Participant added successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// remove participant from event
+router.delete('/:id/deleteparticipants/:userId', async (req, res) => { 
+  try {
+    const { eventId, userId } = req.params;
+    const eventt = await event.findById({_id:eventId});
+    if (!eventt) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+    eventt.participants.delete(userId);
+    await event.save();
+    res.json({ message: 'Participant removed successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.post("/:eventId/report", async (req, res) => {
+  try {
+    const eventId = req.params.eventId;
+    const userId = req.body.userId;
+
+    // Find the event by ID
+    const event = await Event.findById(eventId);
+
+    // Add the user to the reportedBy array if they haven't already reported
+    if (!event.reportedBy.includes(userId)) {
+      event.reportedBy.push(userId);
+      await event.save();
+    }
+
+    res.status(200).json({ message: "Event reported successfully." });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
 
 
 

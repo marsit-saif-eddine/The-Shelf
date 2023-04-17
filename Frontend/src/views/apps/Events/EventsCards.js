@@ -6,6 +6,7 @@ import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import Favorite from '@mui/icons-material/Favorite';
+import { format } from 'date-fns';
 
 import axios from 'axios';
 import UpdateEventForm from "../Events/UpdateEventForm"
@@ -15,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFlag, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {  useCookies } from "react-cookie";
 import {  CardBody, CardText, Button, Badge } from 'reactstrap'
+import { isUserLoggedIn } from '@utils'
 
 function EventsCards() {
   const [cookies, _]=useCookies(['access_token'])
@@ -26,18 +28,43 @@ function EventsCards() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showForm, setShowForm] = useState(true); // add state variable to track form visibility
   const [participatedCount, setParticipatedCount] = useState(0);
-  const [isparticipated, setIsParticipated] = useState(false);
+  const [isparticipated, setIsParticipating] = useState(false);
   const [user, setUser] = useState('');
   const [change, setChange] = useState(false);
   const [eventData, setEventData] = useState(null);
 
+  const [userData, setUserData] = useState(null)
 
+
+
+
+
+  //** ComponentDidMount
+  useEffect(() => {
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')));
+    }
+  }, []);
+  
 
   useEffect(() => {
-    axios.get('/eventcards').then(({data}) => {
+    axios.get('/events').then(({data}) => {
       setEvents(data);
     });
   }, []);
+
+  // useEffect(() => {
+  //   // Fetch the event object from the API
+  //   fetch(`http://localhost:5000/events/${eventId}`)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setEvent(data);
+  //       // Retrieve the user's participation status from localStorage
+  //       const isParticipating = localStorage.getItem(`event_${eventId}_isParticipating`) === "true";
+  //       setIsParticipating(isParticipating);
+  //     })
+  //     .catch((error) => console.error(error));
+  // }, [eventId]);
   const handleUserInput = (event) => {
     setUser(event.target.value);
   }
@@ -55,41 +82,41 @@ function EventsCards() {
   //   setChange(true)
   //   setIsParticipated(!isparticipated);
   // }, [user, isparticipated]);
-  
-  const patchParticipate = async (eventId) => {
-    try {
-      const response = await fetch(`http://localhost:5000/events/participateEvent/${eventId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: cookies.access_token
-        },
-        body: JSON.stringify({ userId: user }),
-      }
-      );
-      const data = await response.json();
-      setEventData(data);
     
-      // Update the isParticipating property of the event object
-      const updatedEvents = events.map((event) => {
-        if (event._id === eventId) {
-          return {
-            ...event,
-            isParticipating: !event.isParticipating,
-          };
-        } else {
-          return event;
+    const patchParticipate = async (eventId) => {
+      try {
+        const response = await fetch(`http://localhost:5000/events/participateEvent/${eventId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"        },
+          body: JSON.stringify({ userId: userData.id }),
         }
-      });
-  
-      // Update the events state
-      setEvents(updatedEvents);
-      setParticipatedCount( Object.keys(data.participants).length)
-  
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        );
+        const data = await response.json();
+        setEventData(data);
+        const isParticipating = localStorage.getItem(`event_${eventId}_isParticipating`) === "true";
+        setIsParticipating(isParticipating);
+    
+        // Update the isParticipating property of the event object
+        const updatedEvents = events.map((event) => {
+          if (event._id === eventId) {
+            return {
+              ...event,
+              isParticipating: !event.isParticipating,
+            };
+          } else {
+            return event;
+          }
+        });
+    
+        // Update the events state
+        setEvents(updatedEvents);
+        setParticipatedCount( Object.keys(data.participants).length)
+    
+      } catch (error) {
+        console.error(error);
+      }
+    };
   const handleUpdate = (event) => {
     setSelectedEvent(event);
     setShowForm(true)
@@ -242,6 +269,9 @@ function EventsCards() {
             <CardText tag='span' className='item-company'></CardText>
           </h6>
           <CardText className='item-description'>{event.location}</CardText>
+          <CardText className='item-description'>     {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""}  TO   {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
+</CardText>
+
           <button
             className="participate-btn"
             variant="contained"

@@ -26,6 +26,7 @@ import ProfileTwitterFeeds from './ProfileTwitterFeeds'
 import ProfileLatestPhotos from './ProfileLatestQuizzes'
 import ProfileSuggestedPages from './ProfileSuggestedPages'
 import ProfileFriendsSuggestions from './ProfileFriendsSuggestions'
+import ProfileLatestEvents from './ProfileLatestEvents'
 
 // ** Styles
 import '@styles/react/pages/page-profile.scss'
@@ -73,7 +74,7 @@ const Profile = () => {
             <Row>
               <Col lg={{ size: 3, order: 1 }} sm={{ size: 12 }} xs={{ order: 2 }}>
                 <ProfileAbout selectedUser={store.selectedUser} />
-                <ProfileSuggestedPages data={data.suggestedPages} />
+                <ProfileLatestEvents data={data.suggestedPages} />
                 <ProfileTwitterFeeds data={data.twitterFeeds} />
               </Col>
               <Col lg={{ size: 6, order: 2 }} sm={{ size: 12 }} xs={{ order: 1 }}>
@@ -84,6 +85,7 @@ const Profile = () => {
                 <ProfileFriendsSuggestions data={data.suggestions} />
                 <ProfilePoll data={data.polls} />
               </Col>
+              
             </Row>
             <Row>
               <Col className='text-center' sm='12'>
