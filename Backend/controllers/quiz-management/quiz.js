@@ -39,8 +39,9 @@ exports.addQuiz = async (req, res, next) => {
       const {userconnected}=req.query
       const {book}=req.query
       const{status}=req.query
+      const{report}=req.query
       const filter={}
-     
+      
       if(userconnected){
         filter.user_id=userconnected
       }
@@ -49,6 +50,9 @@ exports.addQuiz = async (req, res, next) => {
       }
       if (status) {
         filter.quiz_status = status;
+      }
+      if(report){
+        filter.reported= report;
       }
       const quizzes = await Quiz.find(filter);
       res.json(quizzes);
@@ -118,5 +122,36 @@ exports.addQuiz = async (req, res, next) => {
     } catch (err) {
         res.status(400).json({ "message": err.message })
     }
+  };
+
+exports.saveAnswers=async(req,res,next)=>{
+  
+  try {
+    const quizAnswers = req.body;
+
+    // Validate quiz data here
+
+    const newQuiz = new Quiz(quizAnswers);
+    await newQuiz.save();
+    res.status(201).json(newQuiz);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal server error');
+  }
+}
+    exports.reportQuiz=async(req,res,next)=>{
+      const quizId = req.params.id;
+      try {
+          const quiz = await Quiz.findById(quizId);
+          if (quiz) {
+            quiz.reported = quiz.reported +1;
+            quiz.save();
+              res.status(200).json({ "message": "quiz reported" });
+          } else {
+              res.status(404).json({ "message": "quiz not found" });
+          }
+      } catch (err) {
+          res.status(400).json({ "message": err.message })
+      }
 
   }

@@ -57,15 +57,17 @@ useEffect(() => {
             <small className='text-muted'>{quiz.bookName}</small>
           </div>
           <div className='ms-auto'>
+          <Link to={`/quiz/${quiz._id}`}>  
             <Button className='btn-icon' color='primary' size='sm'>
               <Award size={14} />
             </Button>
+            </Link>
           </div>
           </div>
     // </Card>
     ))}
     <br></br>
-    <Link to="/pages/profile/quiz">
+    <Link to="/apps/myquiz">
     <Button className='btn-icon' color='primary' size='m'>  view all </Button>
 </Link>
    

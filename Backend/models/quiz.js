@@ -13,6 +13,9 @@ const quizSchema = new Schema(
     },
     book_id:{},
     user_id:{},
+    creator:{},
+    creator_pic:{  type: String,},
+
     quiz_status:{    type: String,
         
         enum: {
@@ -21,6 +24,12 @@ const quizSchema = new Schema(
           },
           default:"pending"
     },
+    reported:{
+        type: Number,
+        default:0,
+
+    },
+    
     questions :[
         {
         questionText: {
@@ -50,6 +59,7 @@ const quizSchema = new Schema(
         type: Number,
         required: false,
     }
+ 
     
 }]
 

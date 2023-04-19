@@ -48,58 +48,61 @@ import { useParams } from 'react-router-dom';
 
 
 
-function questiond(){
+function questiond(props){
   
 
-// const [quiz,setQuiz]= useState(
-//   [{  quizName:"quiz name",
-//       quizdesc:"quizdesc",
-//       book_id:"",
-//       questions:[
-//         {questionText :"Question"},
-//       {  questionType:"radio"},
-//        { options:[
-    
-           
-//             {optionText:""},
-//             {optionText:""}
-        
-//     ]},
-//     ],
-//     answer:false,
-//     answerkey:"",
-//     points:0,
-//     open:true,
-//     required: false
-// }]
-// )
 const [quiz,setQuiz]= useState([]);
 
 
 
     const { id } = useParams();
     useEffect(() => {
-        axios.get(`/quiz/${id}`)
-        .then(response => console.log(response.data.quiz))
-        .then(response => setQuiz(response.data.quiz))
+        axios.get(`http://localhost:5000/quiz/${id}`)
+      //  .then(response => console.log(response.data))
+      .then(response => setQuiz(response.data.quiz))
 
         .catch(error => console.error(error));
   
-      }, []);
+      }, [id]);
  
- 
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        // TODO: Process the user's answers and submit them to the database using an API call
+      };
+    
+      if (!quiz) {
+        return <div>Loading...</div>;
+      }
  
 return (
-    <div className="containers">
  
  
-   <div >
-   <h1> name :{quiz._id}</h1>
-   <h1>{quiz.quizDescription}</h1>
-
-   </div>
- 
-</div>
+ <div>
+      <h1>{quiz.quizName}</h1>
+      <p>{quiz.quizDescription}</p>
+      <form onSubmit={handleSubmit}>
+        {quiz.questions?.map((question, index) => (
+          <div key={question._id.$oid}>
+            <h2>Question {index + 1}</h2>
+            <p>{question.questionText}</p>
+            {question.options.map((option, optionIndex) => (
+              <div key={optionIndex}>
+                <input
+                  type={question.questionType}
+                  name={"question_" + index}
+                  value={option.optionText}
+                  id={"question_" + index + "_option_" + optionIndex}
+                />
+                <label htmlFor={"question_" + index + "_option_" + optionIndex}>
+                  {option.optionText}
+                </label>
+              </div>
+            ))}
+          </div>
+        ))}
+        <Button type="submit">Submit</Button>
+       </form>
+    </div>
 );
 }
 

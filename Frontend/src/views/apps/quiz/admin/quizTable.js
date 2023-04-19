@@ -1,6 +1,8 @@
 
 import { Container } from  'reactstrap'
 import '@styles/react/apps/app-users.scss'
+import Avatar from '@components/avatar'
+
 import {
     Card,
     CardHeader,
@@ -19,11 +21,15 @@ import {
     InputGroupText,
     Label,
     Badge, 
+    Modal,
+    ModalBody,
+    ModalHeader,
     UncontrolledDropdown, 
     DropdownToggle, 
     DropdownMenu,
      DropdownItem 
   } from "reactstrap";
+  import { Link } from 'react-router-dom'
 
   import Select from 'react-select'
   import DataTable from 'react-data-table-component'
@@ -33,18 +39,39 @@ import {
   import ReactPaginate from "react-paginate";
   import axios from "axios";
   import { Fragment, useState, useEffect } from 'react'
-import { Trash2 , MoreVertical, FileText,Archive} from 'react-feather';
+import { Trash2 , MoreVertical, FileText,Archive, Check, Layers, Clock} from 'react-feather';
 import quiz from '..';
+import { useParams } from 'react-router-dom';
+import { store } from '@store/store'
+import { getUser} from '../../user/store'
+import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
 
 const quizTable = () => {
 
+  const [show, setShow] = useState(false)
 
     const [Quizs, setQuizs] = useState([])
     const[change,setChange]=useState(false)
+    const [statusFilter, setStatusFilter] = useState('all'); // default to show all quizzes
+    const [approvedQuizCount, setApprovedQuizCount] = useState(0);
+    const [pendingQuizzesCount, setPendingQuizzes] = useState(0);
+    const [totalQuizsCount, setQuizsCount] = useState(0);
+
+   
 
     const get = ()=>{
         axios.get('http://localhost:5000/quiz/allquiz')
-        .then(response => setQuizs(response.data))
+        .then(response =>{
+           setQuizs(response.data);
+           const approvedQuizzes = response.data.filter(quiz => quiz.quiz_status === 'approved');
+           const pendingQuizzes = response.data.filter(quiz => quiz.quiz_status === 'pending');
+           setQuizsCount(response.data.length);
+
+           setApprovedQuizCount(approvedQuizzes.length);
+           setPendingQuizzes(pendingQuizzes.length);
+        }
+           )
+        
     .catch(error => console.error(error));
     }
 
@@ -101,7 +128,31 @@ const quizTable = () => {
     }
 });   
       }
+///////////////////details////////
+const [quiz,setQuiz]= useState([]);
 
+
+
+    //const { id } = useParams();
+    const details=(id)=> {
+        axios.get(`http://localhost:5000/quiz/${id}`)
+      //  .then(response => console.log(response.data))
+      .then(response => setQuiz(response.data.quiz))
+
+        .catch(error => console.error(error));
+  
+      }
+ 
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        // TODO: Process the user's answers and submit them to the database using an API call
+      };
+    
+      if (!quiz) {
+        return <div>Loading...</div>;
+      }
+
+//////////
 ///search////
 const [searchQuery, setSearchQuery] = useState('');
 const [filteredData, setFilteredData] = useState(Quizs);
@@ -116,7 +167,25 @@ const filteredQuizData = Quizs.filter(
       quiz.quizName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       quiz.book_id.toLowerCase().includes(searchQuery.toLowerCase()) 
 
-  );
+  )
+////////////////
+
+// const filteredQuizData = Quizs.filter((quiz) => {
+//   const nameMatch = quiz.quizName.toLowerCase().includes(searchQuery.toLowerCase());
+//   const statusMatch = statusFilter === 'all' || quiz.status === statusFilter;
+//   const bookIdMatch = quiz.book_id.toLowerCase().includes(searchQuery.toLowerCase());
+  
+//   return nameMatch || statusMatch || bookIdMatch;
+// });
+
+
+
+// const handleStatusFilterChange = (event) => {
+//   const status = event.target.value;
+//   setStatusFilter(status);
+// };
+
+
 
 ////////////
       const statusObj = {
@@ -126,10 +195,42 @@ const filteredQuizData = Quizs.filter(
       
 
   return (
-
+ 
 <Fragment>
  
+<div className='app-user-list'>
+    <Row>
+    <Col lg='3' sm='6'>
+        <StatsHorizontal
+          color='primary'
+          statTitle='Toatal Quizzes'
+          icon={<Layers size={20} />}
+          renderStats={<h3 className='fw-bolder mb-75'>{totalQuizsCount}</h3>}
+        />
+      </Col>
+      <Col lg='3' sm='6'>
+        <StatsHorizontal
+          color='success'
+          statTitle='Quizzes approved'
+          icon={<Check size={20} />}
+          renderStats={<h3 className='fw-bolder mb-75'>{approvedQuizCount}</h3>}
+        />
+      </Col>
 
+      <Col lg='3' sm='6'>
+        <StatsHorizontal
+          color='warning'
+          statTitle='Quizzes pending'
+          icon={<Clock size={20} />}
+          renderStats={<h3 className='fw-bolder mb-75'>{pendingQuizzesCount}</h3>}
+        />
+      </Col>
+
+   
+    
+     
+      </Row>
+      </div>
       <Card className='overflow-hidden'>
                 <div className="row" id="basic-table">
                     <div className="col-12">
@@ -137,6 +238,13 @@ const filteredQuizData = Quizs.filter(
                             <div className="card-header">
                                 <h4 className="card-title">All quizzes</h4>
                             </div>
+                            {/* <label htmlFor="status-filter">Filter by status:</label>
+      <select id="status-filter" value={statusFilter} onChange={handleStatusFilterChange}>
+        <option value="all">All</option>
+        <option value="pending">pending</option>
+        <option value="approved">approved</option>
+       
+      </select> */}
                             <div className="card-body">
                             <div className='d-flex align-items-center mb-sm-0 mb-1 me-1'>
             <label className='mb-0' htmlFor='search-invoice'>
@@ -154,9 +262,10 @@ const filteredQuizData = Quizs.filter(
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th>id</th>
+                                            
                                             <th>Quiz Name</th>
                                             <th>Description</th>
+                                            <th>Creator</th>
                                             <th>status</th>
                                             <th>Actions</th>
                                         </tr>
@@ -166,11 +275,23 @@ const filteredQuizData = Quizs.filter(
                                       
                                         {filteredQuizData.map((quiz) => (
                                          <tr key={quiz._id} >
-                                            <td>{quiz._id}</td>
+                                           
                                             <td>
                                             {quiz.quizName}
                                             </td>
                                             <td>{quiz.quizDescription}</td>
+         
+                                            <td className='fw-bolder'> 
+                                            <Link
+            to={`/pages/profile/${quiz.user_id}`}
+            className='user_name text-truncate text-body'
+            onClick={() => store.dispatch(getUser(quiz.user_id))}
+          >
+             <Avatar className='me-1' img={quiz.creator_pic} width='32' height='32' />
+                                              {quiz.creator}
+                                              </Link>
+                                              </td>
+                                            
                                             <td>
                                                 <Badge className='text-capitalize' color={statusObj[quiz.quiz_status]} pill>
                                                   {quiz.quiz_status}
@@ -186,7 +307,7 @@ const filteredQuizData = Quizs.filter(
             <DropdownItem
              
               className='w-100'
-             
+              onClick={() => {details(quiz._id);setShow(true)}}
             >
               <FileText size={14} className='me-50' />
               <span className='align-middle'>Details</span>
@@ -217,6 +338,44 @@ const filteredQuizData = Quizs.filter(
                 </div>
                
       </Card>
+         
+      <Modal isOpen={show} toggle={() => setShow(!show)} className='modal-dialog-centered modal-lg'>
+        <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
+        <ModalBody className='px-sm-5 pt-50 pb-5'>
+          <div className='text-center mb-2'>
+            <h1 className='mb-1'>Quiz : {quiz.quizName}</h1>
+            <p> description : {quiz.quizDescription} </p>
+          </div>
+          <div>
+    
+      <Form >
+        {quiz.questions?.map((question, index) => (
+          <div key={question._id.$oid}>
+            <h2>Question {index + 1}</h2>
+            <p>{question.questionText}</p>
+            {question.options.map((option, optionIndex) => (
+              <div key={optionIndex}>
+                <Input
+                  type={question.questionType}
+                  name={"question_" + index}
+                  value={option.optionText}
+                  id={"question_" + index + "_option_" + optionIndex}
+                />
+                <label htmlFor={"question_" + index + "_option_" + optionIndex}>
+                  {option.optionText}
+                </label>
+               
+              </div>
+            ))}
+            <label> the correct answer is : </label>
+             <p>{question.answerkey}</p>
+          </div>
+        ))}
+        
+       </Form>
+    </div>
+          </ModalBody>
+          </Modal>
 
       {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} /> */}
     </Fragment>

@@ -252,7 +252,7 @@ const AppRoutes = [
     
   // },
   {
-    path: '/apps/quiz',
+    path: '/apps/myquiz',
     element: <Quiz />,
     meta: {
       appLayout: false,
@@ -263,18 +263,9 @@ const AppRoutes = [
     }
     
   },
-  {
-    path: '/pages/profile/quiz',
-    element: <MyQuizzes />,
-    meta: {
-      appLayout: false,
-      className: 'quiz-application',
-      layout: 'horizontal',
-      action: 'client',
-      resource: 'client'
-    }
+
     
-  },
+  
 
   {
     path: '/pages/profile/event',
@@ -288,6 +279,7 @@ const AppRoutes = [
     }
     
   },
+  
   {
     element: <QuizByBook/>,
     path: '/quiz/allquiz/quizByBook/:id',

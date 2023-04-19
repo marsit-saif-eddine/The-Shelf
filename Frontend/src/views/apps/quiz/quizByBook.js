@@ -45,7 +45,7 @@ import classnames from 'classnames'
   console.log(params); // Check the console to see what `params` contains
   const productId = params.id;
   const approved="approved";
-
+  //let report<4;
 useEffect(() => {
     if (productId !== null) {
         fetch(`http://localhost:5000/quiz/allquiz?book=${productId}&status=${approved}`)

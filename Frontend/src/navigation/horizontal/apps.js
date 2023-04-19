@@ -32,14 +32,7 @@ export default [
       action: 'client',
       resource: 'client',
      },
-     {
-      id: 'quiz',
-      title: 'quiz',
-      icon: <Award />,
-      navLink: '/apps/quiz',
-      action: 'client',
-      resource: 'client',
-   },
+   
         {
       id: 'books',
       title: 'Books',

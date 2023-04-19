@@ -45,8 +45,17 @@ import QuizDisplay from "./quizDisplay"
 
 function quizCreate(){
 
+
+///////// state variables  ///////////
+
     const [show, setShow] = useState(false)
-  
+
+    const [quizname,setQuizname]=useState("quiz name")
+
+    const [quizdesc,setQuizdesc]=useState("quiz desc")
+
+    const [selectedBookId, setSelectedBookId] = useState("");
+
     const [questions, setQuestions]= useState(
     [{ questionText :"Question",
     questionType:"radio",
@@ -64,12 +73,15 @@ function quizCreate(){
     required: false
 }]
 )
+const [saved, setSaved] = useState(false);
 
+const [books, setBooks] = useState([])
 
-const [quizname,setQuizname]=useState("quiz name")
-const [quizdesc,setQuizdesc]=useState("quiz desc")
-const [selectedBookId, setSelectedBookId] = useState("");
+const [quizNameError, setQuizNameError] = useState('');
 
+const [submitted, setSubmitted] = useState(false);
+
+//////////// functions ///////////
 
 function changeQuestion(text, i){
 var newQuestion =[...questions];
@@ -133,9 +145,9 @@ function addMoreQuestionField(){
 
 function setOptionAnswer(ans,qno){
     var Questions=[...questions];
-    Questions[qno].answerKey=ans;
+    Questions[qno].answerkey=ans;
     setQuestions(Questions)
-    console.log(" right answer is "+qno+" "+ans)
+    console.log(" right answer is " +ans)
 }
 
 function setOptionPoints(points,qno){
@@ -159,11 +171,13 @@ function addAnswer(i){
     setQuestions(answerofQuestion)
 }
 
-///////////// toast success  ////////////
-const [saved, setSaved] = useState(false);
+
 
 
  ////////////////// save quiz /////////////////////
+
+
+ 
 function commitToDb(){
     axios.post(`http://localhost:5000/quiz/addquiz`,{
       quizName:quizname,  
@@ -171,24 +185,24 @@ function commitToDb(){
       questions:questions,
       book_id:selectedBookId,
       user_id:userId,
+      creator:userName,
+      creator_pic: userpic,
       method: 'POST',
     
     })
-    if (!quizname) {
-        setNameError('Name is required');
-      }
+   
     setSaved(true);
-      
-    toast.success('Quiz created successfully!');
+    
 
+    toast.success('Quiz created successfully!');
     }
 //
 var user = JSON.parse(localStorage.getItem('userData'));
-console.log("your user id is :"+user.id);
+//console.log("your user id is :"+user.id);
 var userId = user.id;
-   
+var userName = user.username;
+var userpic = user.avatar;
 /////// show book in select /////////////
-const [books, setBooks] = useState([])
     useEffect(() => {
         axios.get(`/book/books`)
           .then(response => {console.log(response.data) ; setBooks(response.data)})
@@ -199,77 +213,90 @@ const [books, setBooks] = useState([])
 
 
 
-      function handleSelectChange(event) {
-        console.log(event.target.value)
-        setSelectedBookId(event.target.value);
+    //   function handleSelectChange(event) {
+    //     console.log(event.target.value)
+    //     setSelectedBookId(event.target.value);
+    //   }
+
+    function handleSelectChange(event) {
+
+        if (event && event.target && event.target.value) {
+            console.log("selectedBookId:", event.target.value);
+
+          setSelectedBookId(event.target.value);
+          console.log('selectedBookId updated to:', selectedBookId);
+
+        }
       }
-      const [nameError, setNameError] = useState('');
-
-      function handleSubmit(event) {
-        event.preventDefault();
-        if (quizname === '') {
-            setNameError('Please enter your quiz title');
-          }
-        // submit quiz data with selectedBookId
-      }
 
 
-      ///////////// current user id/////////////////
-     // const [userId, setUserId] = useState(null);
+////validators///////
+
+useEffect(() => {
+    if (submitted && !quizNameError) {
+      commitToDb();
+    }
+  }, [submitted, quizNameError]);
+  
+
+const validateQuizName = () => {
+    if (quizname.length < 3) {
+        setQuizNameError('Quiz name must be at least 3 characters long');
+      
+    } else {
+      setQuizNameError('');
+    }
+  };
+  useEffect(() => {
+    validateQuizName();
+  }, [quizname]);
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    validateQuizName();
+   // setSubmitted(true);
     
-    //   useEffect(() => {
-    //     const token = localStorage.getItem('token');
-    
-    //     if (token) {
-    //       const decodedToken = jwtDecode(token);
-    //       setUserId(decodedToken.sub);
-    //     } else {
-    //       setUserId(null);
-    //     }
-    //   }, []);
-      /////////
+    if (quizNameError) {
+      return;
+      
+    }
+};
+  ////////////////
+  const booksOptions = [
+    {
+      label: 'books',
+      options: [
+       // { value: '', label: '' }, // add a blank option
+        ...books.map((book) => ({ value: book._id, label: book.name }))
+      ]
+    }
+  ];
+
+//////////
 
 
 function questionUI(){
     return questions.map((ques,i)=>(
         <Accordion expanded={ques.open} className={ques.open ? 'add_border':""}>
 
-            {/* 
-<AccordionSummary elevation={1} >
-{ questions[i].open ? (
-    <div className="saved-ques">
-    <Typography > {i+1}. {questions[i].questionText}</Typography>
-    {ques.options.map((op, j)=>(
-    <div key={j}>
-        <div style={{display:'flex',}}>
-    <FormControlLabel control={
-    <input type={ques.questionType} required={ques.type} /> 
-    } 
-    label={ 
-    <Typography>
-        <h1>11</h1>
-    {ques.options[j].optionText }
-    </Typography> 
-    } />
-    </div>
-    </div>
-))
-    }
-</div>
-):""}
-</AccordionSummary> */}
 
 <div className="ques-box" >
     {!questions[i].answer? (
 <AccordionDetails className="add-ques">
+    <br></br>
     <div className="add-ques-top">
     <Input type="text" className="question" placeholder="question" value={ques.questionText}  onChange={(e)=>{changeQuestion(e.target.value, i)}} ></Input>
-    <select className="select" style={{fontSize:"13px"}}>
+
+                <div class="col-md-3 mb-1">
+    <select className="select2 form-select" style={{fontSize:"13px"}}>
         <option id="text" value="text" onClick={()=>{addQuestionType(i,"text")}}> <SubjectIcon />paragraph</option>
         <option id="checkbox" value="checkbox"  onClick={()=>{addQuestionType(i,"check")}}><CheckBoxIcon checked />unique choice</option>
         <option id="radio" value="radio" onClick={()=>{addQuestionType(i,"radio")}}><Radio checked />multiple choice</option>
 
     </select>
+    </div>
+  
     {!ques.answer ? (
     <div className="ques-edit">
 
@@ -378,8 +405,8 @@ function questionUI(){
 
 
 <div className="add-ques-body">
-<Button size="small" style={{textTransform:'none', fontSize:"13px", fontWeight:"600"}}>
-add answer feedback </Button>
+{/* <Button size="small" style={{textTransform:'none', fontSize:"13px", fontWeight:"600"}}>
+add answer feedback </Button> */}
 </div>
 <div>
     <Button variant="outlined"  onClick={()=>{doneAnswer(i)}}>Done</Button>
@@ -391,93 +418,85 @@ add answer feedback </Button>
         
     ))
 }
+
+
+
 return(
   
 <Fragment>
-      <Card>
-        <CardHeader>
-          <CardTitle tag='h4'>Search</CardTitle>
-       
-       
-         
-        <Col
-          xl='6'
-          className='d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1'
-        >
-          <div className='d-flex align-items-center mb-sm-0 mb-1 me-1'>
-            <label className='mb-0' htmlFor='search-invoice'>
-               <SearchIcon/>
-            </label>
-            <Input
-              id='search-invoice'
-              className='ms-50 w-100'
-              type='text'
-             // value={searchTerm}
-              onChange={e => handleFilter(e.target.value)}
-            />
-          </div>
-                 </Col>
-               
+    
 
                  
-                 </CardHeader>
-                 </Card>
-
-                 <Card>
-                    <CardHeader>New quiz </CardHeader>
-                    <CardBody>
+           
+                 
                     <Row>
-                    <Col>
-                    <Button color='primary' onClick={() => setShow(true)}>
+                    <Col >
+                    <Button  className='add-new-user' color='primary' onClick={() => setShow(true)}>
                         Add new Quiz</Button>
                     </Col>
                  </Row>
-                    </CardBody>
-                 </Card>
-
+                   
                 
-                    
-                
-
-
+                 <Card>  
                  <Modal isOpen={show} toggle={() => setShow(!show)} className='modal-dialog-centered modal-lg'>
         <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>
           <div className='text-center mb-2'>
             <h1 className='mb-1'>Create a new QUIZ</h1>
-            <p>you can create your own questions from here</p>
+            <p>hello, you can create your own questions from here</p>
           </div>
-          <Form  onSubmit={handleSubmit}>
-            <Card>
+          {submitted && quizNameError && <div className="error">{quizNameError}</div>}
+
+          <Form onSubmit={handleSubmit} >
+            
             <Row className='gy-1 pt-75'>
             
-             <Input type="text" className="quiz-title" placeholder="enter your quiz title here" onChange={(e)=>{setQuizname(e.target.value)}} required></Input>
-             {nameError && <span>{nameError}</span>}
+             <Input type="text" className="quiz-title" placeholder="enter your quiz title here" onChange={(e) => setQuizname(e.target.value)} required></Input>
+             {quizNameError && <div className="error">{quizNameError}</div>}
              <Input type="text" className="quiz-desc" placeholder="enter your quiz desrpition here" onChange={(e)=>{setQuizdesc(e.target.value)}}></Input>
-             {/* <form onSubmit={handleSubmit}> */}
+          <br></br>
                 <Row>
+                <Col className='mb-1' md='12' sm='12'>
+                <div class="col-md-6 mb-1">
                     <label> choose the book this quiz is about : </label>
-             <select name="book_id"  value={selectedBookId} onChange={handleSelectChange} className="select">
-  <option value="">Select a book</option>
+             <select name="book_id" value={selectedBookId} onChange={handleSelectChange} className="select2 form-select">
   {books.map((book) => (
     <option key={book._id} value={book._id}>
       {book.name}
     </option>
   ))}
 </select>
+</div>
+</Col>
+          {/* <Col className='mb-1' md='6' sm='12'>
+            <Label className='form-label'>Grouped Select</Label>
+            <Select
+            value={selectedBookId} 
+        // onChange={handleSelectChange}
+            onChange={()=>handleSelectChange()}
+            options={booksOptions}
+              isClearable={false}
+             
+              className='react-select'
+              classNamePrefix='select'
+            />
+          </Col> */}
 </Row>
-{/* </form> */}
+
             </Row>
-            </Card>
-            <Card>
+           
+          
 {questionUI()}
 <Button onClick={commitToDb }> SAVE</Button>
 {saved}
+
+<br></br>
       <ToastContainer />
-            </Card>
+         
           </Form>
         </ModalBody>
       </Modal>
+      </Card>
 
 
                  </Fragment>

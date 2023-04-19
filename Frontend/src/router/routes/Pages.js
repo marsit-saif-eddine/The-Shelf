@@ -54,14 +54,7 @@ const PagesRoutes = [
     }
   },
 
-  {
-    path: '/pages/profile/quiz',
-    element: <MyQuiz />,
-    meta: {
-      action: 'read',
-      resource: 'ACL'
-    }
-  },
+
 
   {
     path: '/pages/faq',
