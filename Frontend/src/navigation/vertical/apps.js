@@ -152,7 +152,15 @@ export default [
         navLink: 'quizzes/list',
         action: 'admin',
         resource: 'admin',
-      }
+      },
+      {
+        id: "clubs",
+        title: "Clubs",
+        icon: <Award />,
+        navLink: "apps/clubs/list",
+        action: "admin",
+        resource: "admin",
+      },
       // ,
       // {
       //   id: 'view',

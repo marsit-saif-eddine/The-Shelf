@@ -49,6 +49,12 @@ const VideoCall = lazy(() => import('../../views/apps/Events/VideoCall'))
 const VideoConferance = lazy(() => import('../../views/apps/Events/chatvideoconf'))
 const EventsMore = lazy(() => import('../../views/pages/profile/ProfileshowMoreEvents'))
 
+const ClubsList = lazy(() => import('../../views/clubs-management/clubs/ClubsList'));
+const AddClub = lazy(() => import('../../views/clubs-management/AddClub'));
+const ClubDetails = lazy(() => import('../../views/clubs-management/club-details/ClubDetails'));
+
+
+
 
 const AppRoutes = [
   {
@@ -444,6 +450,55 @@ const AppRoutes = [
     element: <Permissions />,
     path: '/apps/permissions'
   }
+
+
+
+  //// WAJIH'S ROUTES
+  ,
+  {
+    element: <ClubsList  />,
+    path: '/apps/clubs/list',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+  },
+  {
+    element: <AddClub  />,
+    path: '/apps/clubs/add',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+  },
+  {
+    element: <AddClub  />,
+    path: '/apps/clubs/edit/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+  },
+  {
+    element: <ClubDetails />,
+    path: '/apps/clubs/details/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+  },
 ]
 
 export default AppRoutes

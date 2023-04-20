@@ -1,0 +1,94 @@
+.chat-bubbles-container {
+  .bubble {
+    position: fixed;
+    right: 10px;
+    bottom: 90px;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.3);
+    cursor: pointer;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .bubble-badge,
+    .bubble-close-badge {
+      border-radius: 50%;
+      padding: 2px;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 1;
+      position: absolute;
+    }
+    .bubble-badge {
+      background-color: red;
+      color: white;
+      top: -5px;
+      left: -5px;
+    }
+    .bubble-close-badge {
+      background-color: white;
+      border: 2px solid #f6f6f6;
+      top: -5px;
+      display: none;
+      right: -5px;
+    }
+    .bubble-close-badge:hover {
+      transform: scale(1.2);
+      transition: all .4s ease;
+    }
+
+  }
+  .bubble:hover + .dialog-bubble-container > * {
+    display: block;
+  }
+
+  .bubble:hover .bubble-close-badge {
+    display: block;
+  }
+  
+
+  .bubble:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.5);
+  }
+
+  .dialog-bubble-container {
+    position: fixed;
+    width: 220px;
+    right: 80px;
+    height: 60px;
+    bottom: 100px;
+    .dialog-bubble {
+      position: absolute;
+      background-color: #fff;
+      border-radius: 10px;
+      display: none;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .dialog-bubble-arrow {
+      position: absolute;
+      z-index: -1;
+      width: 5px;
+      height: 5px;
+      display: none;
+      border: 10px solid white;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+      top: 40%;
+      right: -10px;
+      transform: rotate(45deg);
+    }
+  }
+}

@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 
 // ** Router Import
 import Router from './router/Router'
 
 const App = () => {
-  
+
   return (
     <Suspense fallback={null}>
       <Router />

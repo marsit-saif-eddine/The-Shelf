@@ -49,12 +49,19 @@ app.use(express.urlencoded({ extended: false }));
 
 ////// BEGIN ROUTES ///////
 const signUpRoutes = require("./routes/sign-up/sign-up");
+const clubsRoutes = require('./routes/clubs');
+
+
 app.use("/signUp",signUpRoutes);
 app.use("/user",userssRouter);
 app.use("/events",eventsRouter)
 app.use("/book",booksRouter);
 app.use("/quiz",quizRouter);
 app.use("/appChat",chatRouter);
+
+app.use("/clubs",clubsRoutes);
+app.use('/avatars', express.static('uploads/avatars'));
+
 
 
 

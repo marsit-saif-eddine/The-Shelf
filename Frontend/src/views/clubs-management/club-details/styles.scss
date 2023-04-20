@@ -1,0 +1,45 @@
+.club-details {
+    .announcement-container {
+        position: relative;
+        
+        .announcement-text {
+            top: -47px;
+            margin: 0;
+            z-index: -1;
+            padding-left: 110px;
+            .card-body {
+                padding: 10px;
+                min-height: 70px;
+            }
+        }
+
+        .editor-card {
+            box-shadow: none;
+        }
+    }
+}
+
+.members-container, .club-details {
+    .expandable-btn {
+        overflow: hidden;
+        max-width: 50px;
+        height: fit-content;
+        transition: 350ms ease-in-out;
+        text-align: center;
+        padding: 0.700rem 1.1rem;
+        white-space: nowrap;
+        span {
+            opacity: 0;
+            margin-left: 10px;
+            transition: 400ms;
+        }
+    }
+    
+    .expandable-btn:hover {
+        max-width: 140px;
+        
+        span {
+            opacity: 1;
+        }
+    }
+}

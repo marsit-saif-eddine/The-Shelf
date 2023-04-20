@@ -7,6 +7,9 @@ import Layout from '@layouts/VerticalLayout'
 
 // ** Menu Items Array
 import navigation from '@src/navigation/vertical'
+import { useDispatch } from 'react-redux';
+import { initSocketConnection } from '../redux/chat';
+import { useEffect } from 'react';
 
 const VerticalLayout = props => {
   // const [menuData, setMenuData] = useState([])
@@ -15,6 +18,11 @@ const VerticalLayout = props => {
   // useEffect(() => {
   //   axios.get(URL).then(response => setMenuData(response.data))
   // }, [])
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(initSocketConnection());
+  }, []);
 
   return (
     <Layout menuData={navigation} {...props}>
