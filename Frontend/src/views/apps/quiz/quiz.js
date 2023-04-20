@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { Trash2 } from "react-feather";
 import Swal from 'sweetalert2';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
+
 function Quiz ({quiz}) {
 
 
@@ -55,7 +57,7 @@ const Delete = (id) => {
 Take quiz
 </Link>   
 
-<div class="d-flex justify-content-end justify-content-sm-end align-items-end mb-2 col-sm-12">
+<div className="d-flex justify-content-end justify-content-sm-end align-items-end mb-2 col-sm-12">
 <Trash2 size={14} className='me-50' onClick={() => Delete(quiz._id)} />
 
 </div> 

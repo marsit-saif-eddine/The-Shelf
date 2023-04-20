@@ -38,3 +38,6 @@
 .add-option{
     padding-bottom: 5px;
 }
+.error{
+    color: red;
+}
