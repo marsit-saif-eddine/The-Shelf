@@ -1,0 +1,95 @@
+.club-details {
+    .announcement-container {
+        position: relative;
+        
+        .announcement-text {
+            top: -47px;
+            margin: 0;
+            z-index: -1;
+            padding-left: 110px;
+            .card-body {
+                padding: 10px;
+                min-height: 70px;
+            }
+        }
+
+        .editor-card {
+            box-shadow: none;
+        }
+    }
+
+    .admin-avatar {
+        position: relative;
+        cursor: pointer;
+        .card {
+            margin: 0;
+        }
+        .card .card {
+            box-shadow: 0 4px 24px 0 rgba(34, 41, 47, 0.1) !important;
+        }
+        img {
+            width: auto;
+            height: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+        .admin-details-card {
+            z-index: 1;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            top: calc(100% + 15px);
+            left: -50%;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+
+            button {
+                min-width: 125px
+            }
+        }
+
+    }
+    .admin-avatar:hover {
+        .admin-details-card {
+            width: fit-content;
+            height: fit-content;
+            min-width: 130px;
+            padding: 10px;
+        }
+        img {
+            transform: scale(1.5);
+            transition: 0.3s all ease;
+        }
+    }
+
+    a {
+        width: fit-content;
+        height: fit-content;
+    }
+}
+
+.members-container, .club-details {
+    .expandable-btn {
+        overflow: hidden;
+        max-width: 50px;
+        height: fit-content;
+        transition: 350ms ease-in-out;
+        text-align: center;
+        padding: 0.700rem 1.1rem;
+        white-space: nowrap;
+        span {
+            opacity: 0;
+            margin-left: 10px;
+            transition: 400ms;
+        }
+    }
+    
+    .expandable-btn:hover {
+        max-width: 140px;
+        
+        span {
+            opacity: 1;
+        }
+    }
+}

@@ -17,9 +17,10 @@ export default class JwtService {
     // ** Request Interceptor
     axios.interceptors.request.use(
       config => {
+        if (config.url === 'https://api.openai.com/v1/engines/text-davinci-003/completions')
+        return config;
         // ** Get token from localStorage
         const accessToken = this.getToken()
-
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
           // ** eslint-disable-next-line no-param-reassign

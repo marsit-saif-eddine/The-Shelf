@@ -4,10 +4,12 @@ const ObjectID = require("mongodb").ObjectId;
 const bcrypt = require("bcryptjs");
 
 exports.signUp = async (req, res) => {
+  
   const dbUsers = getDb().collection("users");
 
   const salt = bcrypt.genSaltSync(10);
   req.body.password = bcrypt.hashSync(req.body.password, salt);
+
   ability = [
     {
       action: 'read',
@@ -22,6 +24,7 @@ exports.signUp = async (req, res) => {
       subject: 'client'
     }
   ];
+
  username = `${req.body.firstname} ${req.body.lastname}`;
 
   dbUsers

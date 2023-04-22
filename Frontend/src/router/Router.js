@@ -51,11 +51,11 @@ const Router = () => {
       element: <BlankLayout />,
       children: [{ path: '/auth/not-auth', element: <NotAuthorized /> }]
     },
-    {
-      path: '*',
-      element: <BlankLayout />,
-      children: [{ path: '*', element: <Error /> }]
-    },
+    // {
+    //   path: '*',
+    //   element: <BlankLayout />,
+    //   children: [{ path: '*', element: <Error /> }]
+    // },
     ...allRoutes
   ])
 

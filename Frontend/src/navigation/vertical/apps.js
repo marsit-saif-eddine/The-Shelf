@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Mail, MessageSquare, CheckSquare, Calendar, FileText, Circle, ShoppingCart, User, Shield, Award } from 'react-feather'
+import { Mail, MessageSquare, CheckSquare, Calendar, FileText, Circle, ShoppingCart, User, Shield, Award, Coffee } from 'react-feather'
 
 export default [
   {
@@ -152,7 +152,15 @@ export default [
         navLink: 'quizzes/list',
         action: 'admin',
         resource: 'admin',
-      }
+      },
+      {
+        id: "clubs",
+        title: "Clubs",
+        icon: <Coffee />,
+        navLink: "/apps/clubs/list",
+        action: "admin",
+        resource: "admin",
+      },
       // ,
       // {
       //   id: 'view',

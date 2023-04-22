@@ -7,6 +7,9 @@ import Layout from '@layouts/HorizontalLayout'
 
 // ** Menu Items Array
 import navigation from '@src/navigation/horizontal'
+import { useDispatch } from 'react-redux';
+import { initSocketConnection } from '../redux/chat';
+import { useEffect } from 'react';
 
 const HorizontalLayout = props => {
   // const [menuData, setMenuData] = useState([])
@@ -15,6 +18,10 @@ const HorizontalLayout = props => {
   // useEffect(() => {
   //   axios.get(URL).then(response => setMenuData(response.data))
   // }, [])
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(initSocketConnection());
+  }, []);
 
   return (
     <Layout menuData={navigation} {...props}>

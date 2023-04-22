@@ -32,14 +32,16 @@ import "@styles/react/pages/page-authentication.scss";
 const Register = () => {
   // ** Hooks
   const { skin } = useSkin();
+  const [avatar, setAvatar] = useState("");
+  const [avatarToUpload, setAvatarToUpload] = useState(null);
   const [signedUp, setSignedUp] = useState();
   const [userForm, setUserForm] = useState({
-    lastname: '',
-    firstname: '',
-    email: '',
-    phone_number: '',
-    address: '',
-    password: ''
+    lastname: "",
+    firstname: "",
+    email: "",
+    phone_number: "",
+    address: "",
+    password: "",
   });
   const params = useParams();
 
@@ -48,12 +50,12 @@ const Register = () => {
   useEffect(() => {
     if (params.id) {
       axios
-        .get(
-          "http://localhost:5000/signUp/getPreInscription?id=" + params.id
-        )
+        .get("http://localhost:5000/signUp/getPreInscription?id=" + params.id)
         .then((resp) => {
           setUserForm(resp.data);
         });
+    } else {
+      handleImgReset();
     }
   }, []);
 
@@ -64,21 +66,27 @@ const Register = () => {
       return;
     }
     //delete userForm.confirm_password
-    userForm['password'] = event.target.password.value;
+    userForm["password"] = event.target.password.value;
+    userForm._id = params.id || null;
+
+    let formData = new FormData();
+    formData.append("img", avatarToUpload);
+    formData.append("user", JSON.stringify(userForm));
     if (params.id) {
-      userForm._id = params.id;
-      adminSignUp(userForm)
+      adminSignUp(formData);
     } else {
-      signUp(userForm);
+      signUp(formData);
     }
     //event.target.reset();
   };
 
-  const signUp = (user) => {
-    axios
-      .post("http://localhost:5000/signUp/signUp", user)
+  const signUp = (formData) => {
+    fetch("http://localhost:5000/signUp/signUp", {
+      method: 'POST',
+      body: formData,
+    })
       .then((response) => {
-        if (response.data) {
+        if (response.ok) {
           setSignedUp(true);
         }
         // CONFIRM ACTION PERFORMED HERE
@@ -88,11 +96,32 @@ const Register = () => {
       });
   };
 
-  const adminSignUp = (user) => {
+  const handleImgReset = () => {
+    setAvatar(
+      require("@src/assets/images/portrait/small/avatar-s-11.jpg").default
+    );
+    setAvatarToUpload(null);
+  };
+
+  const onAvatarChange = (e) => {
+    e.preventDefault();
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    setAvatarToUpload(file);
+    reader.onload = function () {
+      setAvatar(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const adminSignUp = (formData) => {
     axios
-      .post("http://localhost:5000/signUp/adminSignUp", user)
+      .post("http://localhost:5000/signUp/adminSignUp", {
+        method: 'POST',
+        body: formData,
+      })
       .then((response) => {
-        if (response.data) {
+        if (response.ok) {
           setSignedUp(true);
         }
         // CONFIRM ACTION PERFORMED HERE
@@ -100,7 +129,7 @@ const Register = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const illustration =
       skin === "dark" ? "register-v2-dark.svg" : "register-v2.svg",
@@ -202,9 +231,50 @@ const Register = () => {
               <CardTitle tag="h2" className="fw-bold mb-1">
                 Adventure starts here 🚀
               </CardTitle>
-              <CardText className="mb-2">
-                Make your app management easy and fun!
+              <CardText className="mb-2 fst-italic">
+              “A reader lives a thousand lives before he dies . . . The man who never reads lives only one.”
               </CardText>
+              <div className="d-flex">
+                <div className="me-25">
+                  <img
+                    className="rounded me-50"
+                    src={avatar}
+                    alt="Generic placeholder image"
+                    height="100"
+                    width="100"
+                  />
+                </div>
+                <div className="d-flex align-items-end mt-75 ms-1">
+                  <div>
+                    <Button
+                      tag={Label}
+                      className="mb-75 me-75"
+                      size="sm"
+                      color="primary"
+                    >
+                      Upload
+                      <Input
+                        type="file"
+                        onChange={onAvatarChange}
+                        hidden
+                        accept="image/*"
+                      />
+                    </Button>
+                    <Button
+                      className="mb-75"
+                      color="secondary"
+                      size="sm"
+                      outline
+                      onClick={handleImgReset}
+                    >
+                      Reset
+                    </Button>
+                    <p className="mb-0">
+                      Allowed JPG, GIF or PNG. Max size of 800kB
+                    </p>
+                  </div>
+                </div>
+              </div>
               <Form className="auth-register-form mt-2" onSubmit={handleSubmit}>
                 <div className="mb-1">
                   <Label className="form-label">Lastname</Label>
@@ -212,8 +282,10 @@ const Register = () => {
                     type="text"
                     name="lastname"
                     placeholder="Lastname"
-                    value={userForm['lastname']}
-                    onChange={(e) => setUserForm({...userForm, lastname: e.target.value})}
+                    value={userForm["lastname"]}
+                    onChange={(e) =>
+                      setUserForm({ ...userForm, lastname: e.target.value })
+                    }
                     autoFocus
                   />
                 </div>
@@ -223,8 +295,10 @@ const Register = () => {
                   <Input
                     type="text"
                     name="firstname"
-                    value={userForm['firstname']}
-                    onChange={(e) => setUserForm({...userForm, firstname: e.target.value})}
+                    value={userForm["firstname"]}
+                    onChange={(e) =>
+                      setUserForm({ ...userForm, firstname: e.target.value })
+                    }
                     placeholder="Firstname"
                   />
                 </div>
@@ -234,9 +308,10 @@ const Register = () => {
                   <Input
                     type="Email"
                     name="email"
-                    value={userForm['email']}
-                    onChange={(e) => setUserForm({...userForm, email: e.target.value})}
-
+                    value={userForm["email"]}
+                    onChange={(e) =>
+                      setUserForm({ ...userForm, email: e.target.value })
+                    }
                     placeholder="Email"
                   />
                 </div>
@@ -246,8 +321,10 @@ const Register = () => {
                   <Input
                     type="number"
                     name="phone_number"
-                    value={userForm['phone_number']}
-                    onChange={(e) => setUserForm({...userForm, phone_number: e.target.value})}
+                    value={userForm["phone_number"]}
+                    onChange={(e) =>
+                      setUserForm({ ...userForm, phone_number: e.target.value })
+                    }
                     placeholder="Phone number"
                   />
                 </div>
@@ -257,8 +334,10 @@ const Register = () => {
                   <Input
                     type="text"
                     name="address"
-                    value={userForm['address']}
-                    onChange={(e) => setUserForm({...userForm, address: e.target.value})}
+                    value={userForm["address"]}
+                    onChange={(e) =>
+                      setUserForm({ ...userForm, address: e.target.value })
+                    }
                     placeholder="Address"
                   />
                 </div>
