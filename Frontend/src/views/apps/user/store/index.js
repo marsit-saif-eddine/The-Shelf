@@ -56,6 +56,18 @@ export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { d
   return id
 })
 
+export const banUser = createAsyncThunk('appUsers/banUser', async (id,{dispatch}) => {
+  await axios.get('/user/ban', { params:{id:id} })
+ await dispatch(getAllData())
+ return id
+})
+
+export const unbanUser = createAsyncThunk('appUsers/unbanUser', async (id,{dispatch}) => {
+ await axios.get('/user/unban', { params:{id:id} })
+await dispatch(getAllData())
+return id
+})
+
 export const appUsersSlice = createSlice({
   name: 'appUsers',
   initialState: {

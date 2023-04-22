@@ -7,6 +7,8 @@ router.get("/allquiz", quizController.getAllQuiz);
 router.get("/:id", quizController.getQuizById);
 router.put("/approvequiz/:id", quizController.approveQuiz);
 router.put("/reportquiz/:id", quizController.reportQuiz);
+//'/quiz/:id/submit'
+router.post("/:id/submit", quizController.submit);
 
 router.delete("/delete/:id", quizController.deleteQuiz);
 

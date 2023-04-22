@@ -153,5 +153,46 @@ exports.saveAnswers=async(req,res,next)=>{
       } catch (err) {
           res.status(400).json({ "message": err.message })
       }
+    };
+    //app.post('/quiz/:id/submit',
+    exports.submit=async (req, res) => {
+      const { id } = req.params;
+      const { answers } = req.body;
+    
+      try {
+        // Fetch the quiz from the database using the ID
+        const quiz = await Quiz.findById(id);
+    
+        // Calculate the user's score by comparing their answers to the correct answers
+        let score = 0;
+       
 
-  }
+        for (let i = 0; i < quiz.questions.length; i++) {
+      
+
+          const question = quiz.questions[i];
+          const userAnswer = answers[i];
+          console.log("g :"+ question.answerkey)
+          console.log("u :"+ userAnswer)
+          console.log('ans: '+ id)
+          if (userAnswer === question.answerkey) {
+            console.log("score 3")
+
+            score += question.points;
+            console.log("score saved")
+          }
+        }
+    
+        // Update the quiz in the database to record the user's score
+        quiz.submissions.push({ answers, score });
+        await quiz.save();
+    console.log("sub saved")
+        // Send the user's score back to the frontend as a response
+        res.json({ score });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+      }
+    };
+
+  

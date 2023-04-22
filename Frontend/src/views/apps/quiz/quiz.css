@@ -41,3 +41,11 @@
 .error{
     color: red;
 }
+.submitform{
+    display: "flex";
+    align-self: center;
+    align-content: center;
+    align-Items: "center";
+    justify-Content: "center";
+    height: "100vh";
+}

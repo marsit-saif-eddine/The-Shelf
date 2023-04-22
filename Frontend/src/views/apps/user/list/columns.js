@@ -6,12 +6,12 @@ import Avatar from '@components/avatar'
 
 // ** Store & Actions
 import { store } from '@store/store'
-import { getUser, deleteUser ,rateUser} from '../store'
+import { getUser, deleteUser ,rateUser,banUser,unbanUser} from '../store'
 import Rating from '@mui/material/Rating'
 import Typography from '@mui/material/Typography'
 
 // ** Icons Imports
-import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
+import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive, Slash } from 'react-feather'
 
 // ** Reactstrap Imports
 import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
@@ -165,7 +165,7 @@ export const columns = [
               <Archive size={14} className='me-50' />
               <span className='align-middle'>Edit</span>
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               tag='a'
               href='/'
               className='w-100'
@@ -176,6 +176,19 @@ export const columns = [
             >
               <Trash2 size={14} className='me-50' />
               <span className='align-middle'>Delete</span>
+            </DropdownItem> */}
+            <DropdownItem
+              tag='a'
+              href='/'
+              className='w-100'
+              onClick={e => {
+                e.preventDefault()
+                
+                store.dispatch(row.status == "banned" ?  unbanUser(row._id) : banUser(row._id))
+              }}
+            >
+              <Slash size={14} className='me-50' />
+              {row.status == "banned" ? <span  className='align-middle'>Unban</span> :  <span  className='align-middle'>Ban</span> }
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
