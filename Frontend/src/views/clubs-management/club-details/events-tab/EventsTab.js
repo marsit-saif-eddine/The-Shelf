@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Search } from "react-feather";
 import { Input, InputGroup, InputGroupText } from "reactstrap";
 import EventsCard from "./EventsCard";
+import { useDispatch, useSelector } from "react-redux";
+import { getClubEvents } from "../../../../redux/clubs";
 
 const EventsTab = () => {
-  const events = ["", "", "", "", "", "", ""];
+  const events = useSelector(state => state.clubs.events);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getClubEvents());
+  }, []);
 
   return (
     <div className="row events-container">
@@ -17,7 +24,7 @@ const EventsTab = () => {
       </InputGroup>
       </div>
       {events.map((x, index) => {
-        return <EventsCard key={index} />;
+        return <EventsCard key={index} event={x} />;
       })}
     </div>
   );

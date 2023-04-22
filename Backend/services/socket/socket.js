@@ -1,4 +1,4 @@
-const { getDb } = require("../database/connection");
+const { getDb } = require("../../services/database/connection");
 const ObjectID = require("mongodb").ObjectId;
 
 
@@ -17,20 +17,24 @@ exports.onClubMessageSent = async (data) => {
 }
 
 exports.getUsersClubs = async (data) => {
+    console.log(data);
     const dbClubs = getDb().collection('clubs');
     const clubs = await dbClubs.find( {
         $or: [
             {
                 $and: [
-                    {"members._id": data.user_id},
+                    {"members._id": data},
                     {"members.pending": {$exists: false}}
                 ]
             },
             {
-                "admins._id": data.user_id
+                "admins._id": data
+            },
+            {
+                "created_by._id": data
             }
         ]
     }, {projection: {_id: 1}}).toArray();
-
-    return clubs;
+    console.log(clubs)
+    return clubs.map(x => x._id.toString());
 }

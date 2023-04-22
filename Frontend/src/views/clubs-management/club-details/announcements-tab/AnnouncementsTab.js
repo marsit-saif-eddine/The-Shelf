@@ -8,38 +8,36 @@ import { Editor } from "react-draft-wysiwyg";
 import { Label } from "reactstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { publishAnnouncement } from "../../../../redux/clubs";
 const AnnouncementsTab = () => {
   const [newAnnouncement, setNewAnnouncement] = useState(
     EditorState.createEmpty()
   );
+  
   const [showEditor, setShowEditor] = useState(false);
   const params = useParams();
+  const dispatch = useDispatch();
   const club_id = params.id;
+
   const handleSubmit = () => {
 
     if (showEditor) {
-      publishAnnouncement();
+      addAnnouncement();
     } else {
       setShowEditor(true);
     }
   };
 
-  const publishAnnouncement = () => {
+  const addAnnouncement = () => {
     const rawContentState = convertToRaw(newAnnouncement.getCurrentContent());
-    console.log(rawContentState);
     const text = draftToHtml(rawContentState);
 
-    axios
-      .post(
-        "http://localhost:5000/clubs/publishAnnouncement",
-        { club_id, text },
-        { params: { club_id } }
-      )
-      .then((resp) => {
-        if (resp.data) {
-          setNewAnnouncement(EditorState.createEmpty());
-        }
-      });
+    dispatch(publishAnnouncement({ club_id, text }));
+    
+    setNewAnnouncement(EditorState.createEmpty());
+    setShowEditor(false);
+
   };
 
   return (

@@ -37,7 +37,7 @@ const SidebarLeft = props => {
             <span className='align-middle'>Add Event</span>
           </Button>
         </CardBody>
-        <CardBody>
+        <CardBody style={{display: "none"}}>
           <h5 className='section-label mb-1'>
             <span className='align-middle'>Filter</span>
           </h5>

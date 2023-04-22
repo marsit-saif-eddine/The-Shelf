@@ -16,30 +16,13 @@ import {
 
 export default [
   {
-        id: 'chat',
-        title: 'Chat',
-        icon: <MessageSquare />,
-        navLink: '/apps/chat',
-        action: 'client',
-        resource: 'client',
-     },
-     {
-      id: 'event',
-      title: 'Events',
-      icon: <FileText />,
-      navLink: '/apps/events',
-      action: 'client',
-      resource: 'client',
-     },
-   
-        {
-      id: 'books',
-      title: 'Books',
-      icon: <Book />,
-      navLink: '/apps/books',
-      action: 'client',
-      resource: 'client',
-   },
+    id: "chat",
+    title: "Chat",
+    icon: <MessageSquare />,
+    navLink: "/apps/chat",
+    action: "client",
+    resource: "client",
+  },
   {
     id: "event",
     title: "Events",
@@ -61,6 +44,14 @@ export default [
     title: "Books",
     icon: <Book />,
     navLink: "/apps/books",
+    action: "client",
+    resource: "client",
+  },
+  {
+    id: "clubs",
+    title: "Clubs",
+    icon: <Award />,
+    navLink: "/apps/clubs/list",
     action: "client",
     resource: "client",
   },
@@ -190,13 +181,5 @@ export default [
       //   navLink: 'user/view'
       // },
     ],
-  },
-  {
-    id: "clubs",
-    title: "Clubs",
-    icon: <Award />,
-    navLink: "apps/clubs/list",
-    action: "client",
-    resource: "client",
   },
 ];

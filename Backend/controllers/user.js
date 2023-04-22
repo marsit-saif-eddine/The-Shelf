@@ -9,17 +9,17 @@ var mongoose = require('mongoose');
 const maxAge = 3 * 24 * 60 * 60;
 
 //create token
-const  createToken = (id) => {
-    return jwt.sign({ id }, 'jwt', { expiresIn: '7d' });
+const  createToken = (_id) => {
+    return jwt.sign({ _id }, 'jwt', { expiresIn: '7d' });
 };
 
 
-const createRefreshToken = (userId) => {
-    const refreshToken = jwt.sign({ userId }, 'jwt', { expiresIn: '7d' });
+const createRefreshToken = (_id) => {
+    const refreshToken = jwt.sign({ _id }, 'jwt', { expiresIn: '7d' });
     return refreshToken;
   }
 
-exports.refreshToken=async (req, res) => {
+exports.refreshToken= (req, res) => {
     const accessToken = req.body.accessToken;
   
     if (!accessToken) {
@@ -30,7 +30,7 @@ exports.refreshToken=async (req, res) => {
       const decoded = jwt.verify(accessToken, 'jwt');
       const userId = decoded._id;
   
-      const newToken = await createRefreshToken(userId);
+      const newToken = createRefreshToken(userId);
   
       res.json(newToken);
     } catch (err) {
@@ -90,40 +90,30 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user) {
-            if (user.isConfirmed === false) {res.status(409).json({ "message": "please check your email to confirm you account !" });}
+            if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm you account !" });}
             if (user.status === 'banned') {
-                res.status(400).json({ "message": "User is banned!!" });
+                return res.status(400).json({ "message": "User is banned!!" });
             } else {
-                const auth = await bcrypt.compare(password, user.password);
+                const auth = bcrypt.compare(password, user.password);
                 if (auth) {
                     const accessToken = createToken(user._id);
                     const refreshToken = createRefreshToken(user._id);
                     res.cookie('jwt', accessToken, { httpOnly: true, maxAge: maxAge * 1000 });
-                    console.log("cookie: " + req.cookies.jwt)
-                    res.status(200).json({
-                        userData: {
-                            id: user._id,
-                            email: user.email,
-                            firstName: user.firstname,
-                            lastName:user.lastname,
-                            role: user.role,
-                            ability: user.ability,
-                            username:user.username,
-                            avatar:user.profile_photo
-                        },
+                    
+                    return res.status(200).json({
+                        userData: user,
                         accessToken: accessToken,
                         refreshToken: refreshToken
                     });
                 } else {
-                    res.status(400).json({ "message": "Incorrect password" })
+                    return res.status(400).json({ "message": "Incorrect password" })
                 }
             }
         } else {
-            res.status(404).json({ "message": "No user found" })
+            return res.status(404).json({ "message": "No user found" })
         }
 
     } catch (err) {
-        console.log("here")
         res.status(400).json({ "message": err.message })
     }
 }

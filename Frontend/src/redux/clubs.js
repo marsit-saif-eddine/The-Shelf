@@ -48,11 +48,61 @@ export const cancelJoinRequest = createAsyncThunk(
       })
 );
 
+export const publishAnnouncement = createAsyncThunk(
+  "clubs/publishAnnouncement",
+  payload =>
+    axios
+      .post("clubs/publishAnnouncement", payload)
+      .then((resp) => {
+        return {
+          _id: resp.data,
+          ...payload
+        };
+      })
+);
+
+export const getClubAnnouncements = createAsyncThunk(
+  "clubs/getClubAnnouncements",
+  payload =>
+    axios
+      .get("clubs/getClubAnnouncements", {params: {club_id: payload.club_id}})
+      .then((resp) => {
+        return resp.data;
+      })
+);
+
+export const deleteClubAnnouncement = createAsyncThunk(
+  "clubs/deleteAnnouncement",
+  payload =>
+    axios
+      .delete("clubs/deleteAnnouncement", {params: {_id: payload._id}})
+      .then((resp) => {
+        if (resp.data) {
+          return {
+            data: resp.data,
+            ...payload
+          };
+        }
+
+        return {};
+        
+      })
+);
+
+export const getClubEvents = createAsyncThunk("clubs/getClubEvents", payload =>
+  axios.get("clubs/getClubEvents", {params: payload}).then((resp) => {
+    return resp.data;
+  })
+);
+
+
 export const clubsSlice = createSlice({
   name: "clubs",
   initialState: {
     currentClub: {},
     clubsList: [],
+    clubAnnouncements: [],
+    events: []
   },
   reducers: {
     setCurrentClub: (state, action) => {
@@ -83,8 +133,6 @@ export const clubsSlice = createSlice({
         }
       })
       .addCase(deleteClub.fulfilled, (state, action) => {
-        console.log(action.payload.club_id)
-        console.log(state.clubsList[5]._id);
         if (action.payload.data) {
           const index = state.clubsList.findIndex(
             (x) => x._id === action.payload.club_id
@@ -96,7 +144,7 @@ export const clubsSlice = createSlice({
       })
       .addCase(sendJoinClubRequest.fulfilled, (state, action) => {
         if (action.payload.data) {
-        
+          
         }
       })
       .addCase(cancelJoinRequest.fulfilled, (state, action) => {
@@ -114,6 +162,28 @@ export const clubsSlice = createSlice({
             }
           }
         }
+      }).addCase(publishAnnouncement.fulfilled, (state, action) => {
+        if (action.payload._id) {
+          const user = JSON.parse(localStorage.getItem('userData'));
+          action.payload.publisher = {
+            _id: user._id,
+            lastname: user.lastname,
+            firstname: user.firstname,
+            photo: user.photo
+          };
+          state.clubAnnouncements.unshift(action.payload);
+        }
+      }).addCase(deleteClubAnnouncement.fulfilled, (state, action) => {
+        if (action.payload.data) {
+          const index = state.clubAnnouncements.findIndex(x => x._id === action.payload._id);
+          if (index != -1) {
+            state.clubAnnouncements.splice(index, 1);
+          }
+        }
+      }).addCase(getClubAnnouncements.fulfilled, (state, action) => {
+        state.clubAnnouncements = action.payload;
+      }).addCase(getClubEvents.fulfilled, (state, action) => {
+        state.events = action.payload;
       });
   },
 });

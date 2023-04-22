@@ -1,30 +1,61 @@
+// Require the necessary modules
 const multer = require("multer");
-const ObjectID = require("mongodb").ObjectId;
 const path = require("path");
 
+// Set up the multer storage engine
 const storage = multer.diskStorage({
-
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/avatars");
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/avatars/" ); // set the destination folder for the uploaded files
   },
-  filename: function (req, file, cb) {
-    req.body.user = JSON.parse(req.body.user);
-    if (!req.body.user._id) {
-      req.body.user._id = new ObjectID();
-    }
-    const extension = file.originalname.substring(
-      file.originalname.lastIndexOf(".") + 1
-    );
-    const fileName = `${req.body.user._id.toString()}.${extension}`;
-
-    req.body.user.photo = fileName;
-
-    cb(null, fileName);
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
+    ); // set the filename for the uploaded files
   },
 });
+// Set up the multer upload instance
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png" && ext !== ".svg") {
+        cb(new Error("Only JPG, JPEG and PNG files are allowed"));
+      } else {
+        cb(null, true);
+      }
+    }
+  });
 
-const upload = multer({ storage: storage });
 
-module.exports = {
-  upload
-};
+    const uploadProfilePicture = (req, res, next) => {
+      upload.single("img")(req, res, (err) => {
+        if (err) {
+          return res.status(400).json({ error: err.message });
+        }
+        req.body = JSON.parse(req.body.user);
+        if (req.file) {
+          req.body.photo = req.file.path; // set the service_logo field of the request body to the uploaded file path
+        } else {
+          req.body.photo = 'uploads/avatars/avatar.svg';
+        }
+        next();
+      });
+    };
+
+    const uploadClubLogo = (req, res, next) => {
+      upload.single("logo")(req, res, (err) => {
+        if (err) {
+          return res.status(400).json({ error: err.message });
+        }
+        req.body = JSON.parse(req.body.club);
+        if (req.file) {
+          req.body.logo = req.file.path; // set the service_logo field of the request body to the uploaded file path
+        } else {
+          req.body.logo = 'uploads/avatars/club_logo.png';
+        }
+        next();
+      });
+    };
+  // Export the middleware function
+  module.exports = {uploadProfilePicture, uploadClubLogo}

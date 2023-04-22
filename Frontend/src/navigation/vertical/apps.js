@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Mail, MessageSquare, CheckSquare, Calendar, FileText, Circle, ShoppingCart, User, Shield, Award } from 'react-feather'
+import { Mail, MessageSquare, CheckSquare, Calendar, FileText, Circle, ShoppingCart, User, Shield, Award, Coffee } from 'react-feather'
 
 export default [
   {
@@ -156,8 +156,8 @@ export default [
       {
         id: "clubs",
         title: "Clubs",
-        icon: <Award />,
-        navLink: "apps/clubs/list",
+        icon: <Coffee />,
+        navLink: "/apps/clubs/list",
         action: "admin",
         resource: "admin",
       },

@@ -72,7 +72,6 @@ const Register = () => {
     let formData = new FormData();
     formData.append("img", avatarToUpload);
     formData.append("user", JSON.stringify(userForm));
-    console.log(formData.getAll('img'));
     if (params.id) {
       adminSignUp(formData);
     } else {
@@ -82,14 +81,12 @@ const Register = () => {
   };
 
   const signUp = (formData) => {
-    axios
-    .post("http://localhost:5000/signUp/signUp", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    fetch("http://localhost:5000/signUp/signUp", {
+      method: 'POST',
+      body: formData,
     })
       .then((response) => {
-        if (response.data) {
+        if (response.ok) {
           setSignedUp(true);
         }
         // CONFIRM ACTION PERFORMED HERE
@@ -108,25 +105,23 @@ const Register = () => {
 
   const onAvatarChange = (e) => {
     e.preventDefault();
-    //const reader = new FileReader();
+    const reader = new FileReader();
     const file = e.target.files[0];
-    console.log(file);
     setAvatarToUpload(file);
-    // reader.onload = function () {
-    //   setAvatar(reader.result);
-    // };
-    // reader.readAsDataURL(file);
+    reader.onload = function () {
+      setAvatar(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const adminSignUp = (formData) => {
     axios
-      .post("http://localhost:5000/signUp/adminSignUp", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      .post("http://localhost:5000/signUp/adminSignUp", {
+        method: 'POST',
+        body: formData,
       })
       .then((response) => {
-        if (response.data) {
+        if (response.ok) {
           setSignedUp(true);
         }
         // CONFIRM ACTION PERFORMED HERE
@@ -236,8 +231,8 @@ const Register = () => {
               <CardTitle tag="h2" className="fw-bold mb-1">
                 Adventure starts here 🚀
               </CardTitle>
-              <CardText className="mb-2">
-                Make your app management easy and fun!
+              <CardText className="mb-2 fst-italic">
+              “A reader lives a thousand lives before he dies . . . The man who never reads lives only one.”
               </CardText>
               <div className="d-flex">
                 <div className="me-25">

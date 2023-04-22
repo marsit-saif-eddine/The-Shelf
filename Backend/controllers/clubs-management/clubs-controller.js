@@ -4,8 +4,16 @@ const ObjectID = require("mongodb").ObjectId;
 exports.addClub = async (req, res) => {
   try {
     const dbClubs = getDb().collection("clubs");
-    req.body.logo =
-      "https://graphicriver.img.customer.envatousercontent.com/files/395988839/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=9133752d1e9837a45f7a15ed2d820778";
+
+    req.body.created_by = {
+      _id: req.user._id,
+      lastname: req.user.lastname,
+      firstname: req.user.firstname,
+      photo: req.user.photo
+    };
+
+    req.body.creation_date = new Date();
+
     const result = await dbClubs.insertOne(req.body);
     return res.status(200).send(result.insertedId);
   } catch (ex) {
@@ -81,8 +89,9 @@ exports.getAdminsToSelect = async (req, res) => {
         {},
         {
           projection: {
-            label: { $concat: ["$lastname", " ", "$firstname"] },
-            value: "$_id",
+            lastname: 1,
+            firstname: 1,
+            photo: 1
           },
         }
       )
@@ -96,20 +105,12 @@ exports.getAdminsToSelect = async (req, res) => {
 
 exports.sendJoinClubRequest = async (req, res) => {
   try {
-    req.user = {
-      _id: "", //req.user._id,
-      lastname: "Abidi", //req.user.lastname,
-      firstname: "Wajih", //req.user.firstname,
-      photo:
-        "https://graphicriver.img.customer.envatousercontent.com/files/395988839/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=9133752d1e9837a45f7a15ed2d820778", //req.user.photo
-      pending: true,
-    };
     const dbClubs = getDb().collection("clubs");
     const result = await dbClubs.updateOne(
       { _id: new ObjectID(req.query.club_id) },
       {
         $push: {
-          members: req.user,
+          members: {...req.user, pending: true},
         },
       }
     );
@@ -125,7 +126,7 @@ exports.acceptJoinRequest = async (req, res) => {
     const dbClubs = getDb().collection("clubs");
     const result = await dbClubs.updateOne(
       { _id: new ObjectID(req.query.club_id) },
-      { $unset: { "members.$[member].status": 1 } },
+      { $unset: { "members.$[member].pending": 1 } },
       { arrayFilters: [{ 'member._id': req.body.user_id }] }
     );
     console.log(result);

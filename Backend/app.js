@@ -60,7 +60,7 @@ app.use("/quiz",quizRouter);
 app.use("/appChat",chatRouter);
 
 app.use("/clubs",clubsRoutes);
-app.use('/avatars', express.static('uploads/avatars'));
+app.use('/uploads/avatars', express.static('uploads/avatars'));
 
 
 

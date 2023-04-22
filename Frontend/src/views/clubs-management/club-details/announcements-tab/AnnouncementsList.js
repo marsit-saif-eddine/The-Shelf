@@ -2,37 +2,26 @@ import React, { useEffect, useState } from "react";
 import AnnouncementsCard from "./AnouncementCard";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteClubAnnouncement, getClubAnnouncements } from "../../../../redux/clubs";
 
 const AnnouncementsList = () => {
-  const [announcements, setAnnouncements] = useState([]);
+  const announcements = useSelector(state => state.clubs.clubAnnouncements);
   const params = useParams();
+  const dispatch = useDispatch();
   const club_id = params.id;
 
   useEffect(() => {
-    getClubAnnouncements();
+    dispatch(getClubAnnouncements({club_id}));
   }, []);
-
-  const getClubAnnouncements = () => {
-    axios.get('http://localhost:5000/clubs/getClubAnnouncements', {params: {club_id}}).then(resp => {
-      setAnnouncements(resp.data);
-    });
-  }
-
-  const deleteAnnouncement = (_id) => {
-    axios.delete('http://localhost:5000/clubs/deleteAnnouncement', {params: {_id}}).then(resp => {
-      const index = announcements.findIndex(x => x._id === _id);
-      console.log(index)
-      announcements.splice(index, 1);
-      setAnnouncements([...announcements]);
-    });
-  }
 
   return (
     <>
       {announcements.map((x, index) => {
+        console.log(x);
         return (
             
-          <AnnouncementsCard announcement={x} deleteAnnouncement={deleteAnnouncement} key={index}/>
+          <AnnouncementsCard announcement={x} key={index}/>
         );
       })}
     </>

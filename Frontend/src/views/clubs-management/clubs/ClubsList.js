@@ -23,7 +23,7 @@ const ClubsList = () => {
   };
 
   return (
-    <div className="ClubsList">
+    <div className="clubs-list">
       <div className="row">
         <div className="col-auto">
           <h1>Liste des clubs</h1>
@@ -39,22 +39,6 @@ const ClubsList = () => {
           <ClubCard key={club._id} club={club} />
         ))}
       </div>
-      {showBox ? (
-        <div className="floating-box-container">
-          <ChatBox hideFunc={hideBox} />
-        </div>
-      ) : (
-        <div className="floating-box-container">
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              setShowBox(true);
-            }}
-          >
-            Chat
-          </button>
-        </div>
-      )}
     </div>
   );
 };

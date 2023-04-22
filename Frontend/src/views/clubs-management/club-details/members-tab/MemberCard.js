@@ -4,9 +4,11 @@ import banner from '@src/assets/images/pages/banner1.png';
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { addChatBubble } from "../../../../redux/chat";
+import { useNavigate } from "react-router-dom";
 
 const MemberCard = ({member, acceptRequest, rejectRequest}) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -21,7 +23,7 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
             <div className="profile-image-wrapper">
               <div className="profile-image">
                 <div className="avatar">
-                  <img src={member.photo} />
+                  <img src={'http://localhost:5000/' + member.photo} />
                 </div>
               </div>
             </div>
@@ -49,7 +51,7 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
               <span>Message</span>
             </button>
 
-            <button className="btn btn-outline-success expandable-btn me-1">
+            <button className="btn btn-outline-success expandable-btn me-1" onClick={() => navigate("/pages/profile/" + member._id)}>
               <User className="font-medium-2"></User>
               <span>Profile</span>
             </button>

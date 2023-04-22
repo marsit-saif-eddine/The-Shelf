@@ -12,6 +12,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import toast from 'react-hot-toast'
 import { Menu } from 'react-feather'
 import { Card, CardBody } from 'reactstrap'
+import { useSelector } from 'react-redux'
 
 const Calendar = props => {
   // ** Refs
@@ -32,60 +33,39 @@ const Calendar = props => {
     updateEvent
   } = props
 
-  // ** UseEffect checks for CalendarAPI Update
-  useEffect(() => {
-    if (calendarApi === null) {
-      setCalendarApi(calendarRef.current.getApi())
+  const events = useSelector(state => state.clubs.events?.map(x => {
+    return {
+      title: x.name,
+      start: x.startDate,
+      allDay: true,
     }
-  }, [calendarApi])
+  }));
+
+  useEffect(() => {
+  }, [])
 
   // ** calendarOptions(Props)
   const calendarOptions = {
-    events: store?.events.length ? store.events : [],
+    events: events.length ? events : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    /*
-      Enable dragging and resizing event
-      ? Docs: https://fullcalendar.io/docs/editable
-    */
-    editable: true,
 
-    /*
-      Enable resizing event from start
-      ? Docs: https://fullcalendar.io/docs/eventResizableFromStart
-    */
-    eventResizableFromStart: true,
+    editable: false,
 
-    /*
-      Automatically scroll the scroll-containers during event drag-and-drop and date selecting
-      ? Docs: https://fullcalendar.io/docs/dragScroll
-    */
-    dragScroll: true,
+    eventResizableFromStart: false,
 
-    /*
-      Max number of events within a given day
-      ? Docs: https://fullcalendar.io/docs/dayMaxEvents
-    */
-    dayMaxEvents: 2,
+    dragScroll: false,
 
-    /*
-      Determines if day names and week names are clickable
-      ? Docs: https://fullcalendar.io/docs/navLinks
-    */
+    dayMaxEvents: 3,
+
     navLinks: true,
 
-    eventClassNames({ event: calendarEvent }) {
-      // eslint-disable-next-line no-underscore-dangle
-      const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
-
-      return [
-        // Background Color
-        `bg-light-${colorName}`
-      ]
+    eventClassNames() {
+      return 'bg-light-warning'
     },
 
     eventClick({ event: clickedEvent }) {
@@ -117,29 +97,8 @@ const Calendar = props => {
       handleAddEventSidebar()
     },
 
-    /*
-      Handle event drop (Also include dragged event)
-      ? Docs: https://fullcalendar.io/docs/eventDrop
-      ? We can use `eventDragStop` but it doesn't return updated event so we have to use `eventDrop` which returns updated event
-    */
-    eventDrop({ event: droppedEvent }) {
-      dispatch(updateEvent(droppedEvent))
-      toast.success('Event Updated')
-    },
-
-    /*
-      Handle event resize
-      ? Docs: https://fullcalendar.io/docs/eventResize
-    */
-    eventResize({ event: resizedEvent }) {
-      dispatch(updateEvent(resizedEvent))
-      toast.success('Event Updated')
-    },
-
     ref: calendarRef,
 
-    // Get direction from app state (store)
-    direction: isRtl ? 'rtl' : 'ltr'
   }
 
   return (

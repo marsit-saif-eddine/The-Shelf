@@ -21,11 +21,11 @@ const themeConfig = {
       backgroundColor: 'white' // BS color options [primary, success, etc]
     },
     footer: {
-      type: 'static' // static, sticky, hidden
+      type: 'hidden' // static, sticky, hidden
     },
     customizer: false,
-    scrollTop: true, // Enable scroll to top button
-    toastPosition: 'top-right' // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
+    scrollTop: false, // Enable scroll to top button
+    toastPosition: 'bottom-right' // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right
   }
 }
 

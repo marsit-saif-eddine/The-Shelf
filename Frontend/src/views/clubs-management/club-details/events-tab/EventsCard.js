@@ -11,7 +11,8 @@ import { Card, CardTitle, CardBody, CardText } from "reactstrap";
 // ** Images
 import illustration from "@src/assets/images/pages/email.svg";
 
-const EventsCard = () => {
+const EventsCard = ({event}) => {
+  const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const data = [
     {
       title: "Billy Hopkins",
@@ -54,23 +55,23 @@ const EventsCard = () => {
   ];
 
   return (
-    <div className=" col-4">
+    <div className="col-lg-4 col-md-6 col-12">
       <Card className="card-developer-meetup">
-        <div className="meetup-img-wrapper rounded-top text-center">
-          <img src={illustration} height="170" />
+        <div className="meetup-img-wrapper rounded-top text-center overflow-hidden">
+          <img src={'http://localhost:5000/' + event.image} style={{height: "200px", objectFit: 'cover', width: "100%"}} />
         </div>
         <CardBody>
           <div className="meetup-header d-flex align-items-center">
             <div className="meetup-day">
-              <h6 className="mb-0">THU</h6>
-              <h3 className="mb-0">24</h3>
+              <h6 className="mb-0">{days[new Date(event.startDate).getDay()]}</h6>
+              <h3 className="mb-0">{new Date(event.startDate).getDate()}</h3>
             </div>
             <div className="my-auto">
               <CardTitle tag="h4" className="mb-25">
-                Developer Meetup
+                {event.name}
               </CardTitle>
               <CardText className="mb-0">
-                Meet world popular developers
+                {event.description.substr(0, 35) + ' ...'}
               </CardText>
             </div>
           </div>
@@ -81,8 +82,8 @@ const EventsCard = () => {
               icon={<Calendar size={18} />}
             />
             <div>
-              <h6 className="mb-0">Sat, May 25, 2020</h6>
-              <small>10:AM to 6:PM</small>
+              <h6 className="mb-0">Start date</h6>
+              <small>{new Date(event.startDate).toLocaleString('en-US')}</small>
             </div>
           </div>
           <div className="d-flex mt-2">
@@ -92,11 +93,15 @@ const EventsCard = () => {
               icon={<MapPin size={18} />}
             />
             <div>
-              <h6 className="mb-0">Central Park</h6>
-              <small>Manhattan, New york City</small>
+              <h6 className="mb-0">Location</h6>
+              <small>{event.location}</small>
             </div>
           </div>
           <AvatarGroup data={data} />
+
+          <button className="btn btn-gradient-primary w-100 mt-1">
+            More details
+          </button>
         </CardBody>
       </Card>
     </div>

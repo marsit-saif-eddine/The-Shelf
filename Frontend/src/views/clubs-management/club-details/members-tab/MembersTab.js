@@ -9,15 +9,11 @@ import { acceptMember, rejectMember } from "../../../../redux/clubs";
 const MembersTab = () => {
   const dispatch = useDispatch();
   const currentClub = useSelector(state => state.clubs.currentClub);
+  const [searchText, setSearchText] = useState("");
   
   useEffect(() => {
     //getMembers();
   }, [currentClub]);
-
-  const getMembers = () => {
-    axios.get('http://localhost:5000/clubs/getClubMembers', {params: {club_id: currentClub._id}}).then(resp => {
-    }).catch(() => {});
-  }
 
   const cancelJoinRequest = (user_id) => {
     axios.put('http://localhost:5000/clubs/cancelJoinRequest', {user_id}, {params: {club_id: currentClub._id}}).then(resp => {
@@ -39,13 +35,13 @@ const MembersTab = () => {
     <div className="row members-container">
       <div className="col-12 mb-1">
       <InputGroup className='input-group-merge'>
-        <Input placeholder='search...' />
+        <Input placeholder='search...' onChange={e => setSearchText(e.target.value)} />
         <InputGroupText>
             <Search size={14} />
           </InputGroupText>
       </InputGroup>
       </div>
-      {currentClub ? currentClub.members?.map((x, index) => {
+      {currentClub ? currentClub.members?.filter(x => searchText ? (x.lastname+' ' + x.firstname).toLowerCase().includes(searchText.toLowerCase()) : true).map((x, index) => {
         return <MemberCard member={x} acceptRequest={acceptJoinRequest} rejectRequest={cancelJoinRequest} key={index} />;
       }): ''}
     </div>

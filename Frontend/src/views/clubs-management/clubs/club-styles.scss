@@ -3,7 +3,7 @@
 //   transform: translateY(-5px);
 //   cursor: pointer;
 // }
-.ClubsList {
+.clubs-list {
   position: relative;
 
   .floating-box-container {
@@ -47,12 +47,18 @@
     height: fit-content;
   }
   
-  .main-card {
+  .custom-card {
+    height: 100%;
+    justify-content: space-between;
     margin: 0;
     margin-top: -20px;
     position: relative;
     //box-shadow: 0px 6px 24px -4px rgba(34, 41, 47, 0.1);
     box-shadow: 0px 6px 24px -4px rgba(34, 41, 47, 0.1), 0px -1px 12px -5px rgba(34, 41, 47, 0.1);
+  }
+  
+  .main-card {
+
     .action-btns-container {
       overflow: hidden;
       display: flex;

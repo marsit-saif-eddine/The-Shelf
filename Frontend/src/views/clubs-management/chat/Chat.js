@@ -65,7 +65,7 @@ const ChatLog = (props) => {
         <div
           key={index}
           className={classnames("chat", {
-            "chat-left": item.user._id != currentUser.id,
+            "chat-left": item.user._id != currentUser._id,
           })}
         >
           <div className="chat-avatar">
@@ -73,12 +73,13 @@ const ChatLog = (props) => {
               imgWidth={36}
               imgHeight={36}
               className="box-shadow-1 cursor-pointer"
-              img={item.user.photo}
+              img={item.user._id === 'gpt' ? item.user.photo : ('http://localhost:5000/' + item.user.photo)}
             />
           </div>
 
           <div className="chat-body">
             <div className="chat-content">
+              <b>{item.user.lastname + ' ' + item.user.firstname}</b>
               <p>{item.message}</p>
             </div>
           </div>
@@ -96,9 +97,15 @@ const ChatLog = (props) => {
     e.preventDefault();
     sendClubMessage({
       message: messageToSend,
-      club_id: currentClub._id,
-      user: currentUser,
+      club_id: params.id,
+      user: {
+        _id: currentUser._id,
+        lastname: currentUser.lastname,
+        firstname: currentUser.firstname,
+        photo: currentUser.photo
+      },
     });
+
 
     if (messageToSend.includes("hey gpt")) {
       const text = messageToSend.replace("hey gpt", "");
@@ -111,7 +118,7 @@ const ChatLog = (props) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${"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"}`,
+            Authorization: `Bearer ${"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"}`,
             "Content-Type": "application/json",
           },
         }
@@ -121,7 +128,7 @@ const ChatLog = (props) => {
       sendClubMessage({
         message,
         club_id: currentClub._id,
-        user: { lastname: 'Chat', firstname: 'GPT', photo: '', _id: "gpt" },
+        user: { lastname: 'Chat', firstname: 'GPT', photo: 'https://i.pinimg.com/originals/02/c5/a8/02c5a82909a225411008d772ee6b7d62.png', _id: "gpt" },
       });
     }
     setMessageToSend("");
@@ -138,7 +145,9 @@ const ChatLog = (props) => {
         <div className="active-chat">
           <div className="chat-navbar">
             <header className="chat-header">
-              <div className="d-flex align-items-center">
+              {
+                (conversation?.messages?.length &&
+                  <div className="d-flex align-items-center">
                 <div
                   className="sidebar-toggle d-block d-lg-none me-1"
                   onClick={() => {}}
@@ -148,18 +157,20 @@ const ChatLog = (props) => {
                 <Avatar
                   imgHeight="36"
                   imgWidth="36"
-                  img={currentUser.photo}
+                  img={'http://localhost:5000/' + conversation?.messages.at(-1).user.photo}
                   status={"online"}
                   className="avatar-border user-profile-toggle m-0 me-1"
-                  onClick={() => handleAvatarClick(selectedUser.contact)}
+                  onClick={() => {}}
                 />
                 <div className="col-auto d-flex flex-column justify-content-end">
                   <h6 className="mb-0 lh-1">
-                    {currentUser.lastname + " " + currentUser.firstname}
+                    {conversation?.messages.at(-1).user.lastname + " " + conversation?.messages.at(-1).user.firstname}
                   </h6>
                   <small className="text-muted">Just sent a message</small>
                 </div>
               </div>
+                  )
+              }
               {/* <div className='d-flex align-items-center'>
                 <PhoneCall size={18} className='cursor-pointer d-sm-block d-none me-1' />
                 <Video size={18} className='cursor-pointer d-sm-block d-none me-1' />

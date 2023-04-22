@@ -29,8 +29,9 @@ exports.getClubMembers = async (req, res) => {
 
 exports.getClubEvents = async (req, res) => {
     try {
-        const dbClubEvents = getDb().collection('club_events');
-        const events = await dbClubEvents.find({club_id: req.query.club_id}).toArray();
+        const dbClubEvents = getDb().collection('events');
+        console.log(req.query);
+        const events = await dbClubEvents.find().toArray();
 
         return res.status(200).send(events);
 
@@ -42,7 +43,7 @@ exports.getClubEvents = async (req, res) => {
 exports.getClubAnnouncements = async (req, res) => {
     try {
         const dbClubAnnouncements = getDb().collection('club_announcements');
-        const clubAnnouncements = await dbClubAnnouncements.find({club_id: req.query.club_id}).toArray();
+        const clubAnnouncements = await dbClubAnnouncements.find({club_id: req.query.club_id}).sort({_id: -1}).toArray();
 
         return res.status(200).send(clubAnnouncements);
     } catch(ex) {
@@ -55,17 +56,17 @@ exports.publishAnnouncement = async (req, res) => {
         const dbClubAnnouncements = getDb().collection('club_announcements');
 
         req.body.publisher = {
-            _id: '',//req.user._id,
-            lastname: 'Abidi',//req.user.lastname,
-            firstname: 'Wajih',//req.user.firstname,
-            photo: 'https://graphicriver.img.customer.envatousercontent.com/files/395988839/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=9133752d1e9837a45f7a15ed2d820778'//req.user.photo
+            _id: req.user._id,
+            lastname: req.user.lastname,
+            firstname: req.user.firstname,
+            photo: req.user.photo
         }
 
         req.body.creation_date = new Date();
 
         const result = await dbClubAnnouncements.insertOne(req.body);
 
-        return res.status(200).send(true);
+        return res.status(200).send(result.insertedId);
     } catch(ex) {
         console.log(ex);
         return res.status(500).send();

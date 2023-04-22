@@ -48,7 +48,7 @@ export const ChatSlice = createSlice({
     initSocketConnection: (state, action) => {
       state.socket = io("http://localhost:5000", {
         auth: {
-          user_id: JSON.parse(localStorage.getItem('userData'))._id,
+          token: localStorage.getItem('accessToken') 
         },
       });
 

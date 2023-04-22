@@ -50,5 +50,19 @@ const upload = multer({
         next();
       });
     };
+    const uploadProfilePicture = (req, res, next) => {
+      upload.single("img")(req, res, (err) => {
+        if (err) {
+          return res.status(400).json({ error: err.message });
+        }
+        req.body = JSON.parse(req.body.user);
+        if (req.file) {
+          req.body.photo = req.file.path; // set the service_logo field of the request body to the uploaded file path
+        } else {
+          req.body.photo = '/'
+        }
+        next();
+      });
+    };
   // Export the middleware function
-  module.exports = {uploadPhotoMiddleware,uploadPhotoMiddlewareUpdate}
+  module.exports = {uploadPhotoMiddleware,uploadPhotoMiddlewareUpdate, uploadProfilePicture}

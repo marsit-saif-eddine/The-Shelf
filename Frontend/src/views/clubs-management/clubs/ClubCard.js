@@ -5,63 +5,50 @@ import axios from "axios";
 import AvatarGroup from "@components/avatar-group";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { cancelJoinRequest, deleteClub, sendJoinClubRequest } from "../../../redux/clubs";
-
-const data = [
-  {
-    img: require("@src/assets/images/portrait/small/avatar-s-7.jpg").default,
-  },
-  {
-    img: require("@src/assets/images/portrait/small/avatar-s-11.jpg").default,
-  },
-  {
-    img: require("@src/assets/images/portrait/small/avatar-s-7.jpg").default,
-  },
-  {
-    img: require("@src/assets/images/portrait/small/avatar-s-11.jpg").default,
-  },
-  {
-    img: require("@src/assets/images/portrait/small/avatar-s-7.jpg").default,
-  },
-];
+import {
+  cancelJoinRequest,
+  deleteClub,
+  sendJoinClubRequest,
+} from "../../../redux/clubs";
+import ConfirmationModal from "../modals/ConfirmationModal";
 
 const ClubCard = (props) => {
-  const currentUser = JSON.parse(localStorage.getItem('userData'));
+  const currentUser = JSON.parse(localStorage.getItem("userData"));
   const navigate = useNavigate();
   const [club, setClub] = useState(props.club);
   const [members, setMembers] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch();
-  const [memberShipStatus, setMemberShipStatus] = useState(
-    props.memberShipStatus
-  );
-  useEffect(() => {
-    setMemberShipStatus(club.members ?
-      (
-        club.members.findIndex(x => x._id === currentUser.id && !x.pending) != -1?
-        'member' : club.members.findIndex(x => x._id === currentUser.id && x.pending) != -1 ?
-        'pending' : 'none'
-      ) : 'none');
+  const [memberShipStatus, setMemberShipStatus] = useState("none");
 
-    if (club.members)
-      setMembers(
-        [...club.members
-          ?.filter((x) => !x.pending)
-          .map((x) => {
-            return { title: x.lastname + " " + x.firstname, img: x.photo };
-          })]
-      );
-  }, [club]);
+  useEffect(() => {
+    setMemberShipStatus(
+      club.members
+        ? club.members.findIndex(
+            (x) => x._id === currentUser._id && !x.pending
+          ) != -1
+          ? "member"
+          : club.members.findIndex(
+              (x) => x._id === currentUser._id && x.pending
+            ) != -1
+          ? "pending"
+          : "none"
+        : "none"
+    );
+  }, []);
   return (
     <div className="col-lg-6 col-12">
       <div className="card header-card">
         <h4>{club.club_name}</h4>
       </div>
 
-      <div className="card main-card">
-        {currentUser.is_admin ? (
+      <div className="card main-card custom-card">
+        {(club.admins.findIndex(x => x._id === currentUser._id) > -1 || club.created_by._id === currentUser._id) ? (
           <div className="action-btns-container">
             <div
-              onClick={() => {dispatch(deleteClub({club_id: club._id}))}}
+              onClick={() => {
+                setOpenModal(true);
+              }}
               className="action-btn bg-danger text-white"
             >
               <Trash size={12} />
@@ -78,7 +65,12 @@ const ClubCard = (props) => {
 
         <div className="row flex-nowrap m-0">
           <div className="card user-avatar">
-            <img src={club.logo} width={"100"} height={"100"} />
+            <img
+              src={"http://localhost:5000/" + club.logo}
+              className="bg-light"
+              width={"100px"}
+              height={"100px"}
+            />
           </div>
 
           <div className="infos-column">
@@ -102,38 +94,61 @@ const ClubCard = (props) => {
                 ""
               )}
 
-              <div className="col p-0">
-                <AvatarGroup data={members.splice(0, 8)}></AvatarGroup>
-              </div>
-
+              {club.members ? (
+                <div className="col p-0">
+                  <AvatarGroup
+                    data={club.members
+                      ?.filter((x) => !x.pending)
+                      .map((x) => {
+                        return {
+                          title: x.lastname + " " + x.firstname,
+                          img: "http://localhost:5000/" + x.photo,
+                        };
+                      })
+                      .splice(0, 8)}
+                  ></AvatarGroup>
+                </div>
+              ) : null}
             </div>
           </div>
 
-          {currentUser.is_admin || memberShipStatus === 'member' ? (
-           <button
-           className="btn btn-gradient-primary"
-           onClick={() => navigate("/apps/clubs/details/" + club._id)}
-         >
-           Details
-         </button>
-        ) : memberShipStatus === "none" ? (
-          <button
-          className="btn btn-gradient-primary"
-          onClick={() => {dispatch(sendJoinClubRequest({club_id: club._id})); setMemberShipStatus('pending')}}
-        >
-          Join group
-        </button>
-        ) : memberShipStatus === "pending" ? (
-          <button
-          className="btn btn-gradient-primary"
-          onClick={() => {dispatch(cancelJoinRequest({club_id: club._id, user_id: currentUser.id})); setMemberShipStatus('none')}}
-        >
-          Cancel join request
-        </button>
-        ) : null}
-         
+          {currentUser.role === "admin" || memberShipStatus === "member" ? (
+            <button
+              className="btn btn-gradient-primary"
+              onClick={() => navigate("/apps/clubs/details/" + club._id)}
+            >
+              Details
+            </button>
+          ) : memberShipStatus === "none" ? (
+            <button
+              className="btn btn-gradient-primary"
+              onClick={() => {
+                dispatch(sendJoinClubRequest({ club_id: club._id }));
+                setMemberShipStatus("pending");
+              }}
+            >
+              Join group
+            </button>
+          ) : memberShipStatus === "pending" ? (
+            <button
+              className="btn btn-gradient-primary"
+              onClick={() => {
+                dispatch(
+                  cancelJoinRequest({
+                    club_id: club._id,
+                    user_id: currentUser._id,
+                  })
+                );
+                setMemberShipStatus("none");
+              }}
+            >
+              Cancel join request
+            </button>
+          ) : null}
         </div>
       </div>
+
+      <ConfirmationModal isOpen={openModal} confirmAction={() => {dispatch(deleteClub({ club_id: club._id })); setOpenModal(false)}} buttonText="Delete" body="Do you realy want to delete this club? All its announcements, events and conversations are going to be deleted too." setOpenModal={setOpenModal}  />
     </div>
   );
 };
