@@ -418,7 +418,7 @@ return (
               />
             ))}
           </AvatarGroup> */}
-          <CardText className='item-description'>{event.location}</CardText>
+          <CardText className='item-description'>In {event.location}</CardText>
           <CardText className='item-description'>
             {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} TO {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
           </CardText>
@@ -439,7 +439,7 @@ return (
           <div className='d-flex align-items-center'>
           <AvatarGroup max={4}>
   {event.participants.map(participantt => (
-     <Avatar key={participantt._id} alt={participantt.firstname} img={participantt.profile_photo} />
+     <Avatar key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />
     
   ))
   }

@@ -355,12 +355,12 @@ console.log(userData)
             <Row className='d-flex justify-content-start align-items-center flex-wrap pb-50 post-actions'>
               <Col className='d-flex justify-content-between justify-content-sm-start mb-2' sm='6'>
                 <div className='d-flex align-items-center text-muted text-nowrap cursor-pointer'>
-                  <Heart
+                  {/* <Heart
                     size={18}
                   // className={classnames('me-50', {
                   //   'profile-likes': post.youLiked === true
                   // })}
-                  />
+                  /> */}
                 </div>
                 <div className='d-flex align-items-center'>
                   <div className='avatar-group ms-1'>
@@ -410,9 +410,7 @@ console.log(userData)
                   <button className="btn btn-pastel-danger btn-sm" onClick={() => handleDelete(event._id)}>
                     <FontAwesomeIcon icon={faTrashAlt} />
                   </button>
-                  <button className="btn btn-pastel-info btn-sm" onClick={() => reportEvent(event._id)}>
-                    <FontAwesomeIcon icon={faFlag} />
-                  </button>
+                
 
                 </Col>)}
             </Row>
