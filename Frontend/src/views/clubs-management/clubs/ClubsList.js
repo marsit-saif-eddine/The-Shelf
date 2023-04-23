@@ -7,11 +7,13 @@ import ChatBox from "../chatBox";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteClub, getClubs, rejectMember } from "../../../redux/clubs";
 import { Link } from "react-router-dom";
+import { Input, InputGroup, InputGroupText } from "reactstrap";
+import { Search } from "react-feather";
 
 const ClubsList = () => {
   const currentUser = JSON.parse(localStorage.getItem('userData'));
   const clubs = useSelector((state) => state.clubs.clubsList);
-  const [showBox, setShowBox] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const ClubsList = () => {
     <div className="clubs-list">
       <div className="row">
         <div className="col-auto">
-          <h1>Clubs list</h1>
+          <h1>Clubs</h1>
         </div>
         <div className="col d-flex justify-content-end">
           <Link to="/apps/clubs/add">
@@ -34,8 +36,16 @@ const ClubsList = () => {
           </Link>
         </div>
       </div>
+      <div className="col-12 mt-1 mb-50">
+      <InputGroup className='input-group-merge'>
+        <Input placeholder='search...' onChange={e => setSearchText(e.target.value)} />
+        <InputGroupText>
+            <Search size={14} />
+          </InputGroupText>
+      </InputGroup>
+      </div>
       <div className="row match-height">
-        {clubs?.map((club) => (
+        {clubs?.filter(x => searchText ? x.club_name.toLowerCase().includes(searchText.toLowerCase()): true).map((club) => (
           <ClubCard key={club._id} club={club} />
         ))}
       </div>
