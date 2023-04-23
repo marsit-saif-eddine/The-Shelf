@@ -49,9 +49,6 @@ const BreadCrumbs = props => {
                 <BreadcrumbItem tag='li'>
                   <Link to='/'>Home</Link>
                 </BreadcrumbItem>
-                <BreadcrumbItem tag='li'>
-                  <Link to='/apps/books'>Books</Link>
-                </BreadcrumbItem>
                 {renderBreadCrumbs()}
               </Breadcrumb>
             </div>

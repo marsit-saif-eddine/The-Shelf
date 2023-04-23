@@ -46,17 +46,8 @@ const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/AdminEventTable
 const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
 const QuizAdmin=lazy(() => import('../../views/apps/quiz/admin/quizTable.js'))
 const MyEvents=lazy(() => import('../../views/pages/profile/MyEvents'))
-const Books = lazy(() => import("../../views/apps/books/index"));
-const AddBook = lazy(() => import("../../views/apps/books/addBook"));
-const Book = lazy(() => import("../../views/apps/books/detail/index"));
-const Booksadmin = lazy(() => import("../../views/apps/BookAdmin/list/index"));
-const MyBooksProfile = lazy(() => import("../../views/pages/profile/MyBooks"));
-
 const VideoCall = lazy(() => import("../../views/apps/Events/VideoCall"));
 
-const VideoConferance = lazy(() =>
-  import("../../views/apps/Events/chatvideoconf")
-);
 const EventsMore = lazy(() =>
   import("../../views/pages/profile/ProfileshowMoreEvents")
 );
@@ -69,7 +60,31 @@ const ClubDetails = lazy(() =>
   import("../../views/clubs-management/club-details/ClubDetails")
 );
 
+/* Books */
+const Books = lazy(() => import('../../views/apps/books/index'))
+const AddBook = lazy(() => import('../../views/apps/books/addBook'))
+const Book = lazy(() => import('../../views/apps/books/detail/index'))
+const Booksadmin = lazy(() => import('../../views/apps/BookAdmin/list/index'))
+const MyBooksProfile=lazy(() => import('../../views/pages/profile/MyBooks'))
+
+/* End_Books */
+
+const VideoConferance = lazy(() => import('../../views/apps/Events/chatvideoconf'))
+
+
+/* Posts */
+const Posts = lazy(() => import('../../views/apps/posts/index'))
+const AddPost = lazy(() => import('../../views/apps/posts/addPost'))
+const Post = lazy(() => import('../../views/apps/posts/detail/index'))
+const Postsadmin = lazy(() => import('../../views/apps/posts/admin/postTable'))
+
+
+/* End_Posts */
+
+
+
 const AppRoutes = [
+
   {
     element: <Email />,
     path: "/apps/email",
@@ -78,6 +93,7 @@ const AppRoutes = [
       className: "email-application",
     },
   },
+
   {
     element: <Email />,
     path: "/apps/email/:folder",
@@ -86,6 +102,7 @@ const AppRoutes = [
       className: "email-application",
     },
   },
+
   {
     element: <Email />,
     path: "/apps/email/label/:label",
@@ -94,10 +111,12 @@ const AppRoutes = [
       className: "email-application",
     },
   },
+
   {
     element: <Email />,
     path: "/apps/email/:filter",
   },
+
   {
     path: "/apps/chat",
     element: <Chat />,
@@ -109,6 +128,7 @@ const AppRoutes = [
       resource: "client",
     },
   },
+
 
   {
     element: <Books />,
@@ -134,6 +154,7 @@ const AppRoutes = [
       resource: "client",
     },
   },
+  
   {
     element: <VideoCall />,
     path: "/apps/call",
@@ -181,6 +202,88 @@ const AppRoutes = [
       action: "admin",
       resource: "admin",
     },
+  },
+
+
+  {
+    element: <Posts />,
+    path: '/apps/posts',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'read',
+      resource: 'ACL',
+      //action: 'client',
+      //resource: 'client'
+    }
+  },
+
+
+  {
+    element: <AddPost/>,
+    path: '/addpost',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+  {
+    element: <AddPost/>,
+    path: '/addpost/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+
+  {
+    element: <Post/>,
+    path: '/postdetail/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+     // action: 'client',
+     // resource: 'client'
+      action: 'read',
+      resource: 'ACL',
+    }
+  },
+
+  {
+    path: '/posts/list',
+    element: <Postsadmin />,
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+    
+  },
+
+
+
+
+
+  {
+    element: < VideoConferance/>,
+    path: '/apps/videoconf',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
   },
   {
     path: "/eventsdetail/:id",
@@ -249,6 +352,7 @@ const AppRoutes = [
       resource: "client",
     },
   },
+
   // {
   //   path: '/apps/events/update',
   //   element: <EventsUpdate />,
@@ -411,6 +515,7 @@ const AppRoutes = [
       className: "ecommerce-application",
     },
   },
+
   {
     element: <UserList />,
     path: "/users/list",

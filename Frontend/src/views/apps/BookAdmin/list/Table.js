@@ -1,11 +1,11 @@
 // ** React Imports
-import { Fragment, useState, useEffect } from 'react'
-
+import { Fragment, useState, useEffect, useRef, useCallback } from 'react'
+import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2';
+import axios from "axios";
 // ** Invoice List Sidebar
 import Sidebar from './Sidebar'
-
-// ** Table Columns
-import { columns } from './columns'
+import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
 
 // ** Store & Actions
 import { getAllData, getData } from '../store'
@@ -15,16 +15,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
-import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
 
 // ** Utils
 import { selectThemeColors } from '@utils'
-
-
+// ** Icons Imports
+import { Book, UserPlus, UserCheck, UserX, Bookmark, ChevronDown, Share, Printer, FileText, BookOpen, MoreVertical, Trash2 } from 'react-feather'
 
 
 // ** Reactstrap Imports
 import {
+  Badge,
   Row,
   Col,
   Card,
@@ -43,6 +43,12 @@ import {
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+import './tableList.css'
+
+
+
+
+
 
 // ** Table Header
 const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
@@ -135,13 +141,14 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
                 <span className='align-middle'>Export</span>
               </DropdownToggle>
               <DropdownMenu>
-                <DropdownItem className='w-100'>
-                  <Printer className='font-small-4 me-50' />
-                  <span className='align-middle'>Print</span>
-                </DropdownItem>
-                <DropdownItem className='w-100' onClick={() => downloadCSV(store.data)}>
+              <DropdownItem className='w-100' onClick={() => downloadCSV(store.data)}>
                   <FileText className='font-small-4 me-50' />
                   <span className='align-middle'>CSV</span>
+                </DropdownItem>
+{/*                 
+                <DropdownItem className='w-100' onClick={() => window.print()} >
+                  <Printer className='font-small-4 me-50' />
+                  <span className='align-middle'>Print</span>
                 </DropdownItem>
                 <DropdownItem className='w-100'>
                   <Grid className='font-small-4 me-50' />
@@ -155,12 +162,11 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
                   <Copy className='font-small-4 me-50' />
                   <span className='align-middle'>Copy</span>
                 </DropdownItem>
+               */}
               </DropdownMenu>
             </UncontrolledDropdown>
 
-            <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
-              Add New User
-            </Button>
+            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}> Add New User</Button> */}
           </div>
         </Col>
       </Row>
@@ -169,7 +175,9 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
 }
 
 
+
 const UsersList = () => {
+  
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.books)
@@ -183,13 +191,21 @@ const UsersList = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [acceptance, setAcceptance] = useState({ value: '', label: 'Select ' })
   const [availability, setAvailability] = useState({ value: '', label: 'Select '})
+  const [change, setChange]= useState(false);
+
+  const [Posts, setPosts] = useState([])
+   
+  const [approvedBookCount, setApprovedBookCount] = useState(0);
+  const [pendingBooksCount, setPendingBooks] = useState(0);
+  const [totalBooksCount, setBooksCount] = useState(0);
+  
 
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   // ** Get data on mount
   useEffect(() => {
-    dispatch(getAllData())
+    dispatch(getAllData());
     dispatch(
       getData({
         sort,
@@ -199,10 +215,194 @@ const UsersList = () => {
         perPage: rowsPerPage,
         accepted: acceptance.value,
         available: availability.value
-      })
+      }
+      )
     )
-    console.log('datamsg',store.data)
-  }, [dispatch, store.data.length, sort, sortColumn, currentPage])
+    setBooksCount(store.data.length)
+    setApprovedBookCount(getTotalAcceptedBook(store.data))
+    setPendingBooks(store.data.length - approvedBookCount)
+
+  }, [dispatch, store.data.length, sort, sortColumn, currentPage, change, store.data])
+
+  const getTotalAcceptedBook=(data) => {
+    const totalAccepted = data.filter((item)=> {
+      return item.accepted === true ; 
+    })
+    return totalAccepted.length
+  }
+
+  const acceptedObj = {
+    true: 'light-success',
+    false: 'light-secondary'
+  }
+  
+  // const getAllData = useCallback(async() => {
+  //      dispatch(getAllData());
+  //      setBooksCount(store.data.length)
+  //      setApprovedBookCount(getTotalAcceptedBook(store.data))
+  //      setPendingBooks(store.data.length - approvedBookCount)
+    
+  // })
+  const isAccepted = (isAccepted) => {
+    let status ;
+    isAccepted===true ? status ='Accepted' : status='Not Accepted'
+    return status
+  }
+  
+  const switchAccepted=(id, current)=>{
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to change this book status',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No, cancel',
+      }).then((result) => {
+        if (result.isConfirmed) {
+    axios.put(`http://localhost:5000/book/switch_accepted/${id}`, {accepted: !current})
+   .then(response => {
+    console.log(response.data);
+    setChange(true)  
+    current = change;
+  })
+  .catch(error => {
+    // handle error
+    console.log(error);
+  });
+  }
+  });   
+  }
+
+
+  const deleteBook = (idBook) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to delete this book',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, approve it it!',
+      cancelButtonText: 'No, cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+    axios.delete(`http://localhost:5000/book/${idBook}`)
+    .then(response => {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'The book has been deleted',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    })
+    .catch(error => {
+      // handle error
+      console.log(error);
+    });
+}
+}); 
+  }
+  
+  
+
+  const columns = [
+
+    {
+      name: 'Name',
+      sortable: true,
+      minWidth: '300px',
+      sortField: 'name',
+     selector: row => row.name,
+      cell: row => (
+        <div className='d-flex justify-content-left align-items-center'>
+          <div className='d-flex flex-column'>
+            <Link
+              to={`/bookdetail/${row._id}`}
+              className='user_name text-truncate text-body'
+            >
+            <span className='fw-bolder'>{row.name}</span>
+            </Link>
+          </div>
+        </div>
+     )
+    },
+ 
+   {
+     name: 'Author',
+     minWidth: '230px',
+     sortable: true,
+     sortField: 'billing',
+     selector: row => row.author,
+     cell: row => <span className='text-capitalize'>{row.author}</span>
+     
+   },
+ 
+   {
+     name: 'Owner',
+     minWidth: '230px',
+     sortable: true,
+     sortField: 'billing',
+     selector: row => row.billing,
+     cell: row => <span className='text-capitalize'>{row.owner}</span>
+     
+   },
+   {
+    name: 'Accepted',
+    minWidth: '138px',
+    sortable: true,
+    sortField: 'accepted',
+    selector: row => row.accepted,
+     cell: row => (
+  
+      <Badge className='text-capitalize' style={{cursor:'pointer'}}
+      color={acceptedObj[row.accepted]}
+      onClick={() => switchAccepted(row._id,row.accepted)}
+      >
+        {isAccepted(row.accepted) }
+       </Badge>
+     )
+    
+  },
+ 
+ 
+   {
+     name: 'Actions',
+     minWidth: '100px',
+     cell: row => (
+       <div className='column-action'>
+         <UncontrolledDropdown>
+           <DropdownToggle tag='div' className='btn btn-sm'>
+             <MoreVertical size={14} className='cursor-pointer' />
+           </DropdownToggle>
+           <DropdownMenu>
+             <DropdownItem
+             className='w-100'
+             >
+                <Link
+             to={`/bookdetail/${row._id}`}
+             className='w-100'
+           > 
+             <FileText size={14} className='me-50' />
+             <span className='align-middle'>Details</span>
+               </Link> 
+             </DropdownItem>
+             <DropdownItem
+               tag='a'
+               href='/'
+               className='w-100'
+               onClick={e => {
+                 e.preventDefault();
+                 deleteBook(row._id)
+               }}
+             >
+               <Trash2 size={14} className='me-50' />
+               <span className='align-middle'>Delete</span>
+             </DropdownItem>
+           </DropdownMenu>
+         </UncontrolledDropdown>
+       </div>
+     )
+   }
+ 
+ ]
 
   // ** User filter options
   const AcceptanceOptions = [
@@ -219,7 +419,6 @@ const UsersList = () => {
     
   ]
 
- 
   // ** Function in get data on page change
   const handlePagination = page => {
     dispatch(
@@ -333,6 +532,32 @@ const UsersList = () => {
 
   return (
     <Fragment>
+            <Row>
+            <Col lg='4' sm='6'>
+              <StatsHorizontal
+                color='primary'
+                statTitle='Total Books'
+                icon={<Book size={20} />}
+                renderStats={<h3 className='fw-bolder mb-75'>{totalBooksCount}</h3>}
+              />
+            </Col>
+            <Col lg='4' sm='6'>
+              <StatsHorizontal
+                color='success'
+                statTitle='Accepted Books'
+                icon={<Bookmark size={20} />}
+                renderStats={<h3 className='fw-bolder mb-75'>{approvedBookCount}</h3>}
+              />
+            </Col>
+            <Col lg='4' sm='6'>
+              <StatsHorizontal
+                color='danger'
+                statTitle='Unaccepted Books'
+                icon={<BookOpen size={20} />}
+                renderStats={<h3 className='fw-bolder mb-75'>{pendingBooksCount}</h3>}
+              />
+            </Col>
+          </Row>
       <Card>
         <CardHeader>
           <CardTitle tag='h4'>Filters</CardTitle>
@@ -405,6 +630,7 @@ const UsersList = () => {
             paginationServer
             columns={columns}
             onSort={handleSort}
+            onSelectedRowsChange
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             paginationComponent={CustomPagination}

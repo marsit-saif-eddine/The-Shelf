@@ -92,6 +92,8 @@ const AccountTabs = ({ data }) => {
   }
 
   const onSubmit = data => {
+    console.log('data', data)
+    return false
     if (Object.values(data).every(field => field.length > 0)) {
       return null
     } else {

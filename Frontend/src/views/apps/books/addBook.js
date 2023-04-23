@@ -9,18 +9,19 @@ import {
 import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {Input, Select} from "reactstrap";
+import AddBookForm from "./form/addBookForm";
 
 
 
 const addBook = () => {
 
     var user = JSON.parse(localStorage.getItem('userData'));
-    console.log("your user is :"+user.username);
     const ownerId = user.id;
     //owner1 = user.email
     
+    const {id} =useParams();
 
     const history = useNavigate();
     const [inputs, setInputs] = useState({
@@ -29,6 +30,7 @@ const addBook = () => {
         price: "",
         author: "",
         image: "",
+        accepted: Boolean("false"),
         owner: user.username,
         owner_Id: ownerId,
         for_sale:null
@@ -79,8 +81,8 @@ const addBook = () => {
          price: Number(inputs.price),
          image: String(inputs.image),
          available: Boolean(checked),
-         for_sale: Boolean(inputs.for_sale),
-         accepted: Boolean("false"),
+         //for_sale: Boolean(inputs.for_sale),
+         //accepted: Boolean("false"),
          owner: user.username,
          owner_Id: ownerId
 
@@ -97,92 +99,94 @@ const addBook = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent={"center"}
-                maxWidth={700}
-                alignContent={"center"}
-                alignSelf="center"
-                marginLeft={"auto"}
-                marginRight="auto"
-                marginTop={10}
-            >
-                <FormLabel>Name</FormLabel>
-                <Input
-                    value={inputs.name}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    name="name"
-                />
-                <FormLabel>Author</FormLabel>
-                <Input
-                    value={inputs.author}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    name="author"
-                />
+        <AddBookForm />
 
-                <FormLabel>Rent/ Sale</FormLabel>
-                <Input
-                id="for_sale"
-                name="for_sale"
-                type="select"
-                value={inputs.for_sale} onChange={handleChange} 
-                >
-                        <option value=''>Select</option>
-                        <option value='true'>For sale</option>
-                        <option value='false'>For rent</option>
-                </Input>
-                
-                {inputs.for_sale === 'true' && 
-                    <>
-                    <FormLabel>Price</FormLabel>
-                    <Input
-                        value={inputs.price}
-                        onChange={handleChange}
-                        type="number"
-                        margin="normal"
-                        variant="outlined"
-                        name="price"
-                    />
-                    </>
-                
-                }
-                
-                <FormLabel>Image</FormLabel>
-                <Input
-                    value={inputs.image}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    name="image"
-                />
-                <FormLabel>Description</FormLabel>
-                <Input
-                type='textarea'
-                rows="5"
-                value={inputs.description}
-                onChange={handleChange}
-                margin="normal"
-                variant="outlined"
-                name="description"
-                />
-                <FormControlLabel
-                    control={
-                        <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
-                    }
-                    label="Available"
-                />
+        // <form onSubmit={handleSubmit}>
+        //     <Box
+        //         display="flex"
+        //         flexDirection="column"
+        //         justifyContent={"center"}
+        //         maxWidth={700}
+        //         alignContent={"center"}
+        //         alignSelf="center"
+        //         marginLeft={"auto"}
+        //         marginRight="auto"
+        //         marginTop={10}
+        //     >
+        //         <FormLabel>Name</FormLabel>
+        //         <Input
+        //             value={inputs.name}
+        //             onChange={handleChange}
+        //             margin="normal"
+        //             variant="outlined"
+        //             name="name"
+        //         />
+        //         <FormLabel>Author</FormLabel>
+        //         <Input
+        //             value={inputs.author}
+        //             onChange={handleChange}
+        //             margin="normal"
+        //             variant="outlined"
+        //             name="author"
+        //         />
 
-                <Button variant="contained" type="submit">
-                    Add Book
-                </Button>
-            </Box>
-        </form>
+        //         <FormLabel>Rent/ Sale</FormLabel>
+        //         <Input
+        //         id="for_sale"
+        //         name="for_sale"
+        //         type="select"
+        //         value={inputs.for_sale} onChange={handleChange} 
+        //         >
+        //                 <option value=''>Select</option>
+        //                 <option value='true'>For sale</option>
+        //                 <option value='false'>For rent</option>
+        //         </Input>
+                
+        //         {inputs.for_sale === 'true' && 
+        //             <>
+        //             <FormLabel>Price</FormLabel>
+        //             <Input
+        //                 value={inputs.price}
+        //                 onChange={handleChange}
+        //                 type="number"
+        //                 margin="normal"
+        //                 variant="outlined"
+        //                 name="price"
+        //             />
+        //             </>
+                
+        //         }
+                
+        //         <FormLabel>Image</FormLabel>
+        //         <Input
+        //             value={inputs.image}
+        //             onChange={handleChange}
+        //             margin="normal"
+        //             variant="outlined"
+        //             name="image"
+        //         />
+        //         <FormLabel>Description</FormLabel>
+        //         <Input
+        //         type='textarea'
+        //         rows="5"
+        //         value={inputs.description}
+        //         onChange={handleChange}
+        //         margin="normal"
+        //         variant="outlined"
+        //         name="description"
+        //         />
+        //         <FormControlLabel
+        //             control={
+        //                 <Checkbox checked={checked} onChange={() => setChecked(!checked)} />
+        //             }
+        //             label="Available"
+        //         />
+
+        //         <Button variant="contained" type="submit">
+        //             Add Book
+        //         </Button>
+        //     </Box>
+        // </form>
     );
 };
 

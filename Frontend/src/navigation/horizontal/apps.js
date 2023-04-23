@@ -12,34 +12,48 @@ import {
   MessageSquare,
   Award,
   Book,
-} from "react-feather";
+  Edit
+} from 'react-feather'
+
+
 
 export default [
+  
   {
-    id: "chat",
-    title: "Chat",
-    icon: <MessageSquare />,
-    navLink: "/apps/chat",
-    action: "client",
-    resource: "client",
-  },
-  {
-    id: "event",
-    title: "Events",
-    icon: <FileText />,
-    navLink: "/apps/events",
-    action: "client",
-    resource: "client",
-  },
+        id: 'chat',
+        title: 'Chat',
+        icon: <MessageSquare />,
+        navLink: '/apps/chat',
+        action: 'client',
+        resource: 'client',
+     },
+
+     {
+      id: 'event',
+      title: 'Events',
+      icon: <FileText />,
+      navLink: '/apps/events',
+      action: 'client',
+      resource: 'client',
+     },
+   {
+      id: 'books',
+      title: 'Books',
+      icon: <Book />,
+      navLink: '/apps/books',
+      action: 'client',
+      resource: 'client',
+   },
 
   {
-    id: "books",
-    title: "Books",
-    icon: <Book />,
-    navLink: "/apps/books",
-    action: "client",
-    resource: "client",
-  },
+    id: 'posts',
+    title: 'Posts',
+    icon: <Edit />,
+    navLink: '/apps/posts',
+    action: 'client',
+    resource: 'client',
+ },
+
   {
     id: "clubs",
     title: "Clubs",

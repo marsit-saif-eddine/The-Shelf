@@ -78,12 +78,13 @@ const { pathname } = location;
             <div className='profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0'>
               <Nav className='mb-0' pills>
                 <NavItem>
-                  <NavLink href={`/pages/profile/${selectedUser._id}`} className='fw-bold' active>
+                  <NavLink href='/pages/profile/profile_posts' className='fw-bold' active>
+
                     <span className='d-none d-md-block'>Events</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                   <NavLink className='fw-bold'>
                     <span className='d-none d-md-block'>About</span>
                     <Info className='d-block d-md-none' size={14} />
@@ -102,6 +103,14 @@ const { pathname } = location;
                   </NavLink>
                 </NavItem>
                
+                </NavItem> */}
+                <NavItem>
+                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
+
                 <NavItem>
                   <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' active>
                     <span className='d-none d-md-block'>Books</span>
@@ -111,12 +120,8 @@ const { pathname } = location;
               </Nav>
               <Button color='primary'>
               <Link to='/eventsform'> Add a new event</Link>
-
-  <Plus size={14} > Add a new event</Plus>
-
-  
- 
-</Button>
+              <Plus size={14} > Add a new event</Plus>
+            </Button>
             </div>
           </Collapse>
         </Navbar>

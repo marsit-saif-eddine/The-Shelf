@@ -90,6 +90,10 @@ export const appBooksSlice = createSlice({
       .addCase(updateStatusBook.fulfilled, (state, action) => {
         state.allData = action.payload
       })
+      .addCase(deleteBook.fulfilled, (state, action) => {
+        state.allData = action.payload
+      })
+
   }
 })
 

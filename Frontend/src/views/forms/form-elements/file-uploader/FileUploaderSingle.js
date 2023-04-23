@@ -7,15 +7,30 @@ import { Card, CardHeader, CardTitle, CardBody, Button, ListGroup, ListGroupItem
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
 import { FileText, X, DownloadCloud } from 'react-feather'
-
-const FileUploaderSingle = () => {
+import axios from "axios";
+const FileUploaderSingle = ({files, setFiles}) => {
   // ** State
-  const [files, setFiles] = useState([])
 
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
+    accept: {
+      'image/jpeg': [],
+      'image/png': []
+    },
     onDrop: acceptedFiles => {
       setFiles([...files, ...acceptedFiles.map(file => Object.assign(file))])
+      const data = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        data.append('image', files[0]);
+      }
+      axios.post('http://localhost:5000/book/addbook', file.filenames, {
+        headers: {'Content-type':'multipart/form-data'}
+      }).then(response => {
+        const {file:filenames} = response;
+        onChange(prev => {
+          return [...prev, ...filenames];
+        });
+      })
     }
   })
 
@@ -87,7 +102,7 @@ const FileUploaderSingle = () => {
               <Button className='me-1' color='danger' outline onClick={handleRemoveAllFiles}>
                 Remove All
               </Button>
-              <Button color='primary'>Upload Files</Button>
+              <Button type="button" color='primary'>Upload Files</Button>
             </div>
           </Fragment>
         ) : null}

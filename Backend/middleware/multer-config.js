@@ -6,34 +6,21 @@ const join= require("path")
 const dirname= require("path")
 const extname= require("path")
 const fileURLToPath = require("url")*/
-const {multer, diskStorage} = require("multer");
+const multer= require("multer");
 const {join, dirname, extname} = require("path");
 const {fileURLToPath} = require("url");
+const uuidv4 = require("uuid/v4");
 
 
-
-const MIME_TYPES = {
-    "image/jpg": "jpg",
-    "image/jpeg": "jpg",
-    "image/png": "png",
-};
-
-export default function (image, size) {
-    return multer({
-
-        storage: diskStorage({
-
-            destination: (req, file, callback) => {
-                const __dirname = dirname(fileURLToPath(import.meta.url));
-                callback(null, join(__dirname, "../public/images"));
-            },
-            filename: (req, file, callback) => {
-                const name = file.originalname.split(" ").join("_");
-                const extension = MIME_TYPES[file.mimetype];
-                let newFileName = +new Date() + extname(file.originalname);
-                callback(null, newFileName);
-            },
-        }),
-        limits: size,
-    }).single(image);
-}
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './upload/bookimg/')
+    },
+    filename: function (req, file, cb) {
+        const fileName = file.originalname.toLowerCase().split(" ").join("-");
+        cb(null, uuidv4() + "-" + fileName);
+    }
+  })
+  
+  const upload = multer({ storage: storage })
+  module.exports= upload
