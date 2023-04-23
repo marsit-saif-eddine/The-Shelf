@@ -71,10 +71,11 @@ const ProfilePosts = ({ data }) => {
         .then(data => setEvents(data))
 
         .catch(error => console.log(error));
-      console.log("sii" + userData.id);
+      console.log( userData.avatar);
     }
     console.log(events)
   }, [userData]);
+  console.log(userData);
 
 
   // const handleUpdate = async (_id) => {
@@ -208,8 +209,8 @@ const ProfilePosts = ({ data }) => {
       };
     });
   };
-
-
+console.log('!!!!!!!')
+console.log(userData)
   const renderPosts = () => {
   //   const renderPosts = () => {
 
@@ -331,7 +332,7 @@ const ProfilePosts = ({ data }) => {
     //   }
     //   return renderPosts()
     // }
-    return events.length > 0 ? events.map(event => {
+    return events.length > 0 ? events.reverse().map(event => {
       return (
         <Card key={event._id}>
           <CardBody>
@@ -439,6 +440,7 @@ const ProfilePosts = ({ data }) => {
               <h6>{event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} ~~ {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}</h6>
             </div>
             <h6 className='mb-0'>{event.location}</h6>
+
 
             <fieldset className='form-label-group mb-50'>
               <Label className='form-check-label' >

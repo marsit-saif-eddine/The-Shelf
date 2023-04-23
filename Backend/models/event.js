@@ -8,9 +8,15 @@
     location: { type: String, required: true },
     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     image: { type: String },// new image field,
-    participants :{
-      type: Map, of: Boolean, default: new Map() ,
-    },
+    // participants :{
+    //   type: Map, of: Boolean, default: new Map() ,
+    // },
+    participants:[{
+      type:mongoose.Schema.Types.ObjectId, 
+      ref:'users'
+    }],
+
+
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     favorites: [{
       type: mongoose.Schema.Types.ObjectId,

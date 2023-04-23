@@ -2,7 +2,7 @@
 import { useState } from 'react'
 
 // ** Icons Imports
-import { AlignJustify, Rss, Info, Image, Users, Edit } from 'react-feather'
+import { AlignJustify, Rss, Info, Image, Users, Edit,Plus } from 'react-feather'
 import { Link } from 'react-router-dom';
 
 // ** Reactstrap Imports
@@ -79,7 +79,7 @@ const { pathname } = location;
               <Nav className='mb-0' pills>
                 <NavItem>
                   <NavLink href={`/pages/profile/${selectedUser._id}`} className='fw-bold' active>
-                    <span className='d-none d-md-block'>Feed</span>
+                    <span className='d-none d-md-block'>Events</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
@@ -110,14 +110,13 @@ const { pathname } = location;
                 </NavItem>
               </Nav>
               <Button color='primary'>
-              <Edit className='d-block d-md-none' size={14} />
-              <span className='fw-bold d-none d-md-block'>
-                <Link to='/eventsform'>
-                Add new event
-    
-                </Link>
-   </span>
-            </Button>
+              <Link to='/eventsform'> Add a new event</Link>
+
+  <Plus size={14} > Add a new event</Plus>
+
+  
+ 
+</Button>
             </div>
           </Collapse>
         </Navbar>

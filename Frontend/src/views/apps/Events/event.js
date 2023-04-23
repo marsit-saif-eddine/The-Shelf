@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Trash2 } from "react-feather";
 import Swal from 'sweetalert2';
 import axios from "axios";
+import { useEffect } from "react";
 function Event ({event}) {
 
 
@@ -12,7 +13,12 @@ function Event ({event}) {
   const[change,setChange]=useState(false)
 
 
-
+  useEffect(() => {
+    fetch('http://localhost:5000/events')
+      .then(response => response.json())
+      .then(data => setEvents(data))
+      .catch(error => console.log(error));
+  }, []);
 
     return (
     
@@ -24,8 +30,7 @@ function Event ({event}) {
        
           <CardImg
           variant="top"
-          src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`}
-          alt="Product Img"
+          src={`http://localhost:5000/uploads/${event.image.substr(8)}`}
           height={200}
         />
         </CardHeader>

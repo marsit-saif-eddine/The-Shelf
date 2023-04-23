@@ -11,11 +11,6 @@ const Quiz = lazy(() => import("../../views/apps/quiz"));
 const QuizByBook = lazy(() => import("../../views/apps/quiz/quizByBook"));
 const QuizById = lazy(() => import("../../views/apps/quiz/quizDetails"));
 
-const InvoiceAdd = lazy(() => import("../../views/apps/invoice/add"));
-const InvoiceList = lazy(() => import("../../views/apps/invoice/list"));
-const InvoiceEdit = lazy(() => import("../../views/apps/invoice/edit"));
-const InvoicePrint = lazy(() => import("../../views/apps/invoice/print"));
-const InvoicePreview = lazy(() => import("../../views/apps/invoice/preview"));
 
 const EcommerceShop = lazy(() => import("../../views/apps/ecommerce/shop"));
 const EcommerceDetail = lazy(() => import("../../views/apps/ecommerce/detail"));
@@ -25,6 +20,12 @@ const EcommerceWishlist = lazy(() =>
 const EcommerceCheckout = lazy(() =>
   import("../../views/apps/ecommerce/checkout")
 );
+
+const InvoiceAdd = lazy(() => import('../../views/apps/invoice/add'))
+const InvoiceList = lazy(() => import('../../views/apps/invoice/list'))
+const InvoiceEdit = lazy(() => import('../../views/apps/invoice/edit'))
+const InvoicePrint = lazy(() => import('../../views/apps/invoice/print'))
+const InvoicePreview = lazy(() => import('../../views/apps/invoice/preview'))
 
 const UserList = lazy(() => import("../../views/apps/user/list"));
 const UserView = lazy(() => import("../../views/apps/user/view"));
@@ -39,15 +40,12 @@ const EventsaddForm = lazy(() =>
   import("../../views/apps/Events/NewEventForm")
 );
 
-const Eventsadmin = lazy(() =>
-  import("../../views/apps/EventAdmin/EventTable")
-);
-const MyQuizzes = lazy(() => import("../../views/pages/profile/MyQuizzes"));
-const QuizAdmin = lazy(() =>
-  import("../../views/apps/quiz/admin/quizTable.js")
-);
-const MyEvents = lazy(() => import("../../views/pages/profile/MyEvents"));
 
+
+const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/AdminEventTable'))
+const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
+const QuizAdmin=lazy(() => import('../../views/apps/quiz/admin/quizTable.js'))
+const MyEvents=lazy(() => import('../../views/pages/profile/MyEvents'))
 const Books = lazy(() => import("../../views/apps/books/index"));
 const AddBook = lazy(() => import("../../views/apps/books/addBook"));
 const Book = lazy(() => import("../../views/apps/books/detail/index"));

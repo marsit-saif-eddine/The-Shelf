@@ -47,7 +47,7 @@ router.post('/add',middlewareupload.uploadPhotoMiddleware,eventController.addEve
   );
   router.delete("/delete/:id",eventController.deleteevents);
 
-router.post("/participate/:id",eventController.participateEvent);
+router.post("/participate/:eventId/:id/",eventController.participateEvent);
 
 router.post("/unparticipate/:id",authorize(["user"]), eventController.unparticipateEvent);
 
