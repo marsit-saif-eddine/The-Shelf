@@ -13,6 +13,13 @@ function Quiz ({quiz}) {
 
   const [Quizs, setQuizs] = useState([])
   const[change,setChange]=useState(false)
+  var user = JSON.parse(localStorage.getItem('userData'));
+  //console.log("your user id is :"+user.id);
+  var userId = user.id;
+console.log("userid:"+ userId);
+console.log("creatorid:"+ quiz.user_id)
+
+
 
 const Delete = (id) => {
   Swal.fire({
@@ -54,12 +61,14 @@ const Delete = (id) => {
     <CardBody>
 <CardText> {quiz.quizDescription} </CardText> 
 <Link to={`/quiz/${quiz._id}`}>  
-Take quiz
-</Link>   
+<Button className='round' color='primary' outline>Take quiz</Button>
 
+</Link>  
 <div className="d-flex justify-content-end justify-content-sm-end align-items-end mb-2 col-sm-12">
-<Trash2 size={14} className='me-50' onClick={() => Delete(quiz._id)} />
 
+  {userId  === quiz.user_id && (
+<Trash2 size={14} className='me-50' onClick={() => Delete(quiz._id)} />
+)}
 </div> 
  </CardBody>
     </Card>

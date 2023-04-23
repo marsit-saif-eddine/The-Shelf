@@ -78,6 +78,14 @@ const [saved, setSaved] = useState(false);
 const [books, setBooks] = useState([])
 
 const [quizNameError, setQuizNameError] = useState('');
+const [quizDescError, setDescError] = useState('');
+const [quizQuestionError, setQuestionError] = useState('');
+const [quizOptionError, setQuizoptionError] = useState('');
+const [answerkeyError, setAnswerkeyError] = useState('');
+const [pointsError, setPointsError] = useState('');
+
+//const [quizNameError, setQuizNameError] = useState('');
+
 
 const [submitted, setSubmitted] = useState(false);
 
@@ -174,29 +182,7 @@ function addAnswer(i){
 
 
 
- ////////////////// save quiz /////////////////////
-
-
  
-function commitToDb(){
-    axios.post(`http://localhost:5000/quiz/addquiz`,{
-      quizName:quizname,  
-      quizDescription: quizdesc,
-      questions:questions,
-      book_id:selectedBookId,
-      user_id:userId,
-      creator:userName,
-      creator_pic: userpic,
-      method: 'POST',
-    
-    })
-   
-    setSaved(true);
-    
-
-    toast.success('Quiz created successfully!');
-    }
-//
 var user = JSON.parse(localStorage.getItem('userData'));
 //console.log("your user id is :"+user.id);
 var userId = user.id;
@@ -213,10 +199,7 @@ var userpic = user.avatar;
 
 
 
-    //   function handleSelectChange(event) {
-    //     console.log(event.target.value)
-    //     setSelectedBookId(event.target.value);
-    //   }
+ 
 
     function handleSelectChange(event) {
 
@@ -232,11 +215,7 @@ var userpic = user.avatar;
 
 ////validators///////
 
-useEffect(() => {
-    if (submitted && !quizNameError) {
-      commitToDb();
-    }
-  }, [submitted, quizNameError]);
+
   
 
 const validateQuizName = () => {
@@ -247,21 +226,101 @@ const validateQuizName = () => {
       setQuizNameError('');
     }
   };
+  const validateQuizDesc = () => {
+    if (quizdesc.length < 6) {
+        setDescError('Quiz description must be at least 6 characters long');
+      
+    } else {
+        setDescError('');
+    }
+  };
+  const validateQuizQuestion = () => {
+    if (questions.length < 2) {
+        setQuestionError('please enter at least 2 questions');
+      
+    } else {
+        setQuestionError('');
+    }
+  };
+
+//   const validateAnswerKey = () => {
+//     if (questions.length < 2) {
+//         setQuestionError('please enter at least 2 questions');
+      
+//     } else {
+//         setQuestionError('');
+//     }
+//   };
+
+
+
   useEffect(() => {
     validateQuizName();
-  }, [quizname]);
+    validateQuizDesc();
+    validateQuizQuestion();
+  }, [quizname, quizdesc,quizQuestionError, setQuizNameError, setDescError,setQuestionError]);
 
+  useEffect(() => {
+    if (submitted && !quizNameError && !quizDescError && !quizQuestionError) {
+      commitToDb();
+    }
+  }, [submitted, quizNameError, quizDescError,quizQuestionError]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     validateQuizName();
-   // setSubmitted(true);
-    
-    if (quizNameError) {
+    validateQuizDesc();
+    validateQuizQuestion();
+    if (quizNameError || quizDescError || quizQuestionError) {
+        
       return;
-      
     }
-};
+    setSubmitted(true);
+  
+  };
+
+////////////////////
+////////////////// save quiz /////////////////////
+
+
+ 
+function commitToDb(){
+    if (quizNameError || quizDescError ) {
+console.log("errrrrooo");
+        return;
+      }
+      if (!quizname || !quizdesc) {
+        setQuizNameError('Quiz name is required');
+        setDescError('Quiz description is required');
+        return;
+      }
+    
+      axios.post(`http://localhost:5000/quiz/addquiz`, {
+        quizName: quizname,
+        quizDescription: quizdesc,
+        questions: questions,
+        book_id: selectedBookId,
+        user_id: userId,
+        creator: userName,
+        creator_pic: userpic,
+        method: 'POST',
+      })
+      .then(() => {
+        setSaved(true);
+        toast.success('Quiz created successfully!', {
+            onClose: () => {
+              setShow(false);
+            }
+          });
+          
+        //setShow(false);
+      })
+      .catch(error => {
+        console.error(error);
+        toast.error('Failed to create quiz');
+      });
+    }
+//
   ////////////////
   const booksOptions = [
     {
@@ -287,7 +346,7 @@ function questionUI(){
     <br></br>
     <div className="add-ques-top">
     <Input type="text" className="question" placeholder="question" value={ques.questionText}  onChange={(e)=>{changeQuestion(e.target.value, i)}} ></Input>
-
+    {/* {quizQuestionError && <div className="error">{quizQuestionError}</div>} */}
                 <div class="col-md-3 mb-1">
     <select className="select2 form-select" style={{fontSize:"13px"}}>
         <option id="text" value="text" onClick={()=>{addQuestionType(i,"text")}}> <SubjectIcon />paragraph</option>
@@ -352,7 +411,7 @@ function questionUI(){
     Answer Key
 </Button>
 
-
+<p class="warning"> Please don't forget to add the answer key and the points</p>
 
 <IconButton aria-label="copy" onClick={()=>{copyQuestion(i)}} >
     <ContentCopyIcon/>
@@ -454,9 +513,11 @@ return(
              <Input type="text" className="quiz-title" placeholder="enter your quiz title here" onChange={(e) => setQuizname(e.target.value)} required></Input>
              {quizNameError && <div className="error">{quizNameError}</div>}
              <Input type="text" className="quiz-desc" placeholder="enter your quiz desrpition here" onChange={(e)=>{setQuizdesc(e.target.value)}}></Input>
+             {quizDescError && <div className="error">{quizDescError}</div>}
+
           <br></br>
                 <Row>
-                <Col className='mb-1' md='12' sm='12'>
+                <Col className='mt-2' md='12' sm='12' >
                 <div class="col-md-6 mb-1">
                     <label> choose the book this quiz is about : </label>
              <select name="book_id" value={selectedBookId} onChange={handleSelectChange} className="select2 form-select">
@@ -487,7 +548,9 @@ return(
            
           
 {questionUI()}
-<Button onClick={commitToDb }> SAVE</Button>
+<Col lg={12} md={6}>
+<Button  color="primary" onClick={commitToDb }> SAVE</Button>
+</Col>
 {saved}
 
 <br></br>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 // ** Third Party Components
 import classnames from 'classnames'
 import { Star, ShoppingCart, DollarSign, Heart, Share2, Facebook, Twitter, Youtube, Instagram, Award } from 'react-feather'
-
+import QuizByBook from '../../quiz/quizByBook'
 // ** Reactstrap Imports
 import {
   Row,
@@ -53,7 +53,15 @@ const BookDetails = props => {
     dispatch(getProduct(productId))
   }
 
- 
+ ///////////quiz work //////
+ const [showSection, setShowSection] = useState(false);
+
+ const handleButtonClick = () => {
+   setShowSection(true);
+ }
+
+
+ ///////
 
   return (
     <Row className='my-2'>
@@ -151,16 +159,23 @@ const BookDetails = props => {
       <Row className='text-center'>
             <Col className='mb-12 mb-md-0' md='12' xs='12'>
           <div className='w-75 mx-auto'>
-            <Award />
+            <Award  className='mt-3'/>
             <h4 className='mt-2 mb-1'>Test your knowledge</h4>
             <Button
                     color='info'
-                    className='btn-cart move-cart'>
-                       <Link to={`/quiz/allquiz/quizByBook/${productId}`}>
-                      {/* <Link to='/pages/profile/quiz'> */}
+                    className='btn-cart move-cart'
+                      onClick={handleButtonClick}>
+                    
                   <span>View Quizzes</span>
-                  </Link>
+                 
                 </Button>   
+               
+      {showSection &&
+        <div>
+          <h2 className='mt-3'> here is all the quizzes related to this book !</h2>
+          <QuizByBook/>
+        </div>
+      }
                        </div>
         </Col>
         </Row>
