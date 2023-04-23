@@ -41,11 +41,10 @@ const quizSchema = new Schema(
         
     },
 
-    options: {
-        type: [],
-        required: false,
-    },
-
+    options: [{
+        optionText: String,
+      }],
+      
     answer: {
         type: Boolean,
         required: false,
@@ -61,7 +60,13 @@ const quizSchema = new Schema(
     }
  
     
-}]
+}],
+submissions: [
+    {
+      answers: [],
+      score: Number,
+    },
+  ],
 
 });
 
