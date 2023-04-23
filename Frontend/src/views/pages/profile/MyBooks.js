@@ -31,6 +31,7 @@ import ProfileBooks from './ProfileBooks'
 
 
 // ** Styles
+import './booksStyle.scss'
 import '@styles/react/pages/page-profile.scss'
 
 const MyBooks = () => {
@@ -84,7 +85,7 @@ const MyBooks = () => {
                 <ProfileLatestPhotos data={data.latestPhotos} />
               </Col>
             </Row>
-            <Row>
+            {/* <Row>
               <Col className='text-center' sm='12'>
                 <Button color='primary' className='border-0 mb-1 profile-load-more' size='sm' onClick={handleBlock}>
                   <UILoader blocking={block} overlayColor='rgba(255,255,255, .5)'>
@@ -92,7 +93,7 @@ const MyBooks = () => {
                   </UILoader>
                 </Button>
               </Col>
-            </Row>
+            </Row> */}
           </section>
         </div>
       ) : null}
@@ -102,3 +103,7 @@ const MyBooks = () => {
 }
 
 export default MyBooks
+
+
+
+

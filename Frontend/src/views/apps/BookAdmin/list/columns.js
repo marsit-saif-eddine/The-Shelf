@@ -17,7 +17,7 @@ import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2,
 
 // ** Reactstrap Imports
 import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
-
+import { useEffect, useState } from 'react';
 
 
 // ** Renders Role Columns
@@ -43,43 +43,8 @@ import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 //   )
 // }
 
-const acceptedObj = {
-  true: 'light-success',
-  false: 'light-secondary'
-}
-
-const isAccepted = (isAccepted) => {
-  let status ;
-  isAccepted===true ? status ='Accepted' : status='Not Accepted'
-  return status
-}
-
-const switchAccepted=(id, current)=>{
-  Swal.fire({
-      title: 'Are you sure?',
-      text: 'do you want to approve this book',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, approve it it!',
-      cancelButtonText: 'No, cancel',
-    }).then((result) => {
-      if (result.isConfirmed) {
-  axios.put(`http://localhost:5000/book/switch_accepted/${id}`, {accepted: !current})
-
- .then(response => {
-  console.log(response.data);
-  //setChange(true)   
-console.log(response);
-})
-.catch(error => {
-  // handle error
-  console.log(error);
-});
-}
-});   
-}
-
 export const columns = [
+
    {
      name: 'Name',
      sortable: true,
@@ -120,23 +85,6 @@ export const columns = [
     
   },
 
-  {
-  name: 'Accepted',
-  minWidth: '138px',
-  sortable: true,
-  sortField: 'accepted',
-  selector: row => row.accepted,
-   cell: row => (
-
-    <Badge className='text-capitalize' style={{cursor:'pointer'}}
-    color={acceptedObj[row.accepted]}
-    onClick={() => switchAccepted(row._id,row.accepted)}
-    >
-      {isAccepted(row.accepted) }
-     </Badge>
-   )
-  
-},
 
   {
     name: 'Actions',

@@ -3,12 +3,14 @@ const logger = require("morgan");
 const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
+
 const chatRouter = require("./routes/chat/chat.js")
 const userssRouter = require("./routes/user.js");
 const eventsRouter= require("./routes/event");
 const quizRouter = require("./routes/quiz/quiz.js");
-
 const booksRouter = require("./routes/book/book.js");
+const postsRouter = require("./routes/post/post.js");
+
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -18,7 +20,9 @@ const session = require("express-session");
 const path= require('path')
 app.use(passport.initialize());
 
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/upload/bookimg', express.static(path.join(__dirname, 'upload/bookimg')));
 require('./controllers/user-management/google-auth')(passport);
 
 //app.use(passport.initialize());
@@ -38,7 +42,9 @@ const proxy = require("http-proxy-middleware");
 const user = require("./models/user.js");
 const book = require("./models/book.js");
 const quiz = require("./models/quiz.js");
-//const book = require("../../models/book.js");
+const post = require("./models/post.js");
+
+
 
 
 app.use(logger('dev'));
@@ -58,6 +64,7 @@ app.use("/events",eventsRouter)
 app.use("/book",booksRouter);
 app.use("/quiz",quizRouter);
 app.use("/appChat",chatRouter);
+app.use("/post",postsRouter);
 
 app.use("/clubs",clubsRoutes);
 app.use('/uploads/avatars', express.static('uploads/avatars'));

@@ -47,10 +47,14 @@ const bookSchema = new Schema(
 
     for_sale: {
         type: Boolean,
+        default: false
     },
 
     owner: {},
     owner_Id: {},
+    owner_pic:{
+        type: String
+    }
 
 });
 
