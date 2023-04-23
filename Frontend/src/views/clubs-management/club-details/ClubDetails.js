@@ -14,10 +14,10 @@ import "./styles.scss";
 import "../clubs/club-styles.scss";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import ChatBubbles from "../chat-bubbles/ChatBubbles";
 import { useDispatch } from "react-redux";
 import { deleteClub, setCurrentClub } from "../../../redux/clubs";
 import ConfirmationModal from "../modals/ConfirmationModal";
+import AdminsListModal from "../modals/AdminsListModal";
 
 const ClubDetails = () => {
   const currentUser = JSON.parse(localStorage.getItem("userData"));
@@ -25,6 +25,7 @@ const ClubDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
+  const [openAdminsModal, setOpenAdminsModal] = useState(false);
 
   const [club, setClub] = useState(null);
 
@@ -180,7 +181,7 @@ const ClubDetails = () => {
                   : null
                 }
                 <div className="row justify-content-center m-0">
-                  <button className="btn btn-flat-primary btn-sm">
+                  <button className="btn btn-flat-primary btn-sm" onClick={() => setOpenAdminsModal(true)}>
                     See all
                   </button>
                 </div>
@@ -198,8 +199,8 @@ const ClubDetails = () => {
       
 
       <ConfirmationModal isOpen={openModal} confirmAction={() => {dispatch(deleteClub({ club_id: club._id })); setOpenModal(false); navigate('/apps/clubs/list')}} buttonText="Delete" body="Do you realy want to delete this club? All its announcements, events and conversations are going to be deleted too." setOpenModal={setOpenModal}  />
-
-
+      
+      <AdminsListModal isOpen={openAdminsModal} admins={club?.admins} setOpenModal={setOpenAdminsModal}></AdminsListModal>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Check, Info, Mail, Trash, User, X } from "react-feather";
 import banner from '@src/assets/images/pages/banner1.png';
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { addChatBubble } from "../../../../redux/chat";
+import { addChatBox, addChatBubble } from "../../../../redux/chat";
 import { useNavigate } from "react-router-dom";
 
 const MemberCard = ({member, acceptRequest, rejectRequest}) => {
@@ -46,7 +46,7 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
               </button>
             </div> : 
             <div className="d-flex justify-content-center align-items-center">
-            <button onClick={() => dispatch(addChatBubble({_id: '', user: 'abidi wajih', newContent: null}))} className="btn btn-outline-danger expandable-btn me-1">
+            <button onClick={() => dispatch(addChatBox({_id: '', user: 'abidi wajih', newContent: null}))} className="btn btn-outline-danger expandable-btn me-1">
               <Mail className="font-medium-2"></Mail>
               <span>Message</span>
             </button>

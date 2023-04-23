@@ -55,7 +55,7 @@ const ChatLog = (props) => {
     socket.on("club-message-received", (data) => {
       dispatch(clubMessageReceived(data));
     });
-    scrollToBottom();
+    
   }, []);
 
   // ** Renders user chat

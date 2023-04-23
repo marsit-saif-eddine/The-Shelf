@@ -19,7 +19,7 @@
 $chat-image-back-color: #f2f0f7;
 $chat-head-footer-height: 65px;
 $chat-widget-head-footer-height: 56px;
-$chat-widget-height: 390px;
+$chat-widget-height: 50vh;
 
 // User chat window css
 .chat-app-window {
@@ -100,6 +100,13 @@ $chat-widget-height: 390px;
 
 // Chat Widget
 .chat-widget {
+  width: 450px;
+  margin-bottom: 0 !important;
+  position: fixed;
+  right: 50px;
+  bottom: 0;
+
+  
   .card-header {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
