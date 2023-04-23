@@ -33,19 +33,33 @@ import InputGroupAddon from 'reactstrap';
 import ReactPaginate from "react-paginate";
 import axios from "axios";
 import { Fragment, useState, useEffect } from 'react'
-import { Trash2, MoreVertical, FileText, Archive } from 'react-feather';
+import { Trash2, MoreVertical, FileText, Archive,Layers } from 'react-feather';
+import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
 
 const eventTable = () => {
 
+    const [totalEventsCount, setEventsCount] = useState(0);
 
     const [Events, setEvents] = useState([])
     const [change, setChange] = useState(false)
 
-    const get = () => {
+    const [pageNumber, setPageNumber] = useState(0);
+    const offersPerPage = 5;
+    const pagesVisited = pageNumber * offersPerPage;
+
+
+    const get = ()=>{
         axios.get('http://localhost:5000/events')
-            .then(response => setEvents(response.data))
-            .catch(error => console.error(error));
+        .then(response =>{
+            setEvents(response.data);
+          
+            setEventsCount(response.data.length);
+        }
+           )
+        
+    .catch(error => console.error(error));
     }
+
 
     useEffect(() => {
 
@@ -96,12 +110,56 @@ const eventTable = () => {
         approved: 'light-success',
         pending: 'light-warning'
     }
+    const generatePDF = () => {
+        // Créer un nouveau document PDF
+   const doc = new jsPDF();
+   
 
+
+   // Définir les en-têtes de colonne pour le tableau
+   const headers = [["Name", "Description","StartDate", "EndDate", "Location","Image"]];
+
+   // Obtenir les données du tableau
+   const data = events.map(event => [event.name, event.description,event.startDate,event.endDate, event.location,event.image]);
+
+
+   // Ajouter le tableau au document PDF avec la fonction autotable de jsPDF
+   doc.autoTable({
+     head: headers,
+     body: data
+   });
+
+
+   // Sauvegarder le document PDF
+   doc.save("events.pdf");
+   }
+     
+  
+     const pageCount = Math.ceil(Events.length / offersPerPage);
+     const changePage = ({ selected }) => {
+       setPageNumber(selected);
+   };
 
     return (
 
         <Fragment>
+<div className='app-user-list'>
+    <Row>
+    <Col lg='3' sm='6'>
+        <StatsHorizontal
+          color='primary'
+          statTitle='Total Events'
+          icon={<Layers size={20} />}
+          renderStats={<h3 className='fw-bolder mb-75'>{totalEventsCount}</h3>}
+        />
+      </Col>
+     
 
+   
+    
+     
+      </Row>
+      </div>
 
             <Card className='overflow-hidden'>
                 <div className="row" id="basic-table">
@@ -139,7 +197,7 @@ const eventTable = () => {
                                     <tbody>
 
 
-                                        {filteredEventsData.map((event) => (
+                                        {filteredEventsData.slice(pagesVisited, pagesVisited + offersPerPage).map((event) => (
                                             <tr key={event._id} >
                                                 <td>{event.name}</td>
                                                 <td>{event.description}</td>
@@ -171,6 +229,21 @@ const eventTable = () => {
                                         ))}
                                     </tbody>
                                 </table>
+                                <br></br>
+                                <ReactPaginate
+                  previousLabel={'Previous'}
+                  nextLabel={'Next'}
+                  pageCount={pageCount}
+                  onPageChange={changePage}
+                  containerClassName={'pagination'}
+                  previousLinkClassName={'previous_page'}
+                  nextLinkClassName={'next_page'}
+                  disabledClassName={'disabled'}
+                  activeClassName={'active'}
+                />
+                <Button 
+                  variant="success"
+                  onClick={generatePDF}>Export to PDF</Button>
                             </div>
                         </div>
                     </div>
