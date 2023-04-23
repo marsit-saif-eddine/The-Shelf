@@ -7,7 +7,7 @@ import Avatar from '@components/avatar'
 // ** Third Party Components
 import classnames from 'classnames'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { MoreVertical, Send, Image, X } from 'react-feather'
+import { MoreVertical, Send, Image, X, Minus } from 'react-feather'
 
 // ** Reactstrap Imports
 import { Card, CardHeader, Form, Label, InputGroup, Input, InputGroupText, Button } from 'reactstrap'
@@ -169,7 +169,10 @@ const ChatBox = (props) => {
           <Avatar status='online' className='me-2' img={chatData.contact.avatar} imgHeight='34' imgWidth='34' />
           <h5 className='mb-0'>Carrie Hawkins</h5>
         </div>
-        <X size={18} className='cursor-pointer' onClick={() => {dispatch(closeChatBox(props.boxIndex)); dispatch(addChatBubble(props.chatData))}} />
+        <div className='col-auto d-flex flex-row'>
+        <Minus size={18} className='cursor-pointer me-1' onClick={() => {dispatch(closeChatBox(props.boxIndex)); dispatch(addChatBubble(props.chatData))}} />
+        <X size={18} className='cursor-pointer' onClick={() => {dispatch(closeChatBox(props.boxIndex))}} />
+        </div>
       </CardHeader>
       <div className='chat-app-window'>
         <PerfectScrollbar

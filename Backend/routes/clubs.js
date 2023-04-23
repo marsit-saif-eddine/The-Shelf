@@ -22,7 +22,7 @@ router.put('/cancelJoinRequest', requireAuth, clubsController.cancelJoinRequest)
 //START CLUB DETAILS ENDPOINTS
 router.get('/getClubEvents', requireAuth, clubDetailsController.getClubEvents);
 router.get('/getClubAnnouncements', requireAuth, clubDetailsController.getClubAnnouncements);
-router.get('/getClubDetails', clubDetailsController.getClubDetails);
+router.get('/getClubDetails', requireAuth, clubDetailsController.getClubDetails);
 router.get('/getClubMembers', requireAuth, clubDetailsController.getClubMembers);
 router.post('/publishAnnouncement', requireAuth, clubDetailsController.publishAnnouncement);
 router.delete('/deleteAnnouncement', requireAuth, clubDetailsController.deleteAnnouncement);

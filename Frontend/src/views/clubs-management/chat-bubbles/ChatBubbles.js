@@ -24,7 +24,7 @@ const ChatBubbles = () => {
               </div>
               <img
               onClick={() => {dispatch(addChatBox(x)); dispatch(closeChatBubble(index))}}
-                src="https://graphicriver.img.customer.envatousercontent.com/files/395988839/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&w=590&h=590&s=9133752d1e9837a45f7a15ed2d820778"
+                src={'http://localhost:5000/' + x.photo}
                 height="50px"
                 width="50px"
               />
@@ -34,7 +34,7 @@ const ChatBubbles = () => {
                 className="dialog-bubble-container"
                 style={{ bottom: 70 * (index + 1) }}
               >
-                <div className="dialog-bubble">{x.content}</div>
+                <div className="dialog-bubble">{x.newContent}</div>
                 <div className="dialog-bubble-arrow"></div>
               </div>
             ) : (

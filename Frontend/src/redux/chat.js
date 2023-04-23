@@ -49,7 +49,7 @@ export const ChatSlice = createSlice({
     // }
     addChatBubble: (state, action) => {
       if (state.chatBubbles.findIndex((x) => x._id === action.payload._id) < 0)
-        state.chatBubbles.push(action.payload);
+        state.chatBubbles.push({...action.payload, newContent: 'Hello mate! howx are u?'});
     },
 
     addChatBox: (state, action) => {

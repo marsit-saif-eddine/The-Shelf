@@ -1,7 +1,6 @@
 const { getDb } = require("../../services/database/connection");
 const ObjectID = require("mongodb").ObjectId;
 
-
 exports.onClubMessageSent = async (data) => {
     const dbClubsChat = getDb().collection('clubs_chat');
     const club_id = data.club_id;
@@ -17,7 +16,6 @@ exports.onClubMessageSent = async (data) => {
 }
 
 exports.getUsersClubs = async (data) => {
-    console.log(data);
     const dbClubs = getDb().collection('clubs');
     const clubs = await dbClubs.find( {
         $or: [
@@ -35,6 +33,5 @@ exports.getUsersClubs = async (data) => {
             }
         ]
     }, {projection: {_id: 1}}).toArray();
-    console.log(clubs)
     return clubs.map(x => x._id.toString());
 }

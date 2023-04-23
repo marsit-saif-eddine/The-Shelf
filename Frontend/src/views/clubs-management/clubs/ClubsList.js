@@ -26,7 +26,7 @@ const ClubsList = () => {
     <div className="clubs-list">
       <div className="row">
         <div className="col-auto">
-          <h1>Liste des clubs</h1>
+          <h1>Clubs list</h1>
         </div>
         <div className="col d-flex justify-content-end">
           <Link to="/apps/clubs/add">

@@ -46,12 +46,12 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
               </button>
             </div> : 
             <div className="d-flex justify-content-center align-items-center">
-            <button onClick={() => dispatch(addChatBox({_id: '', user: 'abidi wajih', newContent: null}))} className="btn btn-outline-danger expandable-btn me-1">
+            <button onClick={() => dispatch(addChatBox({_id: '', user: 'abidi wajih', newContent: null}))} className="btn btn-outline-success expandable-btn me-1">
               <Mail className="font-medium-2"></Mail>
               <span>Message</span>
             </button>
 
-            <button className="btn btn-outline-success expandable-btn me-1" onClick={() => navigate("/pages/profile/" + member._id)}>
+            <button className="btn btn-outline-primary expandable-btn me-1" onClick={() => navigate("/pages/profile/" + member._id)}>
               <User className="font-medium-2"></User>
               <span>Profile</span>
             </button>

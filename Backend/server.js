@@ -12,7 +12,6 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("connection", socket.id);
   socket.emit("me", socket.id);
 
   socket.on("disconnect", () => {
@@ -44,11 +43,13 @@ server.listen(process.env.PORT, () => {
 
 // WAJIH'S CODE
 
+let currentSocket;
+
+
 io.use((socket, next) => {
   let token = socket.handshake.auth.token;
   token = token.replace(`"`, "");
   token = token.replace(`"`, "");
-  console.log('socket', socket.handshake.auth.token);
   jwt.verify(
     token,
     process.env.JWT_SECRET,
@@ -56,7 +57,6 @@ io.use((socket, next) => {
       if (err) {
         return next(new Error("UNAUTHORIZED"));
       }
-	  console.log('decoded', decoded);
       socket.user_id = decoded._id;
       next();
     }
@@ -64,6 +64,7 @@ io.use((socket, next) => {
 
   next();
 }).on("connection", async (socket) => {
+  currentSocket = socket;
   socket.on("club-message-sent", (data) => {
     data.creation_date = new Date();
     io.to(data.club_id).emit("club-message-received", data);
@@ -75,3 +76,5 @@ io.use((socket, next) => {
     socket.join(clubsIds);
   }, 8000);
 });
+
+exports.getSocket = () => {console.log(currentSocket); return currentSocket}

@@ -14,7 +14,7 @@ import "./styles.scss";
 import "../clubs/club-styles.scss";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteClub, setCurrentClub } from "../../../redux/clubs";
 import ConfirmationModal from "../modals/ConfirmationModal";
 import AdminsListModal from "../modals/AdminsListModal";
@@ -26,6 +26,7 @@ const ClubDetails = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [openAdminsModal, setOpenAdminsModal] = useState(false);
+  const eventsCount = useSelector(state => state.clubs.events.length);
 
   const [club, setClub] = useState(null);
 
@@ -100,7 +101,7 @@ const ClubDetails = () => {
                       <Calendar className="font-medium-2" />
                     </Badge>
                     <div className="ms-75">
-                      <h5 className="mb-0">1.23k</h5>
+                      <h5 className="mb-0">{eventsCount}</h5>
                       <small>Events planned</small>
                     </div>
                   </div>

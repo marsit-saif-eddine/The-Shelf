@@ -63,7 +63,7 @@ const AddClub = ({}) => {
       })
       .then((resp) => {
         if (resp.data) {
-          setAvatar("localhost:5000/" + resp.data.logo);
+          setAvatar("http://localhost:5000/" + resp.data.logo);
           setSelectedAdmins(resp.data.admins.map(x => {
             return {value: x._id, label: x.lastname + ' ' + x.firstname, photo: x.photo}
           }));
@@ -276,6 +276,7 @@ const AddClub = ({}) => {
                       label: x.lastname + " " + x.firstname,
                     };
                   })}
+                  closeMenuOnSelect={false}
                   onChange={(choice) => onSelectAdminChange(choice)}
                   className="react-select"
                   components={{

@@ -1,17 +1,16 @@
 const { getDb } = require("../../services/database/connection");
 const ObjectID = require("mongodb").ObjectId;
 
-
 exports.getClubDetails = async (req, res) => {
     try {
         const dbClubs = getDb().collection('clubs');
         const club = await dbClubs.findOne({_id: new ObjectID(req.query.club_id)});
-
         if (club) {
             return res.status(200).send(club);
         }
         return res.status(404).send();
     } catch(ex) {
+        console.log(ex)
         return res.status(500).send();
     }
 }
@@ -30,7 +29,6 @@ exports.getClubMembers = async (req, res) => {
 exports.getClubEvents = async (req, res) => {
     try {
         const dbClubEvents = getDb().collection('events');
-        console.log(req.query);
         const events = await dbClubEvents.find().toArray();
 
         return res.status(200).send(events);
@@ -68,7 +66,6 @@ exports.publishAnnouncement = async (req, res) => {
 
         return res.status(200).send(result.insertedId);
     } catch(ex) {
-        console.log(ex);
         return res.status(500).send();
     }
 }

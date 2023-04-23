@@ -9,13 +9,14 @@ var mongoose = require('mongoose');
 const maxAge = 3 * 24 * 60 * 60;
 
 //create token
-const  createToken = (_id) => {
-    return jwt.sign({ _id }, 'jwt', { expiresIn: '7d' });
+const  createToken = (user) => {
+
+    return jwt.sign({...user}, 'jwt', { expiresIn: '7d' });
 };
 
 
-const createRefreshToken = (_id) => {
-    const refreshToken = jwt.sign({ _id }, 'jwt', { expiresIn: '7d' });
+const createRefreshToken = (user) => {
+    const refreshToken = jwt.sign({...user}, 'jwt', { expiresIn: '7d' });
     return refreshToken;
   }
 
@@ -87,17 +88,19 @@ exports.rateUser = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email });
-
+        const user = await User.findOne({ email }, 'lastname firstname photo role password ability');
         if (user) {
             if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm you account !" });}
             if (user.status === 'banned') {
                 return res.status(400).json({ "message": "User is banned!!" });
             } else {
-                const auth = bcrypt.compare(password, user.password);
+                const auth = await bcrypt.compare(password, user.password);
+
                 if (auth) {
-                    const accessToken = createToken(user._id);
-                    const refreshToken = createRefreshToken(user._id);
+                    user._id = user._id.toString();
+                    delete user.password;
+                    const accessToken = createToken(user);
+                    const refreshToken = createRefreshToken(user);
                     res.cookie('jwt', accessToken, { httpOnly: true, maxAge: maxAge * 1000 });
                     
                     return res.status(200).json({

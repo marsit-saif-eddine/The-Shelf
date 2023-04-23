@@ -98,7 +98,6 @@ exports.getAdminsToSelect = async (req, res) => {
       .toArray();
     return res.status(200).send(users);
   } catch (ex) {
-    console.log(ex);
     return res.status(500).send();
   }
 };
