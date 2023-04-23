@@ -241,9 +241,9 @@ const eventTable = () => {
                   disabledClassName={'disabled'}
                   activeClassName={'active'}
                 />
-                <Button 
+                {/* <Button 
                   variant="success"
-                  onClick={generatePDF}>Export to PDF</Button>
+                  onClick={generatePDF}>Export to PDF</Button> */}
                             </div>
                         </div>
                     </div>
