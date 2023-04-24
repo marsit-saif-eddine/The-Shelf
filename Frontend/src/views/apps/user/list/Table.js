@@ -173,6 +173,7 @@ const UsersList = () => {
   const store = useSelector(state => state.users)
 
   // ** States
+  const [connectedId, setConnectedId] = useState(JSON.parse(localStorage.getItem('userData'))?._id || '')
   const [sort, setSort] = useState('desc')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -187,6 +188,7 @@ const UsersList = () => {
 
   // ** Get data on mount
   useEffect(() => {
+    console.log(connectedId)
     dispatch(getAllData())
     dispatch(
       getData({
@@ -196,7 +198,9 @@ const UsersList = () => {
         page: currentPage,
         perPage: rowsPerPage,
         role: currentRole.value,
-        status: currentStatus.value
+        status: currentStatus.value,
+        excludedId:connectedId
+
       })
     )
   }, [dispatch, store.data.length, sort, sortColumn, currentPage])
@@ -205,16 +209,14 @@ const UsersList = () => {
   const roleOptions = [
     { value: '', label: 'Select Role' },
     { value: 'admin', label: 'Admin' },
-    { value: 'author', label: 'Author' },
-    { value: 'editor', label: 'Editor' },
-    { value: 'maintainer', label: 'Maintainer' },
-    { value: 'subscriber', label: 'Subscriber' }
+    { value: 'client', label: 'Author' },
+ 
   ]
 
 
   const statusOptions = [
     { value: '', label: 'Select Status', number: 0 },
-    { value: 'pending', label: 'Pending', number: 1 },
+    { value: 'banned', label: 'Banned', number: 1 },
     { value: 'active', label: 'Active', number: 2 },
     { value: 'inactive', label: 'Inactive', number: 3 }
   ]
@@ -229,7 +231,9 @@ const UsersList = () => {
         perPage: rowsPerPage,
         page: page.selected + 1,
         role: currentRole.value,
-        status: currentStatus.value
+        status: currentStatus.value,
+        excludedId:connectedId
+
       })
     )
     setCurrentPage(page.selected + 1)
@@ -246,7 +250,9 @@ const UsersList = () => {
         perPage: value,
         page: currentPage,
         role: currentRole.value,
-        status: currentStatus.value
+        status: currentStatus.value,
+        excludedId:connectedId
+
       })
     )
     setRowsPerPage(value)
@@ -263,8 +269,10 @@ const UsersList = () => {
         page: currentPage,
         perPage: rowsPerPage,
         role: currentRole.value,
-        status: currentStatus.value
-      })
+        status: currentStatus.value,
+        excludedId:connectedId
+
+            })
     )
   }
 
@@ -324,7 +332,9 @@ const UsersList = () => {
         page: currentPage,
         perPage: rowsPerPage,
         role: currentRole.value,
-        status: currentStatus.value
+        status: currentStatus.value,
+        excludedId:connectedId
+
       })
     )
   }
@@ -356,7 +366,9 @@ const UsersList = () => {
                       role: data.value,
                       page: currentPage,
                       perPage: rowsPerPage,
-                      status: currentStatus.value
+                      status: currentStatus.value,
+                      excludedId:connectedId
+
                     })
                   )
                 }}
@@ -382,7 +394,9 @@ const UsersList = () => {
                       page: currentPage,
                       status: data.value,
                       perPage: rowsPerPage,
-                      role: currentRole.value
+                      role: currentRole.value,
+                      excludedId:connectedId
+
                     })
                   )
                 }}

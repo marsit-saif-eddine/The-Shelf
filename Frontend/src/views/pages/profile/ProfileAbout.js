@@ -255,9 +255,9 @@ const ProfileAbout = ({ selectedUser }) => {
             <Button color='primary' onClick={() => setShow(true)}>
               Edit
             </Button>
-            <Button className='ms-1' color='danger' outline onClick={handleSuspendedClick}>
+            {/* <Button className='ms-1' color='danger' outline onClick={handleSuspendedClick}>
               Suspended
-            </Button>
+            </Button> */}
           </div>
         </CardBody>
       </Card>
