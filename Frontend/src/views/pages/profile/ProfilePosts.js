@@ -205,7 +205,7 @@ const ProfilePosts = ({ data }) => {
       const reportedBy = Array.isArray(prevEvent.reportedBy) ? prevEvent.reportedBy : [];
       return {
         ...prevEvent,
-        reportedBy: [...reportedBy, userId=userData.id]
+        reportedBy: [...reportedBy, userId=userData._id]
       };
     });
   };

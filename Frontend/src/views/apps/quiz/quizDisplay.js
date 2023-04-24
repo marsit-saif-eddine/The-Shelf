@@ -52,7 +52,7 @@ useEffect(() => {
 }, []);
 const userid = useParams().id
 var user = JSON.parse(localStorage.getItem('userData'));
-var userId = user.id;
+var userId = user._id;
 const approved="approved";
 
 useEffect(() => {

@@ -15,7 +15,7 @@ function Quiz ({quiz}) {
   const[change,setChange]=useState(false)
   var user = JSON.parse(localStorage.getItem('userData'));
   //console.log("your user id is :"+user.id);
-  var userId = user.id;
+  var userId = user._id;
 console.log("userid:"+ userId);
 console.log("creatorid:"+ quiz.user_id)
 
