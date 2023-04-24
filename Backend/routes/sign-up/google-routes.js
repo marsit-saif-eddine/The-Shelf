@@ -21,11 +21,12 @@ router.get('/', (req, res) => {
           failureRedirect: "http://localhost:3000/login",
         }),
         function (req, res) {
+          console.log(req,res)
           const userData = {
-            id: req.user.id,
+            _id: req.user.id,
             email: req.user.email,
-            firstName: req.user.firstName,
-            lastName: req.user.lastName,
+            firstname: req.user.firstName,
+            lastname: req.user.lastName,
             role: req.user.role,
             ability: req.user.ability,
             username:req.user.username,

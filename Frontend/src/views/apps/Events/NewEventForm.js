@@ -360,7 +360,7 @@ const NewEventForm = () => {
     formData.append('description', description);
     formData.append('location', location);
     formData.append('image', image);
-    formData.append('owner', userData.id);
+    formData.append('owner', userData._id);
 
     fetch('http://localhost:5000/events/add', {
       method: 'POST',
@@ -369,13 +369,13 @@ const NewEventForm = () => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        navigate(`/pages/profile/${userData.id}`);
+        navigate(`/pages/profile/${userData._id}`);
       })
       .catch((error) => console.log(error));
   };
 
   return (
-    <Modal show={true} onHide={() => navigate(`/pages/profile/${userData.id}`)}>
+    <Modal show={true} onHide={() => navigate(`/pages/profile/${userData._id}`)}>
       <Modal.Header closeButton>
         <Modal.Title>New Event</Modal.Title>
       </Modal.Header>

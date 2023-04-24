@@ -25,7 +25,7 @@ const upload = multer({
         cb(null, true);
       }
     }
-  });
+});
 
 
     const uploadProfilePicture = (req, res, next) => {

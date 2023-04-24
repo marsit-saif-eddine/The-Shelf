@@ -8,6 +8,7 @@ import classnames from 'classnames'
 import { useSelector, useDispatch } from 'react-redux'
 import { handleContentWidth, handleMenuCollapsed, handleMenuHidden } from '@store/layout'
 
+import { useLocation } from 'react-router-dom'
 // ** ThemeConfig
 import themeConfig from '@configs/themeConfig'
 
@@ -45,9 +46,11 @@ const LayoutWrapper = props => {
       }
     }
   }
+const location = useLocation().pathname;
 
   // ** ComponentDidMount
   useEffect(() => {
+    
     if (routeMeta) {
       if (routeMeta.contentWidth) {
         dispatch(handleContentWidth(routeMeta.contentWidth))
@@ -70,7 +73,7 @@ const LayoutWrapper = props => {
       })}
     >
       <div className='content-overlay'></div>
-      <div className='header-navbar-shadow' />
+      {location == '/Home' ? null : <div className='header-navbar-shadow' />}
       <div
         className={classnames({
           'content-wrapper': routeMeta && !routeMeta.appLayout,

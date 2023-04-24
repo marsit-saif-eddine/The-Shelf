@@ -90,9 +90,9 @@ exports.login = async (req, res) => {
     try {
         let user = await User.findOne({ email }, 'lastname firstname photo role password ability');
         if (user) {
-            if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm you account !" });}
+            if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm your account !" });}
             if (user.status === 'banned') {
-                return res.status(400).json({ "message": "User is banned!!" });
+                return res.status(409).json({ "message": "Your account is banned. Please contact the admin!" });
             } else {
                 const auth = await bcrypt.compare(password, user.password);
 
@@ -110,11 +110,11 @@ exports.login = async (req, res) => {
                         refreshToken: refreshToken
                     });
                 } else {
-                    return res.status(400).json({ "message": "Incorrect password" })
+                    return res.status(400).json({ "message": "Invalid Credentials" })
                 }
             }
         } else {
-            return res.status(404).json({ "message": "No user found" })
+            return res.status(404).json({ "message": "No user found with this account! " })
         }
 
     } catch (err) {
@@ -134,21 +134,25 @@ exports.logout = async (req, res) => {
 
 exports.getAllUsersForAdmin = async (req, res, next) => {
     try {
+        const {excludedId} = req.query;
+
         const users = await User.find({});
         let profiles = [];
         users.map(user => {
-            let profile = {
-                ...user
-            }
-            profile = {
-                ...profile['_doc'],
-                rate: 0
-            };
-            profile.rate = profile.rating.reduce((a, b) => a + b.value, 0);
-            profile.rate = profile.rate / profile.rating.length;
-            delete profile.rating;
+            if (user._id.toString() !== excludedId) {
+                let profile = {
+                    ...user
+                }
+                profile = {
+                    ...profile['_doc'],
+                    rate: 0
+                };
+                profile.rate = profile.rating.reduce((a, b) => a + b.value, 0);
+                profile.rate = profile.rate / profile.rating.length;
+                delete profile.rating;
 
-            profiles.push(profile);
+                profiles.push(profile);
+            }
         });
         res.status(200).send(profiles);
         
@@ -160,15 +164,14 @@ exports.getAllUsersForAdmin = async (req, res, next) => {
 exports.getUsersForAdmin = async (req, res) => {
     try {
       // Extract the query parameters from the request
-      const { q, sortColumn, sort, page, perPage, role, status } = req.query;
-
+      const { q, sortColumn, sort, page, perPage, role, status, excludedId } = req.query;
       // Create the filter object based on the query parameters
       const filter = {};
       if (q) {
-        filter.$or = [  
-            { firstname: new RegExp(q, 'i') },    
-            { lastname: new RegExp(q, 'i') },  
-            { email: new RegExp(q, 'i') },   
+        filter.$or = [
+          { firstname: new RegExp(q, 'i') },
+          { lastname: new RegExp(q, 'i') },
+          { email: new RegExp(q, 'i') },
         ];
       }
       if (role) {
@@ -177,13 +180,18 @@ exports.getUsersForAdmin = async (req, res) => {
       if (status) {
         filter.status = status;
       }
-  
+
+      // Exclude the user by ID
+      if (excludedId) {
+        filter._id = { $ne: excludedId };
+      }
+
       // Set the sort order based on the query parameters
       const sortOrder = {};
       if (sortColumn) {
         sortOrder[sortColumn] = sort === 'desc' ? -1 : 1;
       }
-  
+
       // Query the database for matching users and calculate pagination variables
       const totalUsers = await User.countDocuments(filter);
       const totalPages = Math.ceil(totalUsers / perPage);
@@ -192,29 +200,30 @@ exports.getUsersForAdmin = async (req, res) => {
         .skip((page - 1) * perPage)
         .limit(perPage);
 
-        let profiles = [];
-        users.map(user => {
-            let profile = {
-                ...user
-            }
-            profile = {
-                ...profile['_doc'],
-                rate: 0
-            };
-            profile.rate = profile.rating.reduce((a, b) => a + b.value, 0);
-            profile.rate = profile.rate / profile.rating.length;
-            delete profile.rating;
+      let profiles = [];
+      users.map(user => {
+        let profile = {
+          ...user
+        }
+        profile = {
+          ...profile['_doc'],
+          rate: 0
+        };
+        profile.rate = profile.rating.reduce((a, b) => a + b.value, 0);
+        profile.rate = profile.rate / profile.rating.length;
+        delete profile.rating;
 
-            profiles.push(profile);
-        });
-  
+        profiles.push(profile);
+      });
+
       // Return the response as a JSON object
-      res.json({ users: profiles, total:totalUsers , perPage });
+      res.json({ users: profiles, total: totalUsers, perPage });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Server error' });
     }
   }
+
 
 
 exports.getUsers = async (req, res, next) => {
@@ -315,7 +324,7 @@ exports.updateProfile = async (req, res, next) => {
             return res.status(400).json({ error: "User is banned !" });
         }
 
-
+            
             user.firstname = req.body.firstname,
             user.lastname = req.body.lastname,
             user.email = req.body.email,

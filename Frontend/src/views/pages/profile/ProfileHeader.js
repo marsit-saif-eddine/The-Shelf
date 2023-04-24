@@ -2,7 +2,7 @@
 import { useState } from 'react'
 
 // ** Icons Imports
-import { AlignJustify, Rss, Info, Image, Users, Edit } from 'react-feather'
+import { AlignJustify, Rss, Info, Image, Users, Edit,Plus } from 'react-feather'
 import { Link } from 'react-router-dom';
 
 // ** Reactstrap Imports
@@ -77,13 +77,20 @@ const { pathname } = location;
           <Collapse isOpen={isOpen} navbar>
             <div className='profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0'>
               <Nav className='mb-0' pills>
-                <NavItem>
+              <NavItem>
                   <NavLink href={`/pages/profile/${selectedUser._id}`} className='fw-bold' active>
-                    <span className='d-none d-md-block'>Feed</span>
+                    <span className='d-none d-md-block'>Events</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
+                  <NavLink href='/pages/profile' className='fw-bold' active>
+
+                    <span className='d-none d-md-block'>Events</span>
+                    <Rss className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem> */}
+                {/* <NavItem>
                   <NavLink className='fw-bold'>
                     <span className='d-none d-md-block'>About</span>
                     <Info className='d-block d-md-none' size={14} />
@@ -102,6 +109,14 @@ const { pathname } = location;
                   </NavLink>
                 </NavItem>
                
+                </NavItem> */}
+                <NavItem>
+                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
+
                 <NavItem>
                   <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' active>
                     <span className='d-none d-md-block'>Books</span>
@@ -110,13 +125,8 @@ const { pathname } = location;
                 </NavItem>
               </Nav>
               <Button color='primary'>
-              <Edit className='d-block d-md-none' size={14} />
-              <span className='fw-bold d-none d-md-block'>
-                <Link to='/eventsform'>
-                Add new event
-    
-                </Link>
-   </span>
+              <Link to='/eventsform'> Add a new event</Link>
+              <Plus size={14} > Add a new event</Plus>
             </Button>
             </div>
           </Collapse>

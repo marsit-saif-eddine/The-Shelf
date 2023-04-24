@@ -1,10 +1,66 @@
 // ** Icons Import
-import { Mail, MessageSquare, CheckSquare, Calendar, FileText, Circle, ShoppingCart, User, Shield, Award, Coffee } from 'react-feather'
+import { FileText, Circle, Award, Book, Coffee, Layers } from 'react-feather'
 
 export default [
   {
     header: 'Apps & Pages'
   },
+
+  {
+    id: 'Users',
+    title: 'Users',
+    icon: <Circle size={12} />,
+    navLink: 'users/list',
+    action: 'admin',
+    resource: 'admin',
+  },
+  
+  {
+    id: 'BooksAdmin',
+    title: 'Books',
+    icon: <Book size={12} />,
+    navLink: 'books/list',
+    action: 'admin',
+    resource: 'admin',
+  },
+
+  {
+    id: 'events',
+    title: 'Events',
+    icon: <Layers size={12} />,
+    navLink: '/events/list',
+    action: 'admin',
+    resource: 'admin',
+  },
+
+  {
+    id: 'quizzes',
+    title: 'Quizzes',
+    icon: <Award size={12} />,
+    navLink: 'quizzes/list',
+    action: 'admin',
+    resource: 'admin',
+  },
+
+  {
+    id: 'PostsAdmin',
+    title: 'Posts',
+    icon: <FileText size={12} />,
+    navLink: 'posts/list',
+    action: 'admin',
+    resource: 'admin',
+  },
+
+  {
+    id: "clubs",
+    title: "Clubs",
+    icon: <Coffee />,
+    navLink: "/apps/clubs/list",
+    action: "admin",
+    resource: "admin",
+  },
+
+
   // {
   //   id: 'email',
   //   title: 'Email',
@@ -118,49 +174,6 @@ export default [
   //   ]
   // },
   
-      {
-        id: 'Users',
-        title: 'Users',
-        icon: <Circle size={12} />,
-        navLink: 'users/list',
-        action: 'admin',
-        resource: 'admin',
-      },
-      
-      
-      {
-        id: 'BooksAdmin',
-        title: 'Books',
-        icon: <Circle size={12} />,
-        navLink: 'books/list',
-        action: 'admin',
-        resource: 'admin',
-      },
-
-      {
-        id: 'events',
-        title: 'Events',
-        icon: <FileText size={12} />,
-        navLink: '/events/list',
-        action: 'admin',
-        resource: 'admin',
-      },
-      {
-        id: 'quizzes',
-        title: 'Quizzes',
-        icon: <Award size={12} />,
-        navLink: 'quizzes/list',
-        action: 'admin',
-        resource: 'admin',
-      },
-      {
-        id: "clubs",
-        title: "Clubs",
-        icon: <Coffee />,
-        navLink: "/apps/clubs/list",
-        action: "admin",
-        resource: "admin",
-      },
       // ,
       // {
       //   id: 'view',

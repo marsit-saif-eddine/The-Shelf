@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 // ** Product components
 import ProductCards from './BookCards'
 import ProductsHeader from './BooksHeader'
-import ProductsSearchbar from './ProductsSearchbar'
+//import ProductsSearchbar from './ProductsSearchbar'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -30,42 +30,42 @@ const ProductsPage = props => {
   } = props
 
   // ** Handles pagination
-  const handlePageChange = val => {
-    if (val === 'next') {
-      dispatch(getProducts({ ...store.params, page: store.params.page + 1 }))
-    } else if (val === 'prev') {
-      dispatch(getProducts({ ...store.params, page: store.params.page - 1 }))
-    } else {
-      dispatch(getProducts({ ...store.params, page: val }))
-    }
-  }
+  // const handlePageChange = val => {
+  //   if (val === 'next') {
+  //     dispatch(getProducts({ ...store.params, page: store.params.page + 1 }))
+  //   } else if (val === 'prev') {
+  //     dispatch(getProducts({ ...store.params, page: store.params.page - 1 }))
+  //   } else {
+  //     dispatch(getProducts({ ...store.params, page: val }))
+  //   }
+  // }
 
   // ** Render pages
-  const renderPageItems = () => {
-    const arrLength = 3
+  // const renderPageItems = () => {
+  //   const arrLength = 3
   
                     
-    return new Array(Math.trunc(arrLength)).fill().map((item, index) => {
-      return (
-        <PaginationItem
-          key={index}
-          active="1"
-          onClick={() => handlePageChange(index + 1)}
-        >
-          <PaginationLink href='/' onClick={e => e.preventDefault()}>
-            {index + 1}
-          </PaginationLink>
-        </PaginationItem>
-      )
-    })
-  }
+  //   return new Array(Math.trunc(arrLength)).fill().map((item, index) => {
+  //     return (
+  //       <PaginationItem
+  //         key={index}
+  //         active="1"
+  //         onClick={() => handlePageChange(index + 1)}
+  //       >
+  //         <PaginationLink href='/' onClick={e => e.preventDefault()}>
+  //           {index + 1}
+  //         </PaginationLink>
+  //       </PaginationItem>
+  //     )
+  //   })
+  // }
 
-  // ** handle next page click
-  const handleNext = () => {
-    if (store.params.page !== Number(store.totalProducts) / store.products.length) {
-      handlePageChange('next')
-    }
-  }
+  // // ** handle next page click
+  // const handleNext = () => {
+  //   if (store.params.page !== Number(store.totalProducts) / store.products.length) {
+  //     handlePageChange('next')
+  //   }
+  // }
 
   return (
     <div className='content-detached content-right'>
@@ -84,7 +84,7 @@ const ProductsPage = props => {
           })}
           onClick={() => setSidebarOpen(false)}
         ></div>
-        <ProductsSearchbar dispatch={dispatch} getProducts={books} store={store} />
+        {/* <ProductsSearchbar dispatch={dispatch} getProducts={books} store={store} /> */}
         {books && books.length ? (
           <Fragment>
             <ProductCards
@@ -99,7 +99,7 @@ const ProductsPage = props => {
               deleteCartItem={deleteCartItem}
               deleteWishlistItem={deleteWishlistItem}
             />
-            <Pagination className='d-flex justify-content-center ecommerce-shop-pagination mt-2'>
+            {/* <Pagination className='d-flex justify-content-center ecommerce-shop-pagination mt-2'>
               <PaginationItem
                 //disabled={store.params.page === 1}
                 className='prev-item'
@@ -115,7 +115,7 @@ const ProductsPage = props => {
               >
                 <PaginationLink href='/' onClick={e => e.preventDefault()}></PaginationLink>
               </PaginationItem>
-            </Pagination>
+            </Pagination> */}
           </Fragment>
         ) : (
           <div className='d-flex justify-content-center mt-2'>

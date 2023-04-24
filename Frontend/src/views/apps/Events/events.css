@@ -84,14 +84,16 @@
 .participate-btn {
   transition: all 0.3s ease-in-out;
   cursor: pointer;
-  background-color: #8907fc84;
+  background-color: #f5821f;
   color: #fff;
   border: none;
   border-radius: 20px;
   padding: 10px 20px;
+  position: absolute;
   margin-top: 10px;
-  left: 0;
+  right: 0;
   bottom: 20px; /* adjust as needed */
+  
 }
 
 .participate-btn:hover {

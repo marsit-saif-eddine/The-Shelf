@@ -13,7 +13,7 @@ const ProfileLatestPhotos = ({ data }) => {
     setSelectedEvent(event);
     setShowForm(true)
   };
-  const [events, setQuizzes] = useState([]);
+  const [events, setEvents] = useState([]);
   const [userData, setUserData] = useState(null)
   useEffect(() => {
  
@@ -24,23 +24,22 @@ const userid = useParams().id
 
 
 
-useEffect(() => {
+
+  useEffect(() => {
     if (userid !== null) {
-        fetch(`http://localhost:5000/events?userconnected=${userid}`)
-        .then(response => response.json())
-        .then(data => setQuizzes(data))
+      fetch(`http://localhost:5000/events?userconnected=${userid}`)
+      .then(response => response.json())
+        .then(data => setEvents(data))
         .catch(error => console.log(error));
     }
-    console.log(events)
   }, [userid]);
-
 
   return (
 
     <Card>
-         <Link to="/apps/events" className='btn btn-link'>
+         {/* <Link to="/apps/profile" className='btn btn-link'>
   Show More
-</Link>
+</Link> */}
     <CardBody className='profile-suggestion'>
       <h5 className='mb-0'>My Latest Events</h5>
       <br />

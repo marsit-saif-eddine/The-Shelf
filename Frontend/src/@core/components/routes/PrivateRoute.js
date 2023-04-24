@@ -21,7 +21,7 @@ const PrivateRoute = ({ children, route }) => {
       restrictedRoute = route.meta.restricted
     }
     if (!user) {
-      return <Navigate to='/login' />
+      return <Navigate to='/Home' />
     }
     if (user && restrictedRoute) {
       return <Navigate to='/' />

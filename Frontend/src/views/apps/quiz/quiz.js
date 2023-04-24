@@ -78,3 +78,4 @@ const Delete = (id) => {
     }
     
     export default Quiz;
+

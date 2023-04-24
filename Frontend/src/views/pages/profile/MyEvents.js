@@ -30,8 +30,8 @@ import { isUserLoggedIn } from '@utils'
 //import '@styles/react/pages/page-profile.scss'
 
 const MyEvents = () => {
-    const [events, setEvents] = useState([]);
-    const [userData, setUserData] = useState(null)
+  const [events, setEvents] = useState([]);
+  const [userData, setUserData] = useState(null)
   const { id } = useParams();
 
   useEffect(() => {
@@ -44,21 +44,27 @@ useEffect(() => {
       setUserData(JSON.parse(localStorage.getItem('userData')));
     }
   }, []);
+  const userid = useParams().id
 
 
-useEffect(() => {
+  useEffect(() => {
     if (userData !== null) {
-      fetch(`http://localhost:5000/events?userconnected=${id}`)
+      fetch(`http://localhost:5000/events?userconnected=${userData.id}`)
         .then(response => response.json())
-        .then(data => setEvents(data))
+        .then(data => {
+          console.log(data); // Log the response data to the console
 
+            setEvents(data);
+          }
+        )
         .catch(error => console.log(error));
-      console.log("sii" + userData.id);
     }
-    console.log(events)
   }, [userData]);
+  
 
+ 
 
+  console.log(events); // Log the events to the console
 
   return (
   
@@ -67,8 +73,8 @@ useEffect(() => {
     {events.map((event, index) => (
                   <Col md={4} >
  
-          <Event key={event._id} eventss={event} />
-       </Col> 
+          <Event key={event._id} events={event} />
+       </Col>  
         ))}
        </Row>
        </div>

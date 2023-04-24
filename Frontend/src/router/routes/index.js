@@ -12,6 +12,7 @@ import UiElementRoutes from './UiElements'
 import ExtensionsRoutes from './Extensions'
 import PageLayoutsRoutes from './PageLayouts'
 import AuthenticationRoutes from './Authentication'
+import HomeRoutes from './Home'
 
 // ** Layouts
 import BlankLayout from '@layouts/BlankLayout'
@@ -38,19 +39,6 @@ const TemplateTitle = '%s - Vuexy React Admin Template'
 const DefaultRoute = '/access-control'
 
 
-// const clientRoutes = [
-//   ...AuthenticationRoutes,
-//   ...DashboardRoutes,
-//   ...AppRoutes,
-//   ...PagesRoutes,
-//   ...UiElementRoutes,
-//   ...ExtensionsRoutes,
-//   ...PageLayoutsRoutes,
-//   ...FormRoutes,
-//   ...TablesRoutes,
-//   ...ChartsRoutes
-// ]
-
 // ** Merge Routes
 const adminRoutes = [
   ...AuthenticationRoutes,
@@ -63,7 +51,7 @@ const adminRoutes = [
   ...FormRoutes,
   ...TablesRoutes,
   ...ChartsRoutes,
-
+  ...HomeRoutes
 ]
 
 const getRouteMeta = route => {

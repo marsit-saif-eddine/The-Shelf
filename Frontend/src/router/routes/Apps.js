@@ -11,11 +11,6 @@ const Quiz = lazy(() => import("../../views/apps/quiz"));
 const QuizByBook = lazy(() => import("../../views/apps/quiz/quizByBook"));
 const QuizById = lazy(() => import("../../views/apps/quiz/quizDetails"));
 
-const InvoiceAdd = lazy(() => import("../../views/apps/invoice/add"));
-const InvoiceList = lazy(() => import("../../views/apps/invoice/list"));
-const InvoiceEdit = lazy(() => import("../../views/apps/invoice/edit"));
-const InvoicePrint = lazy(() => import("../../views/apps/invoice/print"));
-const InvoicePreview = lazy(() => import("../../views/apps/invoice/preview"));
 
 const EcommerceShop = lazy(() => import("../../views/apps/ecommerce/shop"));
 const EcommerceDetail = lazy(() => import("../../views/apps/ecommerce/detail"));
@@ -25,6 +20,12 @@ const EcommerceWishlist = lazy(() =>
 const EcommerceCheckout = lazy(() =>
   import("../../views/apps/ecommerce/checkout")
 );
+
+const InvoiceAdd = lazy(() => import('../../views/apps/invoice/add'))
+const InvoiceList = lazy(() => import('../../views/apps/invoice/list'))
+const InvoiceEdit = lazy(() => import('../../views/apps/invoice/edit'))
+const InvoicePrint = lazy(() => import('../../views/apps/invoice/print'))
+const InvoicePreview = lazy(() => import('../../views/apps/invoice/preview'))
 
 const UserList = lazy(() => import("../../views/apps/user/list"));
 const UserView = lazy(() => import("../../views/apps/user/view"));
@@ -39,26 +40,14 @@ const EventsaddForm = lazy(() =>
   import("../../views/apps/Events/NewEventForm")
 );
 
-const Eventsadmin = lazy(() =>
-  import("../../views/apps/EventAdmin/EventTable")
-);
-const MyQuizzes = lazy(() => import("../../views/pages/profile/MyQuizzes"));
-const QuizAdmin = lazy(() =>
-  import("../../views/apps/quiz/admin/quizTable.js")
-);
-const MyEvents = lazy(() => import("../../views/pages/profile/MyEvents"));
 
-const Books = lazy(() => import("../../views/apps/books/index"));
-const AddBook = lazy(() => import("../../views/apps/books/addBook"));
-const Book = lazy(() => import("../../views/apps/books/detail/index"));
-const Booksadmin = lazy(() => import("../../views/apps/BookAdmin/list/index"));
-const MyBooksProfile = lazy(() => import("../../views/pages/profile/MyBooks"));
 
+const Eventsadmin=lazy(() => import('../../views/apps/EventAdmin/AdminEventTable'))
+const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
+const QuizAdmin=lazy(() => import('../../views/apps/quiz/admin/quizTable.js'))
+const MyEvents=lazy(() => import('../../views/pages/profile/MyEvents'))
 const VideoCall = lazy(() => import("../../views/apps/Events/VideoCall"));
 
-const VideoConferance = lazy(() =>
-  import("../../views/apps/Events/chatvideoconf")
-);
 const EventsMore = lazy(() =>
   import("../../views/pages/profile/ProfileshowMoreEvents")
 );
@@ -71,7 +60,31 @@ const ClubDetails = lazy(() =>
   import("../../views/clubs-management/club-details/ClubDetails")
 );
 
+/* Books */
+const Books = lazy(() => import('../../views/apps/books/index'))
+const AddBook = lazy(() => import('../../views/apps/books/addBook'))
+const Book = lazy(() => import('../../views/apps/books/detail/index'))
+const Booksadmin = lazy(() => import('../../views/apps/BookAdmin/list/index'))
+const MyBooksProfile=lazy(() => import('../../views/pages/profile/MyBooks'))
+
+/* End_Books */
+
+const VideoConferance = lazy(() => import('../../views/apps/Events/chatvideoconf'))
+
+
+/* Posts */
+const Posts = lazy(() => import('../../views/apps/posts/index'))
+const AddPost = lazy(() => import('../../views/apps/posts/addPost'))
+const Post = lazy(() => import('../../views/apps/posts/detail/index'))
+const Postsadmin = lazy(() => import('../../views/apps/posts/admin/postTable'))
+
+
+/* End_Posts */
+
+
+
 const AppRoutes = [
+
   {
     element: <Email />,
     path: "/apps/email",
@@ -80,6 +93,7 @@ const AppRoutes = [
       className: "email-application",
     },
   },
+
   {
     element: <Email />,
     path: "/apps/email/:folder",
@@ -88,6 +102,7 @@ const AppRoutes = [
       className: "email-application",
     },
   },
+
   {
     element: <Email />,
     path: "/apps/email/label/:label",
@@ -96,25 +111,41 @@ const AppRoutes = [
       className: "email-application",
     },
   },
+
   {
     element: <Email />,
     path: "/apps/email/:filter",
   },
-  {
-    path: "/apps/chat",
-    element: <Chat />,
-    meta: {
-      appLayout: true,
-      className: "chat-application",
-      layout: "horizontal",
-      action: "client",
-      resource: "client",
-    },
-  },
+
+  // {
+  //   path: "/apps/chat",
+  //   element: <Chat />,
+  //   meta: {
+  //     appLayout: true,
+  //     className: "chat-application",
+  //     layout: "horizontal",
+  //     action: "client",
+  //     resource: "client",
+  //   },
+  // },
+
 
   {
     element: <Books />,
     path: "/apps/books",
+    meta: {
+      appLayout: false,
+      className: "chat-application",
+      layout: "horizontal",
+      action: "read",
+      resource: "ACL",
+      //action: 'client',
+      //resource: 'client'
+    },
+  },
+  {
+    element: <Books />,
+    path: "/apps/books/:name",
     meta: {
       appLayout: false,
       className: "chat-application",
@@ -136,6 +167,7 @@ const AppRoutes = [
       resource: "client",
     },
   },
+  
   {
     element: <VideoCall />,
     path: "/apps/call",
@@ -183,6 +215,88 @@ const AppRoutes = [
       action: "admin",
       resource: "admin",
     },
+  },
+
+
+  {
+    element: <Posts />,
+    path: '/apps/posts',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'read',
+      resource: 'ACL',
+      //action: 'client',
+      //resource: 'client'
+    }
+  },
+
+
+  {
+    element: <AddPost/>,
+    path: '/addpost',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+  {
+    element: <AddPost/>,
+    path: '/addpost/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
+  },
+
+  {
+    element: <Post/>,
+    path: '/postdetail/:id',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+     // action: 'client',
+     // resource: 'client'
+      action: 'read',
+      resource: 'ACL',
+    }
+  },
+
+  {
+    path: '/posts/list',
+    element: <Postsadmin />,
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'vertical',
+      action: 'admin',
+      resource: 'admin'
+    }
+    
+  },
+
+
+
+
+
+  {
+    element: < VideoConferance/>,
+    path: '/apps/videoconf',
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
   },
   {
     path: "/eventsdetail/:id",
@@ -251,6 +365,7 @@ const AppRoutes = [
       resource: "client",
     },
   },
+
   // {
   //   path: '/apps/events/update',
   //   element: <EventsUpdate />,
@@ -413,6 +528,7 @@ const AppRoutes = [
       className: "ecommerce-application",
     },
   },
+
   {
     element: <UserList />,
     path: "/users/list",

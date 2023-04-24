@@ -180,7 +180,7 @@ const updateEvent = async (eventId, updatedEvent) => {
         <input type="text" className="form-control" id="location" name="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="image">Image:</label>
         <input
   type="file"
@@ -190,7 +190,7 @@ const updateEvent = async (eventId, updatedEvent) => {
   accept=".jpg, .jpeg, .png"
   onChange={(e) => setImage(e.target.files)}
 />
-      </div>
+      </div> */}
 
       <button type="submit" className="btn btn-primary">Submit</button>
     </form>   

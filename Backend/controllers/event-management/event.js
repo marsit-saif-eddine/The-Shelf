@@ -19,7 +19,7 @@ exports.getallevents = async (req, res) => {
     if(userconnected){
       filter.owner=userconnected
     }
-    const events = await Event.find(filter);
+    const events = await Event.find(filter).populate('participants');
     res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -140,53 +140,58 @@ exports.deleteevents=async (req, res) => {
 // };
 //participate
 //participate
-exports.participateEvent =async (req, res) => {
-  try{
-      const{id}=req.params;
-      const{userId }=req.body;
-      const event = await Event.findById(id);
-      const isParticipate = event.participants.get(userId);
+// exports.participateEvent =async (req, res) => {
+//   try{
+//       const{id}=req.params;
+//       const{userId }=req.body;
+//       const event = await Event.findById(id);
+//       const isParticipate = event.participants.get(userId);
   
-      if (isParticipate){
-          event.participants.delete(userId);
-      }else{
-          event.participants.set(userId,true);
-      }
+//       if (isParticipate){
+//           event.participants.delete(userId);
+//       }else{
+//           event.participants.set(userId,true);
+//       }
 
-      const updatedEvent = await Event.findByIdAndUpdate(
-          id,
-          {participants:event.participants},
-          {new:true}
-      )
+//       const updatedEvent = await Event.findByIdAndUpdate(
+//           id,
+//           {participants:event.participants},
+//           {new:true}
+//       )
 
-      res.status(200).json(updatedEvent);
+//       res.status(200).json(updatedEvent);
 
-  }catch(err){
-          res.status(404).json({error:err.message});
-  }
-  }
-
-// exports.participateEvent = async (req, res) => {
-//   const userId = req.query.id;
-
-//   try {
-//     const event = await Event.findById(req.params.id);
-//     if (!event) {
-//       return res.status(404).send({ message: 'Event not found' });
-//     }
-
-//     if (event.participants.includes(userId)) {
-//       return res.status(409).send({ message: 'User is already participating in this event' });
-//     }
-
-//     event.participants.push(userId);
-//     await event.save();
-
-//     res.status(200).json(event);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
+//   }catch(err){
+//           res.status(404).json({error:err.message});
 //   }
-// };
+//   }
+
+exports.participateEvent = async (req, res) => {
+  const eventId = req.params.eventId;
+  const userId = req.params.id;
+  try {
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).send({ message: 'Event not found' });
+    }
+
+    if (event.participants.includes(userId)&&event.participants.length>0 ) {
+      // remove user from participants list
+      event.participants = event.participants.filter((id) => id!==null &&  id.toString() !== userId);
+    } else {
+      // add user to participants list
+      event.participants.push(userId);
+    }
+
+    const updatedEvent = await event.save();
+    const eventfinal = await Event.findById(eventId).populate('participants');
+    res.send(eventfinal)
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 //unparticipate
 

@@ -37,7 +37,6 @@ const BookView = () => {
       setActive(tab)
     }
   }
-  console.log('storee', store)
 
   return store.selectedBook !== null && store.selectedBook !== undefined ? (
     <div className='app-user-view'>
@@ -53,9 +52,9 @@ const BookView = () => {
     </div>
   ) : (
     <Alert color='danger'>
-      <h4 className='alert-heading'>User not found</h4>
+      <h4 className='alert-heading'>Book not found</h4>
       <div className='alert-body'>
-        Books with id: {id} doesn't exist. Check list of all Users: <Link to='/apps/user/list'>Users List</Link>
+        Books with id: {id} doesn't exist. Check list of all Books: <Link to='/apps/books/list'>Books List</Link>
       </div>
     </Alert>
   )

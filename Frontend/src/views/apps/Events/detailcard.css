@@ -10,7 +10,16 @@
   border-radius: 0.5rem;
   overflow: hidden;
 }
-
+.blog-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.star-rating {
+  font-size: 24px;
+  color: rgba(7, 4, 4, 0.137);
+  text-shadow: 1px 1px yellow
+}
 .event-card-img {
   object-fit: cover;
   width: 30%;

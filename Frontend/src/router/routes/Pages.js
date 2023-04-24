@@ -20,6 +20,9 @@ const KnowledgeBaseCategory = lazy(() => import('../../views/pages/knowledge-bas
 const KBCategoryQuestion = lazy(() => import('../../views/pages/knowledge-base/KnowledgeBaseCategoryQuestion'))
 const MyQuiz = lazy(() => import('../../views/pages/profile/MyQuizzes'))
 const MyBooksProfile = lazy(() => import('../../views/pages/profile/MyBooks'))
+const AddBook = lazy(() => import('../../views/apps/books/addBook'))
+
+
 
 
 const PagesRoutes = [
@@ -44,15 +47,27 @@ const PagesRoutes = [
   }
   
 },
-
-  {
-    path: '/pages/profile/quiz',
-    element: <MyQuiz />,
-    meta: {
-      action: 'read',
-      resource: 'ACL'
-    }
-  },
+{
+  path: '/pages/profile/mybooks/:id',
+  element: <MyBooksProfile />,
+  meta: {
+    action: 'read',
+    resource: 'ACL',
+    layout: 'horizontal',
+  }
+  
+},
+{
+  element: <AddBook/>,
+  path: '/addbook/:id',
+  meta: {
+    appLayout: false,
+    className: 'chat-application',
+    layout: 'horizontal',
+    action: 'client',
+    resource: 'client'
+  }
+},
 
 
 
@@ -74,7 +89,14 @@ const PagesRoutes = [
   },
   {
     path: '/pages/account-settings',
-    element: <AccountSettings />
+    element: <AccountSettings />,
+    meta: {
+      appLayout: false,
+      className: 'chat-application',
+      layout: 'horizontal',
+      action: 'client',
+      resource: 'client'
+    }
   },
   {
     path: '/pages/license',

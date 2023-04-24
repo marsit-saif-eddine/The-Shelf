@@ -1,31 +1,43 @@
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .form-wrapper {
-    width: 50%;
-  }
-  
-  /* add hover effect to form inputs */
-  .form-control:hover {
-    border-color: #0069d9;
-  }
-  .form-group label {
-    font-size: 16px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-  }
-  /* add hover effect to submit button */
-  .btn:hover {
-    background-color: #0069d9;
-    border-color: #0069d9;
-  }
-  
-  /* add animation to submit button */
-  .btn {
-    transition: all 0.3s ease;
-  }
-  
+.form-wrapper {
+  background-color: #f7f7f7;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.form-wrapper:hover {
+  box-shadow: 0 0 10px #ddd;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 10px #007bff;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+.form-group input:focus,
+.form-group input:hover {
+  border-color: #db9730; /* change to your preferred hover color */
+}

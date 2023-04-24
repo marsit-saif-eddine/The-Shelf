@@ -10,7 +10,7 @@ import useJwt from '@src/auth/jwt/useJwt'
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
-import { Facebook, Twitter, Mail, GitHub, HelpCircle, Coffee, X } from 'react-feather'
+import { Facebook, Twitter, Mail, GitHub, HelpCircle, Coffee, X , AlertTriangle } from 'react-feather'
 
 // ** Actions
 import { handleLogin } from '@store/authentication'
@@ -43,6 +43,21 @@ const ToastContent = ({ t, name, role }) => {
           <X size={12} className='cursor-pointer' onClick={() => toast.dismiss(t.id)} />
         </div>
         <span>You have successfully logged in as an {role} user to Vuexy. Now you can start to explore. Enjoy!</span>
+      </div>
+    </div>
+  )
+}
+const Toast = ({ message }) => {
+  return (
+    <div className='d-flex'>
+      <div className='me-1'>
+        <Avatar size='sm' color='danger' icon={<AlertTriangle size={12} />} />
+      </div>
+      <div className='d-flex flex-column'>
+        <div className='d-flex justify-content-between'>
+          <X size={12} className='cursor-pointer' onClick={() => toast.dismiss(t.id)} />
+        </div>
+        <span>{message}</span>
       </div>
     </div>
   )
@@ -97,10 +112,15 @@ const Login = () => {
           ability.update(res.data.userData.ability)
           navigate(getHomeRouteForLoggedInUser(data.role))
           toast(t => (
-            <ToastContent t={t} role={data.role || 'client'} name={data.firstName || data.lastName || 'John Doe'} />
+            <ToastContent t={t} role={data.role || 'client'} name={data.firstname || data.lastname || 'John Doe'} />
           ))
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.log(err)
+          toast(t => (
+            <Toast message={err.response.data.message} />
+          ))
+        })
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -177,7 +197,7 @@ const Login = () => {
               </g>
             </g>
           </svg>
-          <h2 className='brand-text text-primary ms-1'>Vuexy</h2>
+          <h2 className='brand-text text-primary ms-1'>TheShelf</h2>
         </Link>
         <Col className='d-none d-lg-flex align-items-center p-5' lg='8' sm='12'>
           <div className='w-100 d-lg-flex align-items-center justify-content-center px-5'>
@@ -199,6 +219,7 @@ const Login = () => {
                 <Controller
                   id='loginEmail'
                   name='loginEmail'
+                  rules={{ required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i }}
                   control={control}
                   render={({ field }) => (
                     <Input

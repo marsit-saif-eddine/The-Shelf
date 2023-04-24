@@ -1,13 +1,13 @@
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
-
+import { Link } from 'react-router-dom'
 // ** Shop Components
 import Sidebar from './Sidebar'
 import Products from './Books'
 
 // ** Custom Components
 import Breadcrumbs from '@components/breadcrumbs'
-const URL = "http://localhost:5000/book/books";
+const URL = "http://localhost:5000/book/accepted_books";
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import { addToCart, getProducts, getCartItems, addToWishlist, deleteCartItem, de
 
 // ** Styles
 import '../../../@core/scss/react/apps/app-ecommerce.scss'
+import './booksStyle.scss'
 import axios from "axios";
 
 const Shop = () => {
@@ -36,7 +37,7 @@ const Shop = () => {
   }, [])
 
   return (
-    <Fragment>
+    <div className='books_page'>
       <Products
         store={store}
         dispatch={dispatch}
@@ -50,7 +51,8 @@ const Shop = () => {
         deleteCartItem={deleteCartItem}
         deleteWishlistItem={deleteWishlistItem}
       />
-    </Fragment>
+      <div class="buy-now"><Link to={`/addbook`}  class="btn btn-danger">Add Book</Link></div>
+    </div>
   )
 }
 export default Shop

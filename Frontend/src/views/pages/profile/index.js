@@ -30,6 +30,7 @@ import ProfileLatestEvents from './ProfileLatestEvents'
 
 // ** Styles
 import '@styles/react/pages/page-profile.scss'
+import './booksStyle.scss'
 
 const Profile = () => {
   // ** States
@@ -73,9 +74,12 @@ const Profile = () => {
           <section id='profile-info'>
             <Row>
               <Col lg={{ size: 3, order: 1 }} sm={{ size: 12 }} xs={{ order: 2 }}>
+
                 <ProfileAbout selectedUser={store.selectedUser} />
                 <ProfileLatestEvents data={data.suggestedPages} />
                 {/* <ProfileTwitterFeeds data={data.twitterFeeds} /> */}
+                <ProfileSuggestedPages data={data.suggestedPages} />
+                <ProfileTwitterFeeds data={data.twitterFeeds} />
               </Col>
               <Col lg={{ size: 6, order: 2 }} sm={{ size: 12 }} xs={{ order: 1 }}>
                 <ProfilePosts data={data.post} />

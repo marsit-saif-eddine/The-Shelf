@@ -5,14 +5,14 @@ import { Card, CardBody, Button } from 'reactstrap'
 import toast from 'react-hot-toast'
 import { CheckCircle } from 'react-feather'
 
-const ToastSuccess = () => {
+const ToastSuccess = (title, msg) => {
   return (
     <Card>
       <CardBody>
         <div className='d-flex text-center align-items-center flex-column'>
           <CheckCircle size='32' className='mb-1' />
-          <h5 className='mb-1 fw-bolder'>Success</h5>
-          <p className='mb-50'>Creates a notification with an animated checkmark.</p>
+          <h5 className='mb-1 fw-bolder'>{title  ? title :'Success'}</h5>
+          <p className='mb-50'>{msg  ? msg :'Your action has been traited'}</p>
           <Button color='success' onClick={() => toast.success('Successfully toasted!')}>
             Success
           </Button>

@@ -7,16 +7,21 @@ import Typography from '@mui/joy/Typography';
 import IconButton from '@mui/joy/IconButton';
 import Favorite from '@mui/icons-material/Favorite';
 import { format } from 'date-fns';
+import { Fragment } from 'react'
+import {  UncontrolledTooltip} from 'reactstrap'
+import Avatar from '@components/avatar'
 
 import axios from 'axios';
 import UpdateEventForm from "../Events/UpdateEventForm"
 import './events.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFlag, faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {  useCookies } from "react-cookie";
 import {  CardBody, CardText, Button, Badge } from 'reactstrap'
 import { isUserLoggedIn } from '@utils'
+
+import { AvatarGroup } from '@mui/material';
 
 function EventsCards() {
   const [cookies, _]=useCookies(['access_token'])
@@ -32,11 +37,32 @@ function EventsCards() {
   const [user, setUser] = useState('');
   const [change, setChange] = useState(false);
   const [eventData, setEventData] = useState(null);
+  const [participants, setparticipants] = useState([]);
+  const [ParcedData,setParcedData]=useState([])
+  
+  const [participantCount, setParticipantCount] = useState(0);
 
   const [userData, setUserData] = useState(null)
+  const { eventId } = useParams();
+  const [counttt, setCounttt] = useState(0);
 
+  const participate = async (_id) => {
+    try {
+      const res = await axios.post(`/events/participate/${_id}`);
+      console.log(res.data);
+      setEvents(events.map(event => {
+        if (event._id === _id) {
+          return { ...event, participants: res.data.participants }
+        }
+        return event;
 
+      }));
+    } catch (err) {
+      console.error(err);
+      //  setErrorMessage('Failed to participate to an event.');
 
+    }
+  };
 
 
   //** ComponentDidMount
@@ -48,15 +74,37 @@ function EventsCards() {
   
 
   useEffect(() => {
-    axios.get('/events').then(({data}) => {
+    axios.get('http://localhost:5000/events').then(({data}) => {
       setEvents(data);
+      
     });
   }, []);
+  // const getEvents = async () => {
+  //   try {
+  //     const response = await axios.get("http://localhost:5000/events");
+  //     const events = response.data;
+  
+  //     // Fetch participants for each event and store them in the participants state variable
+  //     const participants = [];
+  //     for (const event of events) {
+  //       const participantsResponse = await axios.get(`http://localhost:5000/events/participants/${event._id}`);
+  //       participants[event._id] = participantsResponse.data;
+  //     }
+  //     setParticipants(participants);
+  
+  //     setEvents(events);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setErrorMessage("Failed to fetch events");
+  //   }
+  // }; 
 
+  
   const getEvents = async () => {
     try {
       const response = await axios.get("http://localhost:5000/events");
       setEvents(response.data);
+      
     } catch (error) {
       console.error(error);
       setErrorMessage("Failed to fetch events");
@@ -67,6 +115,33 @@ function EventsCards() {
     getEvents();
   }, []);
 
+
+  useEffect(()=>{
+    if(events.length>0){
+      // fetcheventusers()
+    
+    }
+  },[events])
+
+  // const fetcheventusers = async () =>{
+  //   events.map((element,index)=>{
+  //     let datax = []
+  //     let event = {
+  //       eventdata:element
+  //     }
+  //     for (const key in element.participants) {
+  //       let temparray = []; 
+  //       let user = await ('http://localhost:5000/users/')
+
+  //     }
+
+  //   })
+
+
+
+
+
+  // }
 
 
   // useEffect(() => {
@@ -99,43 +174,87 @@ function EventsCards() {
   //   setIsParticipated(!isparticipated);
   // }, [user, isparticipated]);
     
-    const patchParticipate = async (eventId) => {
-      try {
-        const response = await fetch(`http://localhost:5000/events/participateEvent/${eventId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"        },
-          body: JSON.stringify({ userId: userData.id }),
+  const patchParticipate = async (eventId) => {
+    let userId = userData._id;
+    try {
+      const response = await axios.post(`/events/participate/${eventId}/${userId}`);
+  
+      const data =  response.data;
+      console.log(data)
+      setEventData(data);
+      const isParticipating = localStorage.getItem(`event_${eventId}_isParticipating`) === "true";
+      setIsParticipating(isParticipating);
+  
+      // Update the isParticipating property of the event object
+      const updatedEvents = events.map((event) => {
+        if (event._id === eventId) {
+          return {
+            ...event,
+            isParticipating: !event.isParticipating,
+            participantCount: event.participantCount + (event.isParticipating ? -1 : 1),
+          };
+        } else {
+          return event;
         }
-        );
-        const data = await response.json();
+      });
+  
+      // Update the events state with updated participant count
+      const updatedEvent = updatedEvents.find((event) => event._id === eventId);
+      setEvents([...updatedEvents.filter((event) => event._id !== eventId), updatedEvent]);
+  
+      // Update counttt state
+      const updatedCount = updatedEvent.participants.length;
+      setCounttt(updatedCount);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+    // const partcipatee = async ( eventId,userId) => {
+    //   userId=userData.id;
+      
+    //   console.log(eventId)
+    //   try {
+    //     const response = await axios.post(`/events/participate/${eventId}/${userId}`);
+    //     return response.data;
+    //   } catch (err) {
+    //     console.error(err);
+    //     return null;
+    //   }
+    // };
+  
+    const partcipatee = async (eventId) => {
+      console.log(userData.id);
+      let userId = userData.id;
+      console.log(eventId);
+      try {
+        const response = await axios.post(`/events/participate/${eventId}/${userId}`);
+        const data = await response.data();
+        if (!data) {
+          // Handle the case where the response data is null or undefined
+          return;
+        }
         setEventData(data);
-        const isParticipating = localStorage.getItem(`event_${eventId}_isParticipating`) === "true";
-        setIsParticipating(isParticipating);
-    
-        // Update the isParticipating property of the event object
+        if (data.participants) {
+          setParticipantCount(data.participants.length);
+        }
+        // Update participant count in event data
         const updatedEvents = events.map((event) => {
           if (event._id === eventId) {
-            return {
-              ...event,
-              isParticipating: !event.isParticipating,
-              participantCount: event.participantCount + (event.isParticipating ? -1 : 1),
-
-            };
-          } else {
-            return event;
+            return { ...event, participants: data.participants };
           }
+          return event;
         });
-    
-        // Update the events state
         setEvents(updatedEvents);
-        setParticipatedCount( Object.keys(data.participants).length)
+        setParticipantCount(data.participants.length);
         getEvents();
-
       } catch (error) {
         console.error(error);
       }
     };
+    
+    
+    
   const handleUpdate = (event) => {
     setSelectedEvent(event);
     setShowForm(true)
@@ -146,7 +265,7 @@ function EventsCards() {
       .then(response => response.json())
       .then(data => setEvents(data))
       .catch(error => console.log(error));
-  }, []);
+  }, [eventData]);
 
 
   // const handleUpdate = async (_id) => {
@@ -259,7 +378,6 @@ function EventsCards() {
   };
   // setParticipatedCount( Object.keys(data.participants).length);
 
-
   return (
 
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -273,8 +391,8 @@ function EventsCards() {
 <div className="card-container">
   
 {events.map((event) => {
-  let count = event.participants ? Object.keys(event.participants).length : 0;
-  return (
+let counttt = event && event.participants ? event.participants.length : 0;
+return (
     <div className="card-wrapper" key={event._id}>
       <div className="img-container">
         <img
@@ -290,18 +408,73 @@ function EventsCards() {
             <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
             <CardText tag='span' className='item-company'></CardText>
           </h6>
-          <CardText className='item-description'>{event.location}</CardText>
+          {/* <p>Participants:</p>
+          <AvatarGroup max={4}>
+            {event.participants.map((participant) => (
+              <Avatar
+                key={participant.id}
+                alt={participant.name}
+                src={participant.avatarUrl}
+              />
+            ))}
+          </AvatarGroup> */}
+          <CardText className='item-description'>In {event.location}</CardText>
           <CardText className='item-description'>
             {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} TO {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
           </CardText>
+
           <button
             className="participate-btn"
             variant="contained"
-            color="primary"
+            color="#f5821f"
             onClick={() => patchParticipate(event._id)}
-          >{count} 
+            
+          >{counttt} 
             {event.isParticipating ? "Cancel participation" : "Participated"}
+            {/* <div>{userData.Avatar}</div> */}
+
           </button>
+
+
+          <div className='d-flex align-items-center'>
+          <AvatarGroup max={4}>
+  {event.participants.map(participantt => (
+     <Avatar key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />
+    
+  ))
+  }
+  
+</AvatarGroup>
+
+            {/* <div className='avatar-group ms-1'>{avatars}</div> */}
+    </div>
+          {/* <p>Participants: {participants[event._id]?.map((participant) => participant.name).join(", ") || "None"}</p> */}
+
+          {/* <div className='d-flex align-items-center'>
+                  <div className='avatar-group ms-1'>
+                   <Fragment>
+                        {/* <Fragment key={userData.name}> */}
+                          {/* <Avatar
+                            className='pull-up' 
+                            img={userData.image}
+                            id={userData.name.toLowerCase().split(' ').join('-')}
+                            imgHeight='26'
+                            imgWidth='26'
+                          /> */}
+                          {/* <UncontrolledTooltip
+                             target={userData.name.toLowerCase().split(' ').join('-')}
+                            placement='top'
+                          >
+                            {userData.name} */} 
+                          {/* </UncontrolledTooltip>
+                        </Fragment>
+                      
+{/*                     
+                  </div>
+                  <a href='/' className='text-muted text-nowrap ms-50' onClick={e => e.preventDefault()}>
+                    +{count}  more
+                  </a>
+            </div> */}
         
         </CardBody>
       </Card>
@@ -320,6 +493,7 @@ function EventsCards() {
 
 )
 }
+
 
 export default EventsCards;
 

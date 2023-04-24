@@ -20,7 +20,9 @@ export const getData = createAsyncThunk('appUsers/getData', async params => {
     page: params.page,
     perPage: params.perPage,
     role: params.role,
-    status: params.status
+    status: params.status,
+    excludedId:params.excludedId
+
   }})
   console.log('alll data',response.data)
   return {

@@ -71,10 +71,11 @@ const ProfilePosts = ({ data }) => {
         .then(data => setEvents(data))
 
         .catch(error => console.log(error));
-      console.log("sii" + userData.id);
+      console.log( userData.avatar);
     }
     console.log(events)
   }, [userData]);
+  console.log(userData);
 
 
   // const handleUpdate = async (_id) => {
@@ -208,8 +209,8 @@ const ProfilePosts = ({ data }) => {
       };
     });
   };
-
-
+console.log('!!!!!!!')
+console.log(userData)
   const renderPosts = () => {
   //   const renderPosts = () => {
 
@@ -331,7 +332,7 @@ const ProfilePosts = ({ data }) => {
     //   }
     //   return renderPosts()
     // }
-    return events.length > 0 ? events.map(event => {
+    return events.length > 0 ? events.reverse().map(event => {
       return (
         <Card key={event._id}>
           <CardBody>
@@ -354,12 +355,12 @@ const ProfilePosts = ({ data }) => {
             <Row className='d-flex justify-content-start align-items-center flex-wrap pb-50 post-actions'>
               <Col className='d-flex justify-content-between justify-content-sm-start mb-2' sm='6'>
                 <div className='d-flex align-items-center text-muted text-nowrap cursor-pointer'>
-                  <Heart
+                  {/* <Heart
                     size={18}
                   // className={classnames('me-50', {
                   //   'profile-likes': post.youLiked === true
                   // })}
-                  />
+                  /> */}
                 </div>
                 <div className='d-flex align-items-center'>
                   <div className='avatar-group ms-1'>
@@ -389,7 +390,7 @@ const ProfilePosts = ({ data }) => {
                   </a> */}
                 </div>
               </Col>
-              {userData && event.owner == userData.id && (
+              {userData && event.owner == userData._id && (
 
                 <Col className='d-flex justify-content-between justify-content-sm-end align-items-center mb-2' sm='6'>
                   {/* <a href='/' className='text-nowrap'>
@@ -409,9 +410,7 @@ const ProfilePosts = ({ data }) => {
                   <button className="btn btn-pastel-danger btn-sm" onClick={() => handleDelete(event._id)}>
                     <FontAwesomeIcon icon={faTrashAlt} />
                   </button>
-                  <button className="btn btn-pastel-info btn-sm" onClick={() => reportEvent(event._id)}>
-                    <FontAwesomeIcon icon={faFlag} />
-                  </button>
+                
 
                 </Col>)}
             </Row>
@@ -439,6 +438,7 @@ const ProfilePosts = ({ data }) => {
               <h6>{event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} ~~ {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}</h6>
             </div>
             <h6 className='mb-0'>{event.location}</h6>
+
 
             <fieldset className='form-label-group mb-50'>
               <Label className='form-check-label' >
