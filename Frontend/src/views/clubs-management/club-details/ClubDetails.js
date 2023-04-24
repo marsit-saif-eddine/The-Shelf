@@ -57,7 +57,7 @@ const ClubDetails = () => {
           <div className="col-md-8">
             <div className="main-card card">
               {club.admins.findIndex((x) => x._id === currentUser._id) > -1 ||
-              club.created_by._id === currentUser._id ? (
+              club.created_by._id === currentUser._id || currentUser.role === 'admin' ? (
                 <div className="action-btns-container">
                   <div
                     onClick={() => {
@@ -69,7 +69,7 @@ const ClubDetails = () => {
                   </div>
                   <div
                     className="action-btn bg-warning text-white"
-                    onClick={() => navigate("/apps/clubs/edit/" + club._id)}
+                    onClick={() => navigate((currentUser.role === "admin" ? "/apps/clubs/edit/" : "/apps/clubs/editt/") + club._id)}
                     style={{ borderLeft: "1px solid #8080803b" }}
                   >
                     <Edit size={12} />

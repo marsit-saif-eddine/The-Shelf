@@ -75,8 +75,10 @@ exports.getClubs = async (req, res) => {
   try {
     const dbClubs = getDb().collection("clubs");
     const clubs = await dbClubs.find().toArray();
+
     return res.status(200).send(clubs);
   } catch (ex) {
+    console.log(ex)
     return res.status(500).send();
   }
 };

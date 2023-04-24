@@ -157,7 +157,7 @@ const ChatLog = (props) => {
                 <Avatar
                   imgHeight="36"
                   imgWidth="36"
-                  img={'http://localhost:5000/' + conversation?.messages.at(-1).user.photo}
+                  img={conversation?.messages.at(-1).user._id != 'gpt' ? ('http://localhost:5000/' + conversation?.messages.at(-1).user.photo) : conversation?.messages.at(-1).user.photo}
                   status={"online"}
                   className="avatar-border user-profile-toggle m-0 me-1"
                   onClick={() => {}}

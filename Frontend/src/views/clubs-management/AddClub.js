@@ -192,7 +192,7 @@ const AddClub = ({}) => {
       <Card>
         <CardHeader>
           <CardTitle tag="h4">
-            {params.id ? "Modifier un club" : "Ajouter un club"}
+            {params.id ? "Edit club" : "Create new club"}
           </CardTitle>
         </CardHeader>
 
@@ -241,19 +241,19 @@ const AddClub = ({}) => {
           <form onSubmit={handleSubmit}>
             <Row>
               <Col className="mb-1" sm="12">
-                <Label className="form-label">Nom du club</Label>
+                <Label className="form-label">Club name</Label>
                 <Input
                   type="text"
                   name="club_name"
                   value={clubName}
                   onChange={(e) => setClubName(e.target.value)}
-                  placeholder="Nom du club"
+                  placeholder="Club name"
                 />
               </Col>
 
               <Col className="mb-1" sm="12">
                 <Label className="form-label" for="InputHelp">
-                  Description de l'activité du club
+                  Club activity description
                 </Label>{" "}
                 <Editor
                   editorState={descr}
@@ -262,7 +262,7 @@ const AddClub = ({}) => {
               </Col>
 
               <Col className="mb-1" sm="12">
-                <Label className="form-label">Liste des administrateurs</Label>
+                <Label className="form-label">Administrators</Label>
                 <Select
                   isClearable={false}
                   isMulti
