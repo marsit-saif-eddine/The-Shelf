@@ -37,13 +37,13 @@ const ClubCard = (props) => {
     );
   }, []);
   return (
-    <div className="col-lg-6 col-12">
+    <div className="col-lg-6 col-12 mb-2">
       <div className="card header-card">
         <h4>{club.club_name}</h4>
       </div>
 
       <div className="card main-card custom-card">
-        {(club.admins.findIndex(x => x._id === currentUser._id) > -1 || club.created_by._id === currentUser._id) ? (
+        {(club.admins.findIndex(x => x._id === currentUser._id) > -1 || club.created_by._id === currentUser._id || currentUser.role === 'admin') ? (
           <div className="action-btns-container">
             <div
               onClick={() => {
@@ -55,7 +55,7 @@ const ClubCard = (props) => {
             </div>
             <div
               className="action-btn bg-warning text-white"
-              onClick={() => navigate("/apps/clubs/edit/" + club._id)}
+              onClick={() => navigate((currentUser.role === "admin" ? "/apps/clubs/edit/" : "/apps/clubs/editt/") + club._id)}
               style={{ borderLeft: "1px solid #8080803b" }}
             >
               <Edit size={12} />
@@ -115,7 +115,7 @@ const ClubCard = (props) => {
           {currentUser.role === "admin" || memberShipStatus === "member" ? (
             <button
               className="btn btn-gradient-primary"
-              onClick={() => navigate("/apps/clubs/details/" + club._id)}
+              onClick={() => navigate((currentUser.role === "admin" ? "/apps/clubs/details/" : "/apps/clubs/detailss/") + club._id)}
             >
               Details
             </button>

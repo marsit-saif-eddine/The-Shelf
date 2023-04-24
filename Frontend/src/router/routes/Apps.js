@@ -568,7 +568,7 @@ const AppRoutes = [
     path: "/apps/clubs/listt",
     meta: {
       appLayout: false,
-      className: "quizid-application",
+      className: "zef-application",
       layout: "horizontal",
       action: "client",
       resource: "client",
@@ -579,10 +579,21 @@ const AppRoutes = [
     path: "/apps/clubs/list",
     meta: {
       appLayout: false,
-      className: "quizid-application",
+      className: "azef-application",
       layout: "vertical",
       action: "admin",
       resource: "admin",
+    },
+  },
+  {
+    element: <ClubsList/>,
+    path: "/apps/clubs/listt",
+    meta: {
+      appLayout: false,
+      className: "argaz-application",
+      layout: "horizontal",
+      action: "client",
+      resource: "client",
     },
   },
   {
@@ -612,7 +623,7 @@ const AppRoutes = [
     path: "/apps/clubs/details/:id",
     meta: {
       appLayout: false,
-      className: "quizid-application",
+      className: "aerha-application",
       layout: "vertical",
       action: "admin",
       resource: "admin",
@@ -623,7 +634,7 @@ const AppRoutes = [
     path: "/apps/clubs/addd",
     meta: {
       appLayout: false,
-      className: "quizid-application",
+      className: "etherg-application",
       layout: "horizontal",
       action: "client",
       resource: "client",
@@ -634,7 +645,7 @@ const AppRoutes = [
     path: "/apps/clubs/editt/:id",
     meta: {
       appLayout: false,
-      className: "quizid-application",
+      className: "teh-application",
       layout: "horizontal",
       action: "client",
       resource: "client",
@@ -645,7 +656,7 @@ const AppRoutes = [
     path: "/apps/clubs/detailss/:id",
     meta: {
       appLayout: false,
-      className: "quizid-application",
+      className: "zererg-application",
       layout: "horizontal",
       action: "client",
       resource: "client",

@@ -49,7 +49,7 @@ exports.signUp = async (req, res) => {
         console.log(err);
       if (err) {
         if (err.code == 11000) {
-          res.status(200).send("user already exist");
+          res.status(200).send(false);
         } else {
           res.status(500).send("failed to invite user");
         }
@@ -113,7 +113,7 @@ exports.adminSignUp = async (req, res) => {
     .catch((err) => {
         console.log(err);
         if (err.code == 11000) {
-          res.status(200).send("user already exist");
+          res.status(200).send(false);
         } else {
           res.status(500).send("failed to invite user");
         }

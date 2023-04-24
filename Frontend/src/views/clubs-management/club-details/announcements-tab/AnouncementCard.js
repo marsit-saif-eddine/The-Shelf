@@ -7,6 +7,7 @@ import { deleteClubAnnouncement } from "../../../../redux/clubs";
 const AnnouncementsCard = ({ announcement }) => {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("userData"));
 
   return (
     <>
@@ -25,17 +26,22 @@ const AnnouncementsCard = ({ announcement }) => {
                 " " +
                 announcement.publisher.firstname}
             </h5>
-            <small className="text-muted">{new Date(announcement.creation_date).toLocaleString("en-US")}</small>
+            <small className="text-muted">
+              {new Date(announcement.creation_date).toLocaleString("en-US")}
+            </small>
           </div>
-          <div className="col d-flex justify-content-end">
-            <button
-              className="btn btn-outline-danger expandable-btn me-1"
-              onClick={() => setOpenModal(true)}
-            >
-              <Trash className="font-medium-2"></Trash>
-              <span>Delete</span>
-            </button>
-          </div>
+          {(currentUser.role === "admin" ||
+            currentUser._id === announcement.publisher._id) && (
+            <div className="col d-flex justify-content-end">
+              <button
+                className="btn btn-outline-danger expandable-btn me-1"
+                onClick={() => setOpenModal(true)}
+              >
+                <Trash className="font-medium-2"></Trash>
+                <span>Delete</span>
+              </button>
+            </div>
+          )}
         </div>
         <div className="card announcement-text">
           <div

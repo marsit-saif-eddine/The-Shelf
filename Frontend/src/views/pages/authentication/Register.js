@@ -24,6 +24,7 @@ import {
   Label,
   Input,
   Button,
+  Alert,
 } from "reactstrap";
 
 // ** Styles
@@ -35,6 +36,9 @@ const Register = () => {
   const [avatar, setAvatar] = useState("");
   const [avatarToUpload, setAvatarToUpload] = useState(null);
   const [signedUp, setSignedUp] = useState();
+  const [submitted, setSubmitted] = useState(false);
+  const [pwdInvalid, setPwdInvalid] = useState(false);
+  const [formError, setFormError] = useState(null);
   const [userForm, setUserForm] = useState({
     lastname: "",
     firstname: "",
@@ -44,8 +48,6 @@ const Register = () => {
     password: "",
   });
   const params = useParams();
-
-  let formError = null;
 
   useEffect(() => {
     if (params.id) {
@@ -61,10 +63,24 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setPwdInvalid(false);
+    setSubmitted(true);
+    setFormError(null);
+
     if (event.target.password.value != event.target.confirm_password.value) {
-      formError = "Please confirm your password";
+      setPwdInvalid(true);
+      setFormError("Please confirm your password!");
       return;
     }
+    Object.keys(userForm)
+      .filter((x) => ["lastname", "firstname", "email"].includes(x))
+      .forEach((x) => {
+        if (!userForm[x]) {
+          setFormError("Please fill all the required fields!");
+          return;
+        }
+      });
+
     //delete userForm.confirm_password
     userForm["password"] = event.target.password.value;
     userForm._id = params.id || null;
@@ -81,13 +97,14 @@ const Register = () => {
   };
 
   const signUp = (formData) => {
-    fetch("http://localhost:5000/signUp/signUp", {
-      method: 'POST',
-      body: formData,
-    })
+    axios.post("http://localhost:5000/signUp/signUp", formData)
       .then((response) => {
-        if (response.ok) {
+
+        if (response.data) {
           setSignedUp(true);
+          setSubmitted(false);
+        } else {
+          setFormError("Email already used!");
         }
         // CONFIRM ACTION PERFORMED HERE
       })
@@ -116,13 +133,11 @@ const Register = () => {
 
   const adminSignUp = (formData) => {
     axios
-      .post("http://localhost:5000/signUp/adminSignUp", {
-        method: 'POST',
-        body: formData,
-      })
+      .post("http://localhost:5000/signUp/adminSignUp", formData)
       .then((response) => {
         if (response.ok) {
           setSignedUp(true);
+          setSubmitted(false);
         }
         // CONFIRM ACTION PERFORMED HERE
       })
@@ -232,7 +247,8 @@ const Register = () => {
                 Adventure starts here 🚀
               </CardTitle>
               <CardText className="mb-2 fst-italic">
-              “A reader lives a thousand lives before he dies . . . The man who never reads lives only one.”
+                “A reader lives a thousand lives before he dies . . . The man
+                who never reads lives only one.”
               </CardText>
               <div className="d-flex">
                 <div className="me-25">
@@ -282,6 +298,7 @@ const Register = () => {
                     type="text"
                     name="lastname"
                     placeholder="Lastname"
+                    invalid={submitted && !userForm.lastname}
                     value={userForm["lastname"]}
                     onChange={(e) =>
                       setUserForm({ ...userForm, lastname: e.target.value })
@@ -295,6 +312,7 @@ const Register = () => {
                   <Input
                     type="text"
                     name="firstname"
+                    invalid={submitted && !userForm.firstname}
                     value={userForm["firstname"]}
                     onChange={(e) =>
                       setUserForm({ ...userForm, firstname: e.target.value })
@@ -308,6 +326,7 @@ const Register = () => {
                   <Input
                     type="Email"
                     name="email"
+                    invalid={submitted && !userForm.email}
                     value={userForm["email"]}
                     onChange={(e) =>
                       setUserForm({ ...userForm, email: e.target.value })
@@ -346,6 +365,7 @@ const Register = () => {
                   <Label className="form-label">Password</Label>
                   <InputPasswordToggle
                     name="password"
+                    invalid={pwdInvalid}
                     className="input-group-merge"
                   />
                 </div>
@@ -353,9 +373,17 @@ const Register = () => {
                   <Label className="form-label">Confirm password</Label>
                   <InputPasswordToggle
                     name="confirm_password"
+                    invalid={pwdInvalid}
                     className="input-group-merge"
                   />
                 </div>
+
+                {formError && (
+                  <Alert color="danger">
+                    <div className="alert-body">{formError}</div>
+                  </Alert>
+                )}
+
                 <div className="form-check mb-1">
                   <Input type="checkbox" id="terms" />
                   <Label className="form-check-label" for="terms">

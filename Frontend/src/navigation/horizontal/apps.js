@@ -58,7 +58,7 @@ export default [
     id: "clubs",
     title: "Clubs",
     icon: <Award />,
-    navLink: "/apps/clubs/list",
+    navLink: "/apps/clubs/listt",
     action: "client",
     resource: "client",
   },

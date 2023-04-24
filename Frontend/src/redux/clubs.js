@@ -171,6 +171,7 @@ export const clubsSlice = createSlice({
             firstname: user.firstname,
             photo: user.photo
           };
+          action.payload.creation_date = new Date();
           state.clubAnnouncements.unshift(action.payload);
         }
       }).addCase(deleteClubAnnouncement.fulfilled, (state, action) => {

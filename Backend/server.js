@@ -47,6 +47,7 @@ let currentSocket;
 
 
 io.use((socket, next) => {
+  try {
   let token = socket.handshake.auth.token;
   if (token) {
     token = token.replace(`"`, "");
@@ -65,6 +66,7 @@ io.use((socket, next) => {
   );
 
   next();
+  } catch(ex) {}
 }).on("connection", async (socket) => {
   currentSocket = socket;
   socket.on("club-message-sent", (data) => {

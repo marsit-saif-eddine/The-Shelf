@@ -88,7 +88,7 @@ exports.rateUser = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email }, 'lastname firstname photo role password ability');
+        let user = await User.findOne({ email }, 'lastname firstname photo role password ability');
         if (user) {
             if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm your account !" });}
             if (user.status === 'banned') {
@@ -97,6 +97,7 @@ exports.login = async (req, res) => {
                 const auth = await bcrypt.compare(password, user.password);
 
                 if (auth) {
+                    user = {...user._doc};
                     user._id = user._id.toString();
                     delete user.password;
                     const accessToken = createToken(user);
@@ -117,6 +118,7 @@ exports.login = async (req, res) => {
         }
 
     } catch (err) {
+        console.log(err);
         res.status(400).json({ "message": err.message })
     }
 }

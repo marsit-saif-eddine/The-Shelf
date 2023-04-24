@@ -31,7 +31,7 @@ const ClubsList = () => {
           <h1>Clubs</h1>
         </div>
         <div className="col d-flex justify-content-end">
-          <Link to="/apps/clubs/add">
+          <Link to={currentUser.role === "admin" ? "/apps/clubs/add" : "/apps/clubs/add"}>
             <button className="btn btn-outline-primary">Create a club</button>
           </Link>
         </div>
