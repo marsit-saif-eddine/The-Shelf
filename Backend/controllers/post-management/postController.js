@@ -66,14 +66,13 @@ const getAllPostsFilter = async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   };
- 
 
 
 const getAcceptedPosts = async (req, res, next) => {
   let posts;
   try {
  posts = await Post.find({is_accepted:true});
- console.log('this is postlist',posts)
+console.log('this is booklist',posts)
   } catch (err) {
     console.log(err);
   }
@@ -84,20 +83,6 @@ const getAcceptedPosts = async (req, res, next) => {
   return res.status(200).json(posts);
 };
 
-
-const getById = async (req, res, next) => {
-  const id = req.params.id;
-  let post;
-  try {
-    post = await Post.findById(id);
-  } catch (err) {
-    console.log(err);
-  }
-  if (!post) {
-    return res.status(404).json({ message: "No Post found" });
-  }
-  return res.status(200).json(post);
-};
 
 
 const getPostByUserId = async (req, res, next) => {
@@ -203,12 +188,9 @@ const deletePost = async (req, res, next) => {
 
 exports.getAllPosts = getAllPosts;
 exports.addPost = addPost;
-exports.getById = getById;
 exports.updatePost = updatePost;
 exports.deletePost = deletePost;
 exports.getPostByUserId = getPostByUserId;
 exports.getAcceptedPosts = getAcceptedPosts;
 exports.getAllPostsFilter= getAllPostsFilter;
 exports.switchPostToaccepted = switchPostToaccepted;
-
-

@@ -21,6 +21,22 @@ const storage = multer.diskStorage({
         cb(null, uuidv4() + "-" + fileName);
     }
   })
+
+  
+  const uploadClubLogo = (req, res, next) => {
+    upload.single("imgCover")(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
+      req.body = JSON.parse(req.body.club);
+      if (req.file) {
+        req.body.logo = req.file.path; // set the service_logo field of the request body to the uploaded file path
+      } else {
+        req.body.logo = 'uploads/avatars/club_logo.png';
+      }
+      next();
+    });
+  };
   
   const upload = multer({ storage: storage })
   module.exports= upload
