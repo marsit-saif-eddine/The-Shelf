@@ -28,7 +28,7 @@ const EventsList = () => {
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='danger'
-            statTitle='Paid Users'
+            statTitle='Active Users'
             icon={<UserPlus size={20} />}
             renderStats={<h3 className='fw-bolder mb-75'>4,567</h3>}
           />
@@ -36,7 +36,7 @@ const EventsList = () => {
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='success'
-            statTitle='Active Users'
+            statTitle='Banned Users'
             icon={<UserCheck size={20} />}
             renderStats={<h3 className='fw-bolder mb-75'>19,860</h3>}
           />
@@ -44,7 +44,7 @@ const EventsList = () => {
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='warning'
-            statTitle='Pending Users'
+            statTitle='Inactive Users'
             icon={<UserX size={20} />}
             renderStats={<h3 className='fw-bolder mb-75'>237</h3>}
           />

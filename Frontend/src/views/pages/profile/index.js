@@ -78,7 +78,6 @@ const Profile = () => {
                 <ProfileAbout selectedUser={store.selectedUser} />
                 <ProfileLatestEvents data={data.suggestedPages} />
                 {/* <ProfileTwitterFeeds data={data.twitterFeeds} /> */}
-                <ProfileAbout selectedUser={store.selectedUser} /> 
                 <ProfileSuggestedPages data={data.suggestedPages} />
                 <ProfileTwitterFeeds data={data.twitterFeeds} />
               </Col>
