@@ -206,10 +206,10 @@ const UsersList = () => {
         q: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        accepted: acceptance.value
+        is_accepted: acceptance.value
       })
     )
-    console.log('datamsg',store.data)
+    //console.log('datamsg',store.data)
   }, [dispatch, store.data.length, sort, sortColumn, currentPage, change])
 
   const acceptedObj = {
@@ -287,14 +287,14 @@ const UsersList = () => {
     minWidth: '138px',
     sortable: true,
     sortField: 'accepted',
-    selector: row => row.accepted,
+    selector: row => row.is_accepted,
      cell: row => (
   
       <Badge className='text-capitalize' style={{cursor:'pointer'}}
-      color={acceptedObj[row.accepted]}
-      onClick={() => switchAccepted(row._id,row.accepted)}
+      color={acceptedObj[row.is_accepted]}
+      onClick={() => switchAccepted(row._id,row.is_accepted)}
       >
-        {isAccepted(row.accepted) }
+        {isAccepted(row.is_accepted) }
        </Badge>
      )
     
@@ -363,7 +363,7 @@ const UsersList = () => {
         q: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        accepted: acceptance.value
+        is_accepted: acceptance.value
         
       })
     )
@@ -380,7 +380,7 @@ const UsersList = () => {
         q: searchTerm,
         perPage: value,
         page: currentPage,
-        accepted: acceptance.value
+        is_accepted: acceptance.value
       })
     )
     setRowsPerPage(value)
@@ -396,7 +396,7 @@ const UsersList = () => {
         sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
-        accepted: acceptance.value
+        is_accepted: acceptance.value
       })
     )
   }
@@ -427,7 +427,7 @@ const UsersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      accepted: acceptance.value,
+      is_accepted: acceptance.value,
       q: searchTerm
     }
 
@@ -456,7 +456,7 @@ const UsersList = () => {
         q: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        accepted: acceptance.value
+        is_accepted: acceptance.value
         
       })
     )
@@ -486,7 +486,7 @@ const UsersList = () => {
                       sort,
                       sortColumn,
                       q: searchTerm,
-                      accepted: data.value,
+                      is_accepted: data.value,
                       page: currentPage,
                       perPage: rowsPerPage
                     })

@@ -144,6 +144,19 @@ const AppRoutes = [
     },
   },
   {
+    element: <Books />,
+    path: "/apps/books/:name",
+    meta: {
+      appLayout: false,
+      className: "chat-application",
+      layout: "horizontal",
+      action: "read",
+      resource: "ACL",
+      //action: 'client',
+      //resource: 'client'
+    },
+  },
+  {
     element: <VideoConferance />,
     path: "/apps/videoconf",
     meta: {

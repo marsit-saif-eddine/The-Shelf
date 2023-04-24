@@ -431,6 +431,24 @@ console.log('My booklist',books)
   return res.status(200).json(books);
 };
 
+const getByAuthor = async (req, res, next) => {
+  let books;
+  const authorName = req.params.author;
+  try {
+ books = await Book.find({author : authorName});
+  console.log('My booklist',books)
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (!books) {
+    return res.status(404).json({ message: "No books found" });
+  }
+  return res.status(200).json(books);
+};
+
+//getByAuthor
+
 const addBook = async (req, res, next) => {
   const { name, author, description, price, available, for_sale, owner, owner_Id, accepted } = req.body;
   let book;

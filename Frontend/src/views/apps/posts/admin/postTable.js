@@ -25,7 +25,7 @@ import {
   import { Trash2 , MoreVertical, FileText,Archive, Check, Layers, Clock} from 'react-feather';
   import { getUser} from '../../user/store'
   import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
-
+  import "../../quiz/quiz.css"
 
 
 
@@ -35,23 +35,24 @@ const postTable = () => {
 
     const [show, setShow] = useState(false)
 
-    const [Posts, setPosts] = useState([])
     const[change,setChange]=useState(false)
     //const [statusFilter, setStatusFilter] = useState('all'); // default to show all quizzes
     const [approvedPostCount, setApprovedPostCount] = useState(0);
     const [pendingPostsCount, setPendingPosts] = useState(0);
     const [totalPostsCount, setPostsCount] = useState(0);
+    const [posts,setPosts]= useState([]);
+    const [post,setPost]= useState([]);
    
    
 
-    const get = ()=>{
-        axios.get('http://localhost:5000/post/posts')
-        .then(response =>  {
-           setPosts(response.data);
-           const approvedPosts = response.data.filter(post => post.is_accepted === 'true');
-           const pendingPosts = response.data.filter(post => post.is_accepted === 'false');
+    const get = async ()=>{
+       await axios.get('http://localhost:5000/post/posts')
+        .then(async (response) =>  {
+           await setPosts(response.data);
+           const approvedPosts = response.data.filter(post => post.is_accepted === true);
+           const pendingPosts = response.data.filter(post => post.is_accepted === false);
+
            setPostsCount(response.data.length);
-
            setApprovedPostCount(approvedPosts.length);
            setPendingPosts(pendingPosts.length);
         
@@ -63,9 +64,10 @@ const postTable = () => {
     }
 
     useEffect(() => {
+      console.log('tessst')
+
         setChange(false)
         get();
-      console.log(Posts)
       }, [change]);
        
   
@@ -82,7 +84,7 @@ const postTable = () => {
         axios.delete(`http://localhost:5000/post/${id}`)
         .then(() => {
           // Remove the deleted post from the posts array
-          const updatedPosts = Posts.filter((post) => post.id !== id);
+          const updatedPosts = posts.filter((post) => post.id !== id);
           setPosts(updatedPosts);
           setChange(true)
         });
@@ -90,7 +92,7 @@ const postTable = () => {
 });
       }
 
-      const approve=(id)=>{
+      const approve=(item)=>{
         Swal.fire({
             title: 'Are you sure?',
             text: 'do you want to approve this request',
@@ -100,12 +102,12 @@ const postTable = () => {
             cancelButtonText: 'No, cancel',
           }).then((result) => {
             if (result.isConfirmed) {
-        axios.put(`http://localhost:5000/post/switch_accepted/${id}`)
+        axios.put(`http://localhost:5000/post/switch_accepted/${item._id}`,{is_accepted: !item.is_accepted})
      
        .then(response => {
         console.log(response.data);
         setChange(true)   
-     console.log(response);
+        console.log(response);
       })
       .catch(error => {
         // handle error
@@ -113,19 +115,18 @@ const postTable = () => {
       });
     }
 
-    const [post,setPost]= useState([]);
 
 
 
-    //const { id } = useParams();
-    const details=(id)=> {
-        axios.get(`http://localhost:5000/post/${id}`)
-      //  .then(response => console.log(response.data))
-      .then(response => setPost(response.data))
+    // //const { id } = useParams();
+    // const details=(id)=> {
+    //     axios.get(`http://localhost:5000/post/${id}`)
+    //   //  .then(response => console.log(response.data))
+    //   .then(response => setPost(response.data))
 
-        .catch(error => console.error(error));
+    //     .catch(error => console.error(error));
   
-      }
+    //   }
  
       const handleSubmit = (event) => {
         event.preventDefault();
@@ -158,8 +159,8 @@ const postTable = () => {
       }
 
       const statusObj = {
-        approved: 'light-success',
-        pending: 'light-warning'
+        true: 'light-success',
+        false: 'light-warning'
       }
       
 
@@ -211,7 +212,6 @@ const postTable = () => {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th>id</th>
                                             <th>Owner</th>
                                             <th>Content</th>
                                             <th>status</th>
@@ -221,16 +221,14 @@ const postTable = () => {
                                     <tbody>
                                     
                                       
-                                        {Posts.map((post) => (
+                                        {posts && posts.map((post) => (
                                          <tr key={post._id} >
-                                            <td>{post._id}</td>
                                             <td className='fw-bolder'> 
                                             <Link
-            to={`/pages/profile/${post.owner_Id}`}
-            className='user_name text-truncate text-body'
-            onClick={() => store.dispatch(getUser(post.owner_Id))}
-          >
-             <Avatar className='me-1' img={post.creator_pic} width='32' height='32' />
+                                            to={`/pages/profile/${post.owner_Id}`}
+                                            className='user_name text-truncate text-body'
+                                            onClick={() => store.dispatch(getUser(post.owner_Id))}
+                                          >
                                               {post.owner}
                                               </Link>
                                               </td>
@@ -238,38 +236,38 @@ const postTable = () => {
                                             <td>{post.content}</td>
                                             <td>
                                                 <Badge className='text-capitalize' color={statusObj[post.is_accepted]} pill>
-                                                  {post.is_accepted}
+                                                  {post.is_accepted ? 'Approved' : 'Not Approved'}
                                               </Badge>
                                             </td>
                                             <td>
                                              <div className='column-action'>
-        <UncontrolledDropdown>
-          <DropdownToggle tag='div' className='btn btn-sm'>
-            <MoreVertical size={14} className='cursor-pointer' />
-          </DropdownToggle>
-          <DropdownMenu>
-          <DropdownItem
-             
-             className='w-100'
-             onClick={() => {details(post._id);setShow(true)}}
-           >
-             <FileText size={14} className='me-50' />
-             <span className='align-middle'>Details</span>
-           </DropdownItem>
-            <DropdownItem  onClick={() => approve(post._id)}>
-              <Archive size={14} className='me-50' />
-              <span className='align-middle'>approve</span>
-            </DropdownItem>
-            <DropdownItem
-             
-              className='w-100'
-              onClick={() => Delete(post._id)}
-            >
-              <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Delete</span>
-            </DropdownItem>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+                                <UncontrolledDropdown>
+                                  <DropdownToggle tag='div' className='btn btn-sm'>
+                                    <MoreVertical size={14} className='cursor-pointer' />
+                                  </DropdownToggle>
+                                  <DropdownMenu>
+                                  {/* <DropdownItem
+                                    
+                                    className='w-100'
+                                    onClick={() => {details(post._id);setShow(true)}}
+                                  >
+                                    <FileText size={14} className='me-50' />
+                                    <span className='align-middle'>Details</span>
+                                  </DropdownItem> */}
+                                    <DropdownItem  onClick={() => approve(post)}>
+                                      <Archive size={14} className='me-50' />
+                                      <span className='align-middle'>approve</span>
+                                    </DropdownItem>
+                                    <DropdownItem
+                                    
+                                      className='w-100'
+                                      onClick={() => Delete(post._id)}
+                                    >
+                                      <Trash2 size={14} className='me-50' />
+                                      <span className='align-middle'>Delete</span>
+                                    </DropdownItem>
+                                  </DropdownMenu>
+                                </UncontrolledDropdown>
       </div>
                                             </td>
                                         </tr>

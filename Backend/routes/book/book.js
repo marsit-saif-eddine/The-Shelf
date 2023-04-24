@@ -27,13 +27,16 @@ const router = express.Router();
 const booksController = require("../../controllers/book-management/bookController");
 //const middlewareuploader = require('../../middleware/uploadimage');
 const upload= require ('../../middleware/multer-config');
+const uploadController = require('../../controllers/book-management/upload-controller');
 
 router.get("/books", booksController.getAllBooks);
 router.get("/filter_books", booksController.getAllBooksFilter);
 router.get("/accepted_books", booksController.getAcceptedBooks);
-// router.post("/addbook", upload.single('image'), booksController.addBook);
-router.post("/addbook", booksController.addBook);
+router.post("/addbook", upload.single('image'), booksController.addBook);
+//router.post('/addbook', requireAuth, uploadController.uploadBookCover, booksController.addBook)
+//router.post("/addbook", booksController.addBook);
 router.get("/:id", booksController.getById);
+//router.get("/:name", booksController.getByAuthor);
 router.put("/:id", booksController.updateBook);
 router.delete("/:id", booksController.deleteBook);
 router.put("/switch_accepted/:id", booksController.switchBookToaccepted);

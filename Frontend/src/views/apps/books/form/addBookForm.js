@@ -1,12 +1,5 @@
 // ** Reactstrap Imports
-import { Card, CardHeader, CardTitle, CardBody, Col, Input, Form, Button, Label, Row } from 'reactstrap'
-import {
-    Checkbox,
-    FormControlLabel,
-    FormLabel,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Card, CardHeader, CardTitle, CardBody, Col, Input, Form, Button, Label, Row, FormFeedback } from 'reactstrap'
 import { EditorState } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import FileUploaderSingle from '../../../forms/form-elements/file-uploader/FileUploaderSingle'
@@ -17,6 +10,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { useNavigate, useParams } from "react-router-dom";
 import '@styles/react/libs/editor/editor.scss'
 import toast from 'react-hot-toast'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const AddBookForm = () => {
     var user = JSON.parse(localStorage.getItem('userData'));
@@ -45,11 +40,21 @@ const AddBookForm = () => {
         price: "",
         author: "",
         image: "",
-        accepted: Boolean("false"),
+        accepted: false,
         owner: user.username,
         owner_Id: ownerId,
+        avilable: true,
         for_sale:null
     });
+    const [checked, setChecked] = useState(false);
+    const [shoPrice, setShoPrice] = useState(false);
+    const [titleForm, setTitleForm] = useState('');
+    const [mode, setMode] = useState();
+    
+    const [files, setFiles] = useState([]);
+    const [selsctedType, setSelsctedType] = useState(false);
+    const { register, getValues, setValue } = useForm();
+    const refImg = useRef('image');
     const fetchHandler = async () => {
     return await axios.get(`http://localhost:5000/book/${id}`).then((res) => res.data.book);
     };
@@ -59,7 +64,6 @@ const AddBookForm = () => {
             setTitleForm("Edit your book"); 
             setMode('edit')
             fetchHandler().then(async (data) => {
-                setBookFeilds(data)
                 reset(data);
             });
     } else {
@@ -68,6 +72,10 @@ const AddBookForm = () => {
 
     },[])
 
+    const SignupSchema = yup.object().shape({
+        name: yup.string().required(),
+        author: yup.string().required(),
+    })
    
    /*
    // const [selectedFile, setSelectedFile] = useState(null);
@@ -93,15 +101,7 @@ const AddBookForm = () => {
     }
 */
 
-    const [checked, setChecked] = useState(false);
-    const [shoPrice, setShoPrice] = useState(false);
-    const [titleForm, setTitleForm] = useState('');
-    const [mode, setMode] = useState();
-    
-    const [files, setFiles] = useState([]);
-    const [selsctedType, setSelsctedType] = useState(false);
-    const { register, getValues, setValue } = useForm();
-    const refImg = useRef('image');
+
    // const register =  useRef(null);
         const handleChange = (e) => {
             setInputs((prevState) => ({
@@ -109,24 +109,22 @@ const AddBookForm = () => {
                 [e.target.name]: e.target.value,
             }));
         };
-
-
- const sendRequest = async (data) => {
-        data.owner= user.username;
-         data.owner_Id= ownerId;
-         console.log('dataa list with modif', data)
-        await axios
-            .post("http://localhost:5000/book/addbook", data)
-            .then((res) => console.log('data',res.data));
-    };
+    const sendRequest = async (data) => {
+            data.owner= user.username;
+            data.owner_Id= ownerId;
+            console.log('dataa list with modif', data)
+            await axios
+                .post("http://localhost:5000/book/addbook", data)
+                .then((res) => console.log('data',res.data));
+        };
 
     const {
         reset,
         control,
         setError,
         handleSubmit,
-        formState: { errors }
-      } = useForm({mode: 'onBlur'})
+        formState: { errors },
+      } = useForm({ mode: 'onChange', resolver: yupResolver(SignupSchema) })
     
       const onSubmit = async data => {
         console.log('dataa list', data)
@@ -198,6 +196,7 @@ const AddBookForm = () => {
               name='name'
               render={({ field }) => <Input {...field} placeholder='Name' invalid={errors.name && true} />}
             />
+            {errors.name && <FormFeedback>Please enter a book name</FormFeedback>}
             </Col>
           </Row>
 
@@ -212,8 +211,9 @@ const AddBookForm = () => {
               id='author'
               name='author'
               type='text' 
-              render={({ field }) => <Input required {...field} placeholder='Author' invalid={errors.author && true} />}
+              render={({ field }) => <Input  {...field} placeholder='Author' invalid={errors.author && true} />}
             />
+            {errors.author && <FormFeedback>Please enter a book author</FormFeedback>}
             </Col>
           </Row>
 

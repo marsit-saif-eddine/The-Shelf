@@ -51,8 +51,8 @@ export const deletePost = createAsyncThunk('appPosts/deletePost', async (id, { d
   await dispatch(getAllData())
   return id
 })
-export const updateStatusPost = createAsyncThunk('appPosts/updatStatus', async (id, accepted, { dispatch, getState }) => {
-  await axios.put(`post/switch_accepted/`, { params:{id:id} },{body: {accepted}})
+export const updateStatusPost = createAsyncThunk('appPosts/updatStatus', async (id, is_accepted, { dispatch, getState }) => {
+  await axios.put(`post/switch_accepted/`, { params:{id:id} },{body: {is_accepted}})
   console.log('useeer', id)
   await dispatch(getData(getState().posts.params))
   await dispatch(getAllData())

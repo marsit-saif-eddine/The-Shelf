@@ -5,7 +5,7 @@ const path = require("path");
 // Set up the multer storage engine
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads/avatars/" ); // set the destination folder for the uploaded files
+    cb(null, "./uploads/bookimg/" ); // set the destination folder for the uploaded files
   },
   filename: (req, file, cb) => {
     cb(
@@ -28,7 +28,7 @@ const upload = multer({
 });
 
 
-    const uploadProfilePicture = (req, res, next) => {
+    const uploadBookCover = (req, res, next) => {
       upload.single("img")(req, res, (err) => {
         if (err) {
           return res.status(400).json({ error: err.message });
@@ -42,20 +42,5 @@ const upload = multer({
         next();
       });
     };
-
-    const uploadClubLogo = (req, res, next) => {
-      upload.single("logo")(req, res, (err) => {
-        if (err) {
-          return res.status(400).json({ error: err.message });
-        }
-        req.body = JSON.parse(req.body.club);
-        if (req.file) {
-          req.body.logo = req.file.path; // set the service_logo field of the request body to the uploaded file path
-        } else {
-          req.body.logo = 'uploads/avatars/club_logo.png';
-        }
-        next();
-      });
-    };
   // Export the middleware function
-  module.exports = {uploadProfilePicture, uploadClubLogo}
+  module.exports = {uploadBookCover}

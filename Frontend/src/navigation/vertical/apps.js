@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Mail, MessageSquare, CheckSquare, Calendar, FileText, Circle, ShoppingCart, User, Shield, Award, Book, Coffee } from 'react-feather'
+import { FileText, Circle, Award, Book, Coffee } from 'react-feather'
 
 export default [
   {
@@ -45,7 +45,7 @@ export default [
   {
     id: 'PostsAdmin',
     title: 'Posts',
-    icon: <Circle size={12} />,
+    icon: <FileText size={12} />,
     navLink: 'posts/list',
     action: 'admin',
     resource: 'admin',

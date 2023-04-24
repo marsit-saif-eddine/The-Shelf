@@ -11,6 +11,8 @@ import { useForm, Controller } from 'react-hook-form'
 import { useNavigate, useParams } from "react-router-dom";
 import '@styles/react/libs/editor/editor.scss'
 import { formatDate } from '@utils';
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 const AddPostForm = () => {
     var user = JSON.parse(localStorage.getItem('userData'));
@@ -32,12 +34,14 @@ const AddPostForm = () => {
     const [defaultValues, setDefaultValues] = useState({
       content: "",
       image: "",
-      is_accepted: Boolean("false"),
+      is_accepted: false,
       owner: user.username,
       owner_Id: ownerId,
       //date: formatDate(Date.now())
     });
-    
+    const SignupSchema = yup.object().shape({
+      content: yup.string().required(),
+  })
     const fetchHandler = async () => {
       console.log('iddd', id )
     return await axios.get(`http://localhost:5000/post/${id}`).then((res) =>res.data);
@@ -92,15 +96,12 @@ const AddPostForm = () => {
         setError,
         handleSubmit,
         formState: { errors }
-      } = useForm({mode: 'onBlur'})
+      } = useForm({ mode: 'onChange', resolver: yupResolver(SignupSchema) })
     
       const onSubmit = async data => {
-        setError('content', {
-          type: 'manual'
-        })
           const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
           await sleep(1000)
-          if (Object.values(data)) {
+          if (Object.values(data).every(field => field.length > 0)) {
             console.log('dataa list', data)
             data.owner= user.username;
             data.owner_Id= ownerId;
@@ -143,12 +144,12 @@ const AddPostForm = () => {
                         name='content'
                         id='content'
                         placeholder='Content'
-                        render={({ field }) => <Input {...field} type='textarea' style={{ minHeight: '100px' }}/>}
+                        render={({ field }) => <Input {...field} type='textarea' style={{ minHeight: '100px' }} invalid={errors.content && true}/>}
                         />
                         {errors.content && <FormFeedback>Please enter a content post</FormFeedback>}
                         </Col>
                     </Row>
-                <Row className='mb-1'>
+                    <Row className='mb-1'>
                         <Label sm='3' for='Price'>
                         Image
                         </Label>

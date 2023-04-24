@@ -231,4 +231,3 @@ const handleDelete = async (_id) => {
 }
 
 export default PostCards
-

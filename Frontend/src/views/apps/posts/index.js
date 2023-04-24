@@ -8,7 +8,7 @@ import Products from './Posts'
 
 // ** Custom Components
 import Breadcrumbs from '@components/breadcrumbs'
-const URL = "http://localhost:5000/post/posts";
+const URL = "http://localhost:5000/post/accepted_posts";
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
