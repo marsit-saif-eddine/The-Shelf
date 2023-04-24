@@ -98,6 +98,8 @@ const UiElementRoutes = [
   {
     element: <Carousel />,
     path: '/components/carousel'
+   
+    
   },
   {
     element: <Collapse />,

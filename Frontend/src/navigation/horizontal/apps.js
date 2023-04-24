@@ -19,14 +19,14 @@ import {
 
 export default [
   
-  {
-        id: 'chat',
-        title: 'Chat',
-        icon: <MessageSquare />,
-        navLink: '/apps/chat',
-        action: 'client',
-        resource: 'client',
-     },
+  // {
+  //       id: 'chat',
+  //       title: 'Chat',
+  //       icon: <MessageSquare />,
+  //       navLink: '/apps/chat',
+  //       action: 'client',
+  //       resource: 'client',
+  //    },
 
      {
       id: 'event',

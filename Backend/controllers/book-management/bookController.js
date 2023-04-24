@@ -531,7 +531,23 @@ const deleteBook = async (req, res, next) => {
   return res.status(200).json({ message: "Product Successfully Deleted" });
 };
 
+const getSomeBooks = async (req, res, next) => {
+  let books;
+  try {
+    books = await Book.find().limit(6);
+    
+    if (!books) {
+    return res.status(404).json({ message: "No Books found" });
+  }
+  } catch (err) {
+    console.log(err);
+  }
 
+  
+  return res.status(200).json(books);
+};
+
+exports.getSomeBooks = getSomeBooks;
 exports.getAllBooks = getAllBooks;
 exports.getAcceptedBooks = getAcceptedBooks;
 exports.getAllBooksFilter= getAllBooksFilter;

@@ -90,9 +90,9 @@ exports.login = async (req, res) => {
     try {
         const user = await User.findOne({ email }, 'lastname firstname photo role password ability');
         if (user) {
-            if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm you account !" });}
+            if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm your account !" });}
             if (user.status === 'banned') {
-                return res.status(400).json({ "message": "User is banned!!" });
+                return res.status(409).json({ "message": "Your account is banned. Please contact the admin!" });
             } else {
                 const auth = await bcrypt.compare(password, user.password);
 
@@ -109,11 +109,11 @@ exports.login = async (req, res) => {
                         refreshToken: refreshToken
                     });
                 } else {
-                    return res.status(400).json({ "message": "Incorrect password" })
+                    return res.status(400).json({ "message": "Invalid Credentials" })
                 }
             }
         } else {
-            return res.status(404).json({ "message": "No user found" })
+            return res.status(404).json({ "message": "No user found with this account! " })
         }
 
     } catch (err) {

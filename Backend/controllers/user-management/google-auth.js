@@ -26,6 +26,9 @@ passport.use(new GoogleStrategy({
       
       let user = await userModel.findOne({ googleId: profile.id });
       if (user) {
+        if (user.status === 'banned') {
+          return cb("Your account is banned. Please contact the admin!" )
+      }
         // Update the user with the new access token and profile information
         const updatedUser = {
           firstname: profile.name.givenName,
@@ -48,7 +51,7 @@ passport.use(new GoogleStrategy({
               subject: 'client'
             }
           ],
-          status:'active',
+          
           isConfirmed:true,
           username:`${profile.name.givenName} ${profile.name.familyName}`
         };

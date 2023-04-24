@@ -4,7 +4,7 @@
 const themeConfig = {
   app: {
     appName: 'THE SHELF',
-    appLogoImage: require('@src/assets/images/logo/logo.svg').default
+    appLogoImage: require('@src/assets/images/logo/logoo.png').default
   },
   layout: {
     isRTL: false,

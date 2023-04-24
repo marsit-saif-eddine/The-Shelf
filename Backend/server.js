@@ -48,8 +48,10 @@ let currentSocket;
 
 io.use((socket, next) => {
   let token = socket.handshake.auth.token;
-  token = token.replace(`"`, "");
-  token = token.replace(`"`, "");
+  if (token) {
+    token = token.replace(`"`, "");
+    token = token.replace(`"`, "");
+  }
   jwt.verify(
     token,
     process.env.JWT_SECRET,

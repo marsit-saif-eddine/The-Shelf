@@ -117,17 +117,17 @@ const AppRoutes = [
     path: "/apps/email/:filter",
   },
 
-  {
-    path: "/apps/chat",
-    element: <Chat />,
-    meta: {
-      appLayout: true,
-      className: "chat-application",
-      layout: "horizontal",
-      action: "client",
-      resource: "client",
-    },
-  },
+  // {
+  //   path: "/apps/chat",
+  //   element: <Chat />,
+  //   meta: {
+  //     appLayout: true,
+  //     className: "chat-application",
+  //     layout: "horizontal",
+  //     action: "client",
+  //     resource: "client",
+  //   },
+  // },
 
 
   {
