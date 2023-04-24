@@ -390,7 +390,7 @@ console.log(userData)
                   </a> */}
                 </div>
               </Col>
-              {userData && event.owner == userData.id && (
+              {userData && event.owner == userData._id && (
 
                 <Col className='d-flex justify-content-between justify-content-sm-end align-items-center mb-2' sm='6'>
                   {/* <a href='/' className='text-nowrap'>

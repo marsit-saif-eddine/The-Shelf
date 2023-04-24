@@ -1,5 +1,5 @@
 // ** Icons Import
-import { FileText, Circle, Award, Book, Coffee } from 'react-feather'
+import { FileText, Circle, Award, Book, Coffee, Layers } from 'react-feather'
 
 export default [
   {
@@ -27,7 +27,7 @@ export default [
   {
     id: 'events',
     title: 'Events',
-    icon: <Circle size={12} />,
+    icon: <Layers size={12} />,
     navLink: '/events/list',
     action: 'admin',
     resource: 'admin',

@@ -175,7 +175,7 @@ function EventsCards() {
   // }, [user, isparticipated]);
     
   const patchParticipate = async (eventId) => {
-    let userId = userData.id;
+    let userId = userData._id;
     try {
       const response = await axios.post(`/events/participate/${eventId}/${userId}`);
   
@@ -426,7 +426,7 @@ return (
           <button
             className="participate-btn"
             variant="contained"
-            color="primary"
+            color="#f5821f"
             onClick={() => patchParticipate(event._id)}
             
           >{counttt} 

@@ -77,13 +77,19 @@ const { pathname } = location;
           <Collapse isOpen={isOpen} navbar>
             <div className='profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0'>
               <Nav className='mb-0' pills>
-                <NavItem>
-                  <NavLink href='/pages/profile/profile_posts' className='fw-bold' active>
-
+              <NavItem>
+                  <NavLink href={`/pages/profile/${selectedUser._id}`} className='fw-bold' active>
                     <span className='d-none d-md-block'>Events</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
+                {/* <NavItem>
+                  <NavLink href='/pages/profile' className='fw-bold' active>
+
+                    <span className='d-none d-md-block'>Events</span>
+                    <Rss className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem> */}
                 {/* <NavItem>
                   <NavLink className='fw-bold'>
                     <span className='d-none d-md-block'>About</span>

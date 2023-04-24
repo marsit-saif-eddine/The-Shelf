@@ -37,9 +37,9 @@ const userid = useParams().id
   return (
 
     <Card>
-         <Link to="/apps/events" className='btn btn-link'>
+         {/* <Link to="/apps/profile" className='btn btn-link'>
   Show More
-</Link>
+</Link> */}
     <CardBody className='profile-suggestion'>
       <h5 className='mb-0'>My Latest Events</h5>
       <br />
