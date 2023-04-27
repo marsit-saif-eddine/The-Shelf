@@ -76,7 +76,7 @@ const ProfileAbout = ({ selectedUser }) => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      username: selectedUser.firstname,
+      username: selectedUser.username,
       lastName: selectedUser.lastname,
       firstName: selectedUser.firstname,
       rate:selectedUser.rate
@@ -116,20 +116,23 @@ const ProfileAbout = ({ selectedUser }) => {
       )
     }
   }
+const onSubmit = data => {
+  console.log(data);
 
-  const onSubmit = data => {
-    if (Object.values(data).every(field => field.length > 0)) {
-      setShow(false)
-    } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
-            type: 'manual'
-          })
-        }
+  if (Object.values(data).every(field => field && field.length > 0)) {
+    console.log(data);
+    setShow(false);
+  } else {
+    for (const key in data) {
+      if (!data[key] || data[key].length === 0) {
+        setError(key, {
+          type: "manual",
+        });
       }
     }
   }
+};
+
 
   const handleReset = () => {
     reset({
@@ -209,7 +212,7 @@ const ProfileAbout = ({ selectedUser }) => {
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Status:</span>
                   <Badge className='text-capitalize' color={statusColors[selectedUser.status]}>
-                    {selectedUser.is_banned}
+                    {selectedUser.status}
                   </Badge>
                 </li>
                 <li className='mb-75'>
@@ -222,7 +225,7 @@ const ProfileAbout = ({ selectedUser }) => {
                 </li> */}
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Contact:</span>
-                  <span>{selectedUser.firstname}</span>
+                  <span>{selectedUser.phone_number}</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>rate:</span>
@@ -271,70 +274,53 @@ const ProfileAbout = ({ selectedUser }) => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className='gy-1 pt-75'>
               <Col md={6} xs={12}>
-                <Label className='form-label' for='firstName'>
+                <Label className='form-label' for='firstname'>
                   First Name
                 </Label>
                 <Controller
                   defaultValue=''
                   control={control}
-                  id='firstName'
-                  name='firstName'
+                  id='firstname'
+                  name='firstname'
                   render={({ field }) => (
-                    <Input {...field} id='firstName' placeholder='John' invalid={errors.firstName && true} />
+                    <Input {...field} id='firstname' placeholder={selectedUser.firstname} invalid={errors.firstName && true} />
                   )}
                 />
               </Col>
               <Col md={6} xs={12}>
-                <Label className='form-label' for='lastName'>
+                <Label className='form-label' for='lastname'>
                   Last Name
                 </Label>
                 <Controller
                   defaultValue=''
                   control={control}
-                  id='lastName'
-                  name='lastName'
+                  id='lastname'
+                  name='lastname'
                   render={({ field }) => (
-                    <Input {...field} id='lastName' placeholder='Doe' invalid={errors.lastName && true} />
+                    <Input {...field} id='lastName' placeholder={selectedUser.lastname} invalid={errors.lastName && true} />
                   )}
                 />
               </Col>
-              <Col xs={12}>
-                <Label className='form-label' for='username'>
-                  Username
-                </Label>
-                <Controller
-                  defaultValue=''
-                  control={control}
-                  id='username'
-                  name='username'
-                  render={({ field }) => (
-                    <Input {...field} id='username' placeholder='john.doe.007' invalid={errors.username && true} />
-                  )}
-                />
-              </Col>
+              
               <Col md={6} xs={12}>
-                <Label className='form-label' for='billing-email'>
-                  Billing Email
+                <Label className='form-label' for='email'>
+                  Email
                 </Label>
                 <Input
                   type='email'
-                  id='billing-email'
+                  id='email'
                   defaultValue={selectedUser.email}
                   placeholder='example@domain.com'
                 />
               </Col>
               <Col md={6} xs={12}>
-                <Label className='form-label' for='status'>
-                  Status:
+                <Label className='form-label' for='address'>
+                  Address
                 </Label>
-                <Select
-                  id='status'
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='select'
-                  options={statusOptions}
-                  theme={selectThemeColors}
-                  defaultValue={statusOptions[statusOptions.findIndex(i => i.value === selectedUser.status)]}
+                <Input
+                  id='address'
+                  defaultValue={selectedUser.address}
+                  placeholder='Ariana soghra'
                 />
               </Col>
               {/* <Col md={6} xs={12}>
@@ -348,39 +334,13 @@ const ProfileAbout = ({ selectedUser }) => {
                 />
               </Col> */}
               <Col md={6} xs={12}>
-                <Label className='form-label' for='contact'>
-                  Contact
+                <Label className='form-label' for='phone_number'>
+                Phone Number
                 </Label>
-                <Input id='contact' defaultValue={selectedUser.contact} placeholder='+1 609 933 4422' />
+                <Input id='phone_number' defaultValue={selectedUser.phone_number} placeholder='+1 609 933 4422' />
               </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='language'>
-                  language
-                </Label>
-                <Select
-                  id='language'
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='select'
-                  options={languageOptions}
-                  theme={selectThemeColors}
-                  defaultValue={languageOptions[0]}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='country'>
-                  Country
-                </Label>
-                <Select
-                  id='country'
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='select'
-                  options={countryOptions}
-                  theme={selectThemeColors}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
+              
+             
               <Col xs={12}>
                 <div className='d-flex align-items-center mt-1'>
                   <div className='form-switch'>
@@ -394,9 +354,9 @@ const ProfileAbout = ({ selectedUser }) => {
                       </span>
                     </Label>
                   </div>
-                  <Label className='form-check-label fw-bolder' for='billing-switch'>
+                  {/* <Label className='form-check-label fw-bolder' for='billing-switch'>
                     Use as a billing address?
-                  </Label>
+                  </Label> */}
                 </div>
               </Col>
               <Col xs={12} className='text-center mt-2 pt-50'>
