@@ -39,7 +39,7 @@ exports.addQuiz = async (req, res, next) => {
       const {userconnected}=req.query
       const {book}=req.query
       const{status}=req.query
-      const{report}=req.query
+      const{score}=req.query
       const filter={}
       
       if(userconnected){
@@ -51,8 +51,9 @@ exports.addQuiz = async (req, res, next) => {
       if (status) {
         filter.quiz_status = status;
       }
-      if(report){
-        filter.reported= report;
+    
+      if (score){
+        filter.publicScore = score ;
       }
       const quizzes = await Quiz.find(filter);
       res.json(quizzes);
@@ -157,7 +158,7 @@ exports.saveAnswers=async(req,res,next)=>{
     //app.post('/quiz/:id/submit',
     exports.submit=async (req, res) => {
       const { id } = req.params;
-      const { answers } = req.body;
+      const { answers , taker_id } = req.body;
     
       try {
         // Fetch the quiz from the database using the ID
@@ -184,7 +185,7 @@ exports.saveAnswers=async(req,res,next)=>{
         }
     
         // Update the quiz in the database to record the user's score
-        quiz.submissions.push({ answers, score });
+        quiz.submissions.push({ answers, score, taker_id });
         await quiz.save();
     console.log("sub saved")
         // Send the user's score back to the frontend as a response
@@ -195,4 +196,18 @@ exports.saveAnswers=async(req,res,next)=>{
       }
     };
 
-  
+    exports.publishScore=async(req,res,next)=>{
+      const quizId = req.params.id;
+      try {
+          const quiz = await Quiz.findById(quizId);
+          if (quiz) {
+            quiz.publicScore = "public";
+            quiz.save();
+              res.status(200).json({ "message": "score published" });
+          } else {
+              res.status(404).json({ "message": "quiz not found" });
+          }
+      } catch (err) {
+          res.status(400).json({ "message": err.message })
+      }
+    };

@@ -107,13 +107,41 @@ const submitQuiz = (answers) => {
     .then((response) => {
       // Show the user's score to the user
       const userScore = response.data.score;
+      // Swal.fire({
+      //   title: 'Quiz Submitted!',
+      //   text: `Your score is ${userScore} out of ${totalPoints} points.`,
+  
+      //   icon: "success",
+      //   confirmButtonText: "Ok",
+      // });
       Swal.fire({
         title: 'Quiz Submitted!',
         text: `Your score is ${userScore} out of ${totalPoints} points.`,
-  
         icon: "success",
-        confirmButtonText: "Ok",
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        cancelButtonText: "Publish",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // User clicked "OK"
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          // User clicked "Publish"
+         
+          axios.put(`http://localhost:5000/quiz/publishscore/${quiz._id}`, { quizName: quiz.quizName, score: userScore })
+            .then((response) => {
+              // Show a success message
+              Swal.fire({
+                title: 'Score Published!',
+                text: 'Your score has been published.',
+                icon: 'success',
+              });
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
       });
+      
     })
     .catch((error) => {
       console.error(error);

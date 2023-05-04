@@ -400,7 +400,7 @@ const AppRoutes = [
 
   // },
   {
-    path: "/apps/myquiz",
+    path: "/apps/myquiz/:id",
     element: <Quiz />,
     meta: {
       appLayout: false,

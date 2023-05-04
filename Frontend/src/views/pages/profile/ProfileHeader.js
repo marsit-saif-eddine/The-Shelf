@@ -15,7 +15,7 @@ import Avatar from '@components/avatar'
 const ProfileHeader = ({ data,selectedUser }) => {
   // ** States
   const [isOpen, setIsOpen] = useState(false)
-
+console.log("sss   "+ selectedUser)
   const toggle = () => setIsOpen(!isOpen)
  // ** render user img
  const renderUserImg = () => {
@@ -112,16 +112,17 @@ const { pathname } = location;
                 </NavItem>
                
                 </NavItem> */}
+              
+
                 <NavItem>
-                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
-                    <span className='d-none d-md-block'>Quizzes</span>
+                  <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' >
+                    <span className='d-none d-md-block'>Books</span>
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
-
                 <NavItem>
-                  <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' active>
-                    <span className='d-none d-md-block'>Books</span>
+                  <NavLink href={`/pages/profile/myquizzes/${selectedUser._id}`} className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>

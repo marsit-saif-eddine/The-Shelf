@@ -28,27 +28,16 @@ import {  useSelector } from "react-redux";
 
 import { useParams } from 'react-router-dom'
 import QuizNav from "./myQuizNav"
-import { io } from "socket.io-client"
+import QuizScore from "./scoreDisplay"
+
 //////////////  this is the quizzes of each profile ////////////////
 
 
-function QuizDisplay () {
+function QuizAchievments () {
 
 
 const [Quizs, setQuizs] = useState([])
 const[change,setChange]=useState(false)
-
-// useEffect(() => {
-//   const socket = io("http://localhost:5000");
-//   socket.on("me", (msg) => {
-//     console.log("sockeet"+msg);
-//   });
-  
-//   // Clean up the event listener when the component unmounts
-//   return () => {
-//     socket.off("me");
-//   };
-// }, []);
 
 
 const [userData, setUserData] = useState(null)
@@ -57,17 +46,15 @@ useEffect(() => {
   setUserData(JSON.parse(localStorage.getItem('userData')));
 
 }, []);
-
-const store = useSelector(state => state.users)
-console.log("sss  "+ store.selectedUser)
 const userid = useParams().id
 var user = JSON.parse(localStorage.getItem('userData'));
 var userId = user._id;
-const approved="approved";
+//const approved="approved";
+//const publicc="public";
 
 useEffect(() => {
   if (userid !== null) {
-    fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userid}&status=${approved}`)
+    fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userid}&status=approved&score=public`)
       .then(response => response.json())
       .then(data => setQuizs(data))
       .catch(error => console.log(error));
@@ -76,7 +63,6 @@ useEffect(() => {
 }, [userid]);
 
 const [show, setShow] = useState(false)
-
 
 
 return (
@@ -90,22 +76,22 @@ return (
     }}
   >
     <CardBody className='text-center'>
-      <h2 className='text-primary'>Welcome to  { store.selectedUser }  quizzes </h2>
+      <h2 className='text-primary'>Welcome to  { Quizs.creator} achivments </h2>
       <CardText className='mb-2'>
-         <span className='fw-bolder'>here you will find all the quizzes that you created and the admins approved</span>
+         <span className='fw-bolder'>here you will find all the quizzes that you took choose to publish </span>
       </CardText>
       </CardBody>
       </Card>
       
   <div className="containers">
-    <Row>
+  <Row>
     {Quizs.map(quiz => (
         <Col md={4} >
  
-   <Quiz key={quiz._id} quiz={quiz} />
+   <QuizScore key={quiz._id} quiz={quiz} />
 </Col> 
     ))}
-          </Row>       
+          </Row>  
 
           </div>
  </div>
@@ -113,4 +99,5 @@ return (
   );
 }
 
-export default QuizDisplay 
+export default  QuizAchievments ;
+ 

@@ -6,8 +6,11 @@ import { Award } from 'react-feather'
 import classnames from 'classnames'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom';
+import {  NavItem, NavLink } from 'reactstrap'
+import { useSelector, useDispatch } from 'react-redux'
 
-const ProfileLatestPhotos = ({ data }) => {
+
+const ProfileLatestPhotos = ({ data, selectedUser }) => {
   const handleUpdate = (event) => {
     setSelectedEvent(event);
     setShowForm(true)
@@ -17,9 +20,10 @@ const ProfileLatestPhotos = ({ data }) => {
   useEffect(() => {
  
     setUserData(JSON.parse(localStorage.getItem('userData')));
-  
+
 }, []);
 const userid = useParams().id
+console.log("latest id"+ userid)
 const approved="approved";
 const [maxQuizzes, setMaxQuizzes] = useState(3);
 const filteredQuizzes = quizzes.slice(0, maxQuizzes);
@@ -34,7 +38,10 @@ useEffect(() => {
     console.log(quizzes)
   }, [userid]);
 
+  
+  const store = useSelector(state => state.users)
 
+console.log("ggg"+ store.selectedUser._id)
 
   return (
     <Card>
@@ -67,9 +74,12 @@ useEffect(() => {
     // </Card>
     ))}
     <br></br>
-    <Link to="/apps/myquiz">
-    <Button className='btn-icon' color='primary' size='m'>  view all </Button>
-</Link>
+
+    <NavLink href={`/pages/profile/myquizzes/${store.selectedUser._id}`} className='fw-bold' >
+    <span className='d-none d-md-block'>view all</span>
+      </NavLink>
+
+
    
       </CardBody>
     </Card>

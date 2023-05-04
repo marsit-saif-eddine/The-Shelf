@@ -24,9 +24,20 @@ const quizSchema = new Schema(
           },
           default:"pending"
     },
+
+
     reported:{
         type: Number,
         default:0,
+
+    },
+
+    publicScore :{  type:String,
+    enum: {
+    values: ['public','notPublished'],
+    message: '{VALUE} is not supported'
+  },
+  default:"notPublished"
 
     },
     
@@ -65,6 +76,10 @@ submissions: [
     {
       answers: [],
       score: Number,
+      taker_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
     },
   ],
 

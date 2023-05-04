@@ -86,8 +86,8 @@ const Profile = () => {
               </Col>
               <Col lg={{ size: 3, order: 3 }} sm={{ size: 12 }} xs={{ order: 3 }}>
                 <ProfileLatestQuizzes data={data.latestPhotos} />
-                {/* <ProfileFriendsSuggestions data={data.suggestions} />
-                <ProfilePoll data={data.polls} /> */}
+                <ProfileFriendsSuggestions data={data.suggestions} />
+                {/* <ProfilePoll data={data.polls} /> */}
               </Col>
               
             </Row>
