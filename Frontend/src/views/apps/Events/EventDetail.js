@@ -179,7 +179,7 @@ const EventDetail = () => {
                     className="event-card-img"
                     src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`}
                     alt={event.name}
-                    style={{ borderRadius: "10px",width:"100%",height:"100%"}}
+                    style={{ borderRadius: "10px",width:"100%",height:"250px"}}
                   />
 
                   <CardBody>

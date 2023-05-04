@@ -172,9 +172,9 @@ const affRes = (authorBooks) => {
  
    <div className='books_page'>
 <>
-    <Button color='primary' outline onClick={() => setCenteredModal(!centeredModal)}>
+    {/* <Button color='primary' outline onClick={() => setCenteredModal(!centeredModal)}>
         voice Search
-    </Button>
+    </Button> */}
     <Modal isOpen={centeredModal} toggle={() => setCenteredModal(!centeredModal)} className='modal-dialog-centered'>
               <ModalHeader toggle={() => setCenteredModal(!centeredModal)}>Search books by name</ModalHeader>
               <ModalBody className="modalSearchVoice">
@@ -196,8 +196,15 @@ const affRes = (authorBooks) => {
   
 </>
 
+<div className="voice-button modalSearchVoice"> <button id="speech" 
+                   className='btn m-left type2 '
+                   onClick={listen}
+                  >
+                  <div className={`pulse-ring ${isListening && "isListening"}`}></div>
+                  <Mic size={25}/>
+                  </button></div>
 
-      <div className="buy-now"><Link to={`/addbook`}  class="btn btn-danger">Add Book</Link></div>
+      <div className="buy-now"><Link to={`/addbook`} style={{backgroundColor:'#ff9f43',color:'white'}} class="btn ">Add Book</Link></div>
     </div>
   
   )

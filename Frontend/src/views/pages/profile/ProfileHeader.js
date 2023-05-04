@@ -128,7 +128,7 @@ const { pathname } = location;
                 </NavItem>
               </Nav>
               <Button className='btn btn-outline-primary'>
-              <Link to='/eventsform'> Add a new event</Link>
+              <Link to='/eventsform' style={{color:'white'}}> Add a new event</Link>
               <Plus size={14} > Add a new event</Plus>
             </Button>
             </div>

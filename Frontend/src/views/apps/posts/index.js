@@ -53,7 +53,7 @@ const Shop = () => {
         deleteCartItem={deleteCartItem}
         deleteWishlistItem={deleteWishlistItem}
       />
-       <div class="buy-now"><Link to={`/addpost`}  class="btn btn-danger">Add New post</Link></div>
+       <div class="buy-now"><Link to={`/addpost`}  class="btn " style={{backgroundColor:'#ff9f43',color:'white'}}>Add New post</Link></div>
     
     </div>
     
