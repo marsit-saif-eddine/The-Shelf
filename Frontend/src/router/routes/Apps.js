@@ -284,9 +284,6 @@ const AppRoutes = [
   },
 
 
-
-
-
   {
     element: < VideoConferance/>,
     path: '/apps/videoconf',

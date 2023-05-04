@@ -25,6 +25,7 @@ const AddBookForm = () => {
         name: "",
         description: "",
         price: "",
+        genre: "",
         author: "",
         image: "",
         accepted: Boolean("false"),
@@ -38,6 +39,7 @@ const AddBookForm = () => {
         name: "",
         description: "",
         price: "",
+        genre: "",
         author: "",
         image: "",
         accepted: false,
@@ -173,6 +175,7 @@ const AddBookForm = () => {
           author: '',
           for_sale:'',
           description:'',
+          genre: "",
           avilable: false
         })
       }
@@ -262,6 +265,39 @@ const AddBookForm = () => {
             </Col>
           </Row>
                     
+          <Row className='mb-1'>
+            <Label sm='3' for='for_sale'>
+            Genre
+            </Label>
+            <Col sm='9'>
+            <Controller
+                        defaultValue={defaultValues.genre}
+                        control={control}
+                        id="genre"
+                        name="genre"
+                        render={({ field }) => 
+                        <Input {...field} 
+                        id="genre"
+                        name="genre"
+                        type='select'
+                         >
+                            <option value="">Select</option>
+                            <option value='Action'>Action</option>
+                            <option value='Romance'>Romance</option>
+                            <option value='Fantasy'>Fantasy</option>
+                            <option value='Drama'>Drama</option>
+                            <option value='Crime'>Crime</option>
+                            <option value='Adventure'>Adventure</option>
+                            <option value='Thriller'>Thriller</option>
+                            <option value='Sci-fi'>Sci-fi</option>
+                            <option value='Music'>Music</option>
+                            <option value='Family'>Family</option>
+                        
+                        </Input>
+                            }
+                        />
+            </Col>
+          </Row>
                 
                 <Row className='mb-1'>
                         <Label sm='3' for='Price'>
