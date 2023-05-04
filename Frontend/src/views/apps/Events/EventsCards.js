@@ -436,7 +436,7 @@ return (
           </button>
 
 
-          <div className='d-flex align-items-center'>
+          <div className='d-flex justify-items-center mr-auto '>
           <AvatarGroup max={4}>
   {event.participants.map(participantt => (
      <Avatar key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />

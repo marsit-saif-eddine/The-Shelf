@@ -7,7 +7,8 @@ import { format } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { Card, CardTitle, CardBody, CardText, Badge, Button } from 'reactstrap'
 import { Cookies } from 'react-cookie';
-
+import { Link } from 'react-router-dom';
+import { BsFillCameraVideoFill} from 'react-icons/bs';
 import { Fragment} from 'react'
 
 // ** Third Party Components
@@ -182,7 +183,12 @@ const EventDetail = () => {
                   />
 
                   <CardBody>
-                    <CardTitle tag='h4'>={event.name}</CardTitle>
+                    <CardTitle tag='h4'>={event.name} <Link to="/apps/homepage" className="button">
+      <BsFillCameraVideoFill
+ />
+      VideoCall
+    </Link></CardTitle>
+                    
                     {calculateStarRating(reviews)} 
                     <div className='d-flex'>
                       {/* <Avatar className='me-50' img={data.blog.avatar} imgHeight='24' imgWidth='24' /> */}
@@ -201,7 +207,10 @@ const EventDetail = () => {
                         <small className='text-muted'>{event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}</small>
 
                       </div>
+                     
+                      
                     </div>
+
                     <div className='my-1 py-25'></div>
                    
                     <div className='d-flex'>

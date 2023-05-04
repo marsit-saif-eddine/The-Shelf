@@ -87,7 +87,7 @@
   background-color: #f5821f;
   color: #fff;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 10px 20px;
   position: absolute;
   margin-top: 10px;
@@ -95,6 +95,7 @@
   bottom: 20px; /* adjust as needed */
   
 }
+
 
 .participate-btn:hover {
   background-color: #707a84;
