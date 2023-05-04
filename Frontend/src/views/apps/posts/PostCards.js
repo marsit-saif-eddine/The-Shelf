@@ -36,6 +36,16 @@ const PostCards = props => {
   } = props
 
   const [errorMessage, setErrorMessage] = useState(null);
+  const [userData, setUserData] = useState(null)
+
+
+  //** ComponentDidMount
+  useEffect(() => {
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')));
+    }
+
+  }, []);
 
   // ** Handle Move/Add to cart
   const handleCartBtn = (id, val) => {
@@ -57,10 +67,14 @@ const PostCards = props => {
   }
 
   //isOwner*********************
-  const isTheOwner=() => {
-    if(id === userData._id) {
-        return true
-    }
+  const isTheOwner= async(id) => {
+    let isOwner;
+    console.log('id param',id);
+    console.log('id param user',userData._id );
+
+    (id === userData._id) ?  isOwner = true : isOwner = false;
+    console.log('id isOwner',isOwner);
+      return isOwner;
   }
 // handele delete post
 const handleDelete = async (_id) => {
@@ -100,7 +114,6 @@ const handleDelete = async (_id) => {
   // ** Renders products
   const renderProducts = () => {
     if (products.length) {
-      console.log('posteq', products)
       return products.map(item => {
         return (
           <>
@@ -118,7 +131,7 @@ const handleDelete = async (_id) => {
                   </h6>
                 </div>
               </div>
-              {isTheOwner &&  (
+              {userData && isTheOwner(item.owner_Id) === false &&   (
               <UncontrolledDropdown>
                   <DropdownToggle tag='div' className='btn btn-sm'>
                     <MoreVertical size={14} className='cursor-pointer' />
