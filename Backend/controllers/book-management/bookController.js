@@ -263,6 +263,8 @@
 // exports.getByUserId = getByUserId;
 
 
+const bookMap = require("../../models/book_id_map.js");
+const goodread = require("../../models/goodread.js");
 const Book = require("../../models/book.js")
 
 
@@ -567,10 +569,12 @@ const getByAuthor = async (req, res, next) => {
 //getByAuthor
 
 const addBook = async (req, res, next) => {
-  const { name, author, description, price, available, for_sale, owner, owner_Id, accepted, genre } = req.body;
+  const { name, author, description, price, available, for_sale, owner, owner_Id, accepted, genre , bookId } = req.body;
   let book;
+  let BookMap;
   try {
     //console.log(req.protocol + "://" + req.get("host") + "/upload/bookimg/" + req.file);
+   
     book = new Book({
       name,
       author,
@@ -584,6 +588,11 @@ const addBook = async (req, res, next) => {
       accepted,
       genre
     });
+    BookMap = new bookMap({
+      book_id:bookId,
+      book_id_csv:book._id
+    })
+    await BookMap.save();
     await book.save();
   } catch (err) {
     console.log(err);
@@ -666,12 +675,29 @@ const getSomeBooks = async (req, res, next) => {
   return res.status(200).json(books);
 };
 
+const searchForBook = async (req, res, next) => {
+  try {
+    const query = req.query.q;
+    const filter = {};
+    if (query) {
+      filter.$or = [
+          { title: { $regex: query, $options: 'i' } },
+          { mod_title: { $regex: query, $options: 'i' } },
+        ];
+      
+    }
+    const books = await goodread.find(filter).limit(6);
+    const arrayOfBooks = [{groupTitle: 'Is that your Book ?',
+    searchLimit:6 ,
+    data: books}]
+    return res.status(200).json(arrayOfBooks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
 
-
-// 
-// 
-
-
+exports.searchForBook = searchForBook;
 exports.getSomeBooks = getSomeBooks;
 exports.getAllBooks = getAllBooks;
 exports.getAcceptedBooks = getAcceptedBooks;

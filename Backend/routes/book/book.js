@@ -28,9 +28,7 @@ const booksController = require("../../controllers/book-management/bookControlle
 //const middlewareuploader = require('../../middleware/uploadimage');
 const upload= require ('../../middleware/multer-config');
 const uploadController = require('../../controllers/book-management/upload-controller');
-
-
-
+router.get("/searchForBook", booksController.searchForBook);
 router.get("/books", booksController.getAllBooks);
 router.get("/filter_books", booksController.getAllBooksFilter);
 router.get("/accepted_books", booksController.getAcceptedBooks);

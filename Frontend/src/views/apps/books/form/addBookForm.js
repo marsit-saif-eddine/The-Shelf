@@ -12,6 +12,7 @@ import '@styles/react/libs/editor/editor.scss'
 import toast from 'react-hot-toast'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import Autocomplete from '@components/autocomplete/book.js'
 
 const AddBookForm = () => {
     var user = JSON.parse(localStorage.getItem('userData'));
@@ -72,13 +73,64 @@ const AddBookForm = () => {
         setTitleForm("Add new book"); 
     }
 
-    },[])
+    },[files])
 
     const SignupSchema = yup.object().shape({
         name: yup.string().required(),
         author: yup.string().required(),
     })
+
+    const [isInvalid, setIsInvalid] = useState(true);
+    const [searchResults, setSearchResults] = useState([]);
+    const [searchResultSelectedItem, setSearchSelectedItem] = useState({
+      id:"",
+      name: "",
+      description: "",
+      price: "",
+      author: "",
+      image: "",
+      accepted: false,
+      owner: user.username,
+      owner_Id: ownerId,
+      avilable: true,
+      for_sale:null
+  });
+
+  let timeoutId = null;
+const handleSearch = async (query) => {
+  try {
+    if (query.trim() === '') {
+      setIsInvalid(true);
+      return;
+    }
+    setIsInvalid(false);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(async () => {
+      try {
+        const { data } = await axios.get(`http://localhost:5000/book/searchForBook?q=${query}`);
+        setSearchResults(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 500); // delay for 500 milliseconds
+  } catch (err) {
+    console.error(err);
+  }
+};
+
    
+    const handleListItemClick = (e) => {
+
+      setSearchSelectedItem({ ...searchResultSelectedItem, name: e.title , image:e.cover_image , id:e.book_id});
+      setDefaultValues({ ...defaultValues, name: e.title });
+    }
+    useEffect(() => {
+      console.log(searchResultSelectedItem.name);
+      
+    }, [searchResultSelectedItem]);
+  
    /*
    // const [selectedFile, setSelectedFile] = useState(null);
    function handleFileInput(e) {
@@ -136,6 +188,7 @@ const AddBookForm = () => {
             console.log('dataa list', data)
             data.owner= user.username;
             data.owner_Id= ownerId;
+            data.bookId = searchResultSelectedItem.id;
             console.log('dataa list with modif', data)
             if(mode ==='edit') {
                 await axios
@@ -187,6 +240,33 @@ const AddBookForm = () => {
 
       <CardBody>
         <Form onSubmit={handleSubmit(onSubmit)}>
+
+          {/* <Row className='mb-1'>
+            <Label sm='3' for='name'>
+              Name
+            </Label>
+            <Col sm='9'>
+              <Autocomplete
+                className='form-control'
+                suggestions={searchResults}
+                filterKey='title'
+                grouped={true}
+                filterHeaderKey='groupTitle'
+                placeholder='Name'
+                onChange={(e) => handleSearch(e.target.value)}
+                customRender={(item) => (
+
+                  <div className='suggestion-item' key={item._id} onClick={() => handleListItemClick(item)}>
+                    <img src={item.cover_image} height='36' width='28' style={{ marginRight: '6px' }} alt={item.title} />
+                    {item.title}
+                  </div>
+                )}
+              />
+        {!isValid && <FormFeedback>Please enter a book name</FormFeedback>} 
+
+            </Col>
+          </Row> */}
+
           <Row className='mb-1'>
             <Label sm='3' for='name'>
                 Name
@@ -197,12 +277,40 @@ const AddBookForm = () => {
               control={control}
               id='name'
               name='name'
-              render={({ field }) => <Input {...field} placeholder='Name' invalid={errors.name && true} />}
+              render={({ field }) => 
+              
+              <Autocomplete
+                suggestion = {defaultValues.name}
+                value={field.value}
+                fields={field} 
+                invalid={isInvalid}
+                className='form-control'
+                suggestions={searchResults}
+                filterKey='title'
+                grouped={true}
+                filterHeaderKey='groupTitle'
+                placeholder='Name'
+                onChange={(e) => {
+                  handleSearch(e.target.value)
+                  field.onChange(e)
+                  console.log('first')
+                }}
+                customRender={(item) => (
+
+                  <div className='suggestion-item' key={item._id} onClick={() => handleListItemClick(item)}>
+                    <img src={item.cover_image} height='36' width='28' style={{ marginRight: '6px' }} alt={item.title} />
+                    {item.title}
+                  </div>
+                )}
+              />
+        
+              // <Input {...field} placeholder='Name' invalid={errors.name && true} />
+            
+            }
             />
             {errors.name && <FormFeedback>Please enter a book name</FormFeedback>}
             </Col>
           </Row>
-
           <Row className='mb-1'>
             <Label sm='3' for='author'>
             Author
