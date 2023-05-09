@@ -10,6 +10,7 @@ import { Cookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import { BsFillCameraVideoFill} from 'react-icons/bs';
 import { Fragment} from 'react'
+import { isUserLoggedIn } from '@utils'
 
 // ** Third Party Components
 import axios from 'axios'
@@ -58,6 +59,8 @@ const EventDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const user = useSelector(state => state.user);
 
+  const [userData, setUserData] = useState(null)
+
   const fetchEvent = async () => {
     let Event = await axios.get(`http://localhost:5000/events/detail/${id}`)
     setEvent(Event.data);
@@ -76,7 +79,12 @@ const EventDetail = () => {
       // handle error here
     }
   };
-
+  useEffect(() => {
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')));
+    }
+  }, []);
+  
   const handleUnparticipate = async () => {
     try {
       await axios.delete(`/events/${id}/participants`, {
@@ -183,11 +191,16 @@ const EventDetail = () => {
                   />
 
                   <CardBody>
-                    <CardTitle tag='h4'>={event.name} <Link to="/apps/homepage" className="button">
-      <BsFillCameraVideoFill
- />
-      VideoCall
-    </Link></CardTitle>
+                  <CardTitle tag='h4'>{event.name}
+                  {userData && event.owner == userData._id && (
+
+<Link to="/apps/homepage" className="button">
+<BsFillCameraVideoFill
+/>
+VideoCall
+</Link>
+)}
+        </CardTitle>
                     
                     {calculateStarRating(reviews)} 
                     <div className='d-flex'>
@@ -201,6 +214,8 @@ const EventDetail = () => {
                           {event.location}
                           </a>
                         </small>
+
+
                         <span className='text-muted ms-50 me-25'>|</span>
                         <small className='text-muted'>{event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} </small>
 
