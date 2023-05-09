@@ -21,22 +21,24 @@ import { addToCart, getProducts, getCartItems, addToWishlist, deleteCartItem, de
 import '../../../@core/scss/react/apps/app-ecommerce.scss'
 import './booksStyle.scss'
 import axios from "axios";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap'
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, UncontrolledButtonDropdown, DropdownMenu, DropdownItem, DropdownToggle} from 'reactstrap'
 
 import { useVoice } from "./voiceSearch/useVoice";
-//import Mic from "./voiceSearch/microphone-black-shape.svg";
 import { useBookFetch } from "./voiceSearch/useBookFetch";
 
+//Filter
+// import CategoryFilter from "./category-filter"
 
 
 
 const Shop = () => {
   // ** States
-  // const [filterGenre, setFilterGenre] = useState([]);
-	// const [sort, setSort] = useState({ sort: "rating", order: "desc" });
-	// const [page, setPage] = useState(1);
-	// const [search, setSearch] = useState("");
-const [genre, setGenre] = useState({});
+
+const [currentCategories, setCategoryQuery] = useState([])
+const [multiSelectExpanded, setMultiSelectExpanded] = useState(false);
+
+const [genre, setGenre] = useState('');
+const [name, setName] = useState('');
 
   const [activeView, setActiveView] = useState('grid')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -52,41 +54,45 @@ const [genre, setGenre] = useState({});
         return await axios.get(URL).then((res) => res.data);
     };
 
-
-  //   useEffect(() => {
-  //     const getUserBooksFilter = async params => {
-  //      const response = await axios.get('http://localhost:5000/book/user_filter_books', 
-  //       {
-  //         params: {
-  //         q: params.q,
-  //         sortColumn: params.sortColumn,
-  //         sort: params.sort,
-  //         page: params.page,
-  //         perPage: params.perPage,
-  //         genre: params.genre
-   
-  //       }})
-  //       return {
-  //         params,
-  //         data: response.data.books,
-  //         totalPages: response.data.total
-          
-  //       }}
-  //   getUserBooksFilter();
-  // });
-
-
-
-  // ** Vars
-  
   const dispatch = useDispatch()
   const store = useSelector(state => state.ecommerce)
 
   // ** Get products
+
+  useEffect(() => {
+    const fetchSearchBooks = async () => {
+      const response = await axios.get(`http://localhost:5000/book/books_name`, { params: { name: name } });
+      setBooks(response.data);
+    };
+    fetchSearchBooks();
+  }, [name]);
+
+
+  const handleSearchChange = (event) => {
+    setName(event.target.value);
+  };
+
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const response = await axios.get(`http://localhost:5000/book/books_genre`, { params: { genre: genre } });
+      setBooks(response.data);
+    };
+    fetchBooks();
+  }, [genre]);
+
+  const handleGenreChange = (event) => {
+    setGenre(event.target.value);
+  };
+
+  // const handleClearClick = () => {
+  //   setGenre('');
+  // };
+
+
   useEffect(() => {
       fetchHandler().then((data) => setBooks(data));
   }, [])
-
 
   useEffect(() => {
     if (text !== "") {
@@ -114,6 +120,16 @@ const affRes = (authorBooks) => {
   return (
     <>
     {text && <div>{fetchResponse} {text}</div> }
+   
+    <div>
+      <label>
+        Search:
+        <input type="text" value={name} onChange={handleSearchChange} />
+      </label>
+      </div>
+
+   
+
     <Products
       store={store}
       dispatch={dispatch}
@@ -172,6 +188,49 @@ const affRes = (authorBooks) => {
  
    <div className='books_page'>
 <>
+<div>
+<UncontrolledButtonDropdown>
+      <DropdownToggle color='primary' caret>
+      Genre
+      </DropdownToggle>
+      <DropdownMenu value={genre} onChange={handleGenreChange}>
+      {/* <select value={genre} onChange={handleGenreChange}> */}
+        <DropdownItem value=''>
+          All
+        {/* <option value="">All</option> */}
+        </DropdownItem>
+        <DropdownItem value='Action'>
+          Action
+        {/* <option value='Action'>Action</option> */}
+        </DropdownItem>
+        <DropdownItem  value='Romance'>
+          Romance
+        {/* <option value='Romance'>Romance</option> */}
+        </DropdownItem>
+        {/* </select> */}
+      </DropdownMenu>
+    </UncontrolledButtonDropdown>
+      {/* <label>
+        Genre:
+        <select value={genre} onChange={handleGenreChange}>
+          <option value="">All</option>
+          <option value='Action'>Action</option>
+          <option value='Romance'>Romance</option>
+          <option value='Fantasy'>Fantasy</option>
+          <option value='Drama'>Drama</option>
+          <option value='Crime'>Crime</option>
+          <option value='Adventure'>Adventure</option>
+          <option value='Thriller'>Thriller</option>
+          <option value='Sci-fi'>Sci-fi</option>
+          <option value='Music'>Music</option>
+          <option value='Family'>Family</option>            
+          <option value="Fiction">Fiction</option>
+          <option value="Nonfiction">Nonfiction</option>
+        </select>
+      </label> */}
+     {/* <button onClick={handleClearClick}>Clear</button> */}
+    </div>
+
     <Button color='primary' outline onClick={() => setCenteredModal(!centeredModal)}>
         voice Search
     </Button>

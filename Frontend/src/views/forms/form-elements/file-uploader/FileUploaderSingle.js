@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useCallback } from 'react'
 
 // ** Reactstrap Imports
 import { Card, CardHeader, CardTitle, CardBody, Button, ListGroup, ListGroupItem } from 'reactstrap'
@@ -8,31 +8,90 @@ import { Card, CardHeader, CardTitle, CardBody, Button, ListGroup, ListGroupItem
 import { useDropzone } from 'react-dropzone'
 import { FileText, X, DownloadCloud } from 'react-feather'
 import axios from "axios";
-const FileUploaderSingle = ({files, setFiles}) => {
+const FileUploaderSingle = ({ files, setFiles }) => {
   // ** State
 
-  const { getRootProps, getInputProps } = useDropzone({
+  /* const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     accept: {
       'image/jpeg': [],
       'image/png': []
     },
     onDrop: acceptedFiles => {
+      acceptedFiles.forEach((file) => {
+        const reader = new FileReader()
+  
+        reader.onabort = () => console.log('file reading was aborted')
+        reader.onerror = () => console.log('file reading has failed')
+        reader.onload = () => {
+        // Do whatever you want with the file contents
+          const binaryStr = reader.result
+          console.log(binaryStr)
+        }
+        reader.readAsArrayBuffer(file)
+      })
+
+      console.log(acceptedFiles)
       setFiles([...files, ...acceptedFiles.map(file => Object.assign(file))])
       const data = new FormData();
       for (let i = 0; i < files.length; i++) {
         data.append('image', files[0]);
       }
       axios.post('http://localhost:5000/book/addbook', file.filenames, {
-        headers: {'Content-type':'multipart/form-data'}
+        headers: { 'Content-type': 'multipart/form-data' }
       }).then(response => {
-        const {file:filenames} = response;
+        const { file: filenames } = response;
         onChange(prev => {
           return [...prev, ...filenames];
         });
       })
     }
-  })
+  }) */
+  
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imageURL, setImageUrl] = useState();
+
+
+  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+    console.log(acceptedFiles)
+    acceptedFiles.forEach((file) => {
+      setSelectedImages((prevState) => [...prevState, file]);
+    });
+  }, []);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({ onDrop });
+
+  // Add this
+  const onUpload = async () => {
+    const formData = new FormData();
+    console.log(selectedImages)
+
+
+    formData.append("file", selectedImages[0]);
+    formData.append("upload_preset", "bfy1gsk5");
+
+
+    console.log(formData)
+    const options = {
+      method: "POST",
+      body: formData,
+     };
+    
+    return fetch(`https://api.cloudinary.com/v1_1/dsawrgwfd/image/upload`, options)
+      .then((res) => res.json())
+      .then((res) => {
+
+        //!
+        setImageUrl("res.secure_url");
+      })
+      .catch((err) => console.log(err));
+  };
 
   const renderFilePreview = file => {
     if (file.type.startsWith('image')) {
@@ -56,7 +115,7 @@ const FileUploaderSingle = ({files, setFiles}) => {
     }
   }
 
-  const fileList = files.map((file, index) => (
+  const fileList = selectedImages.map((file, index) => (
     <ListGroupItem key={`${file.name}-${index}`} className='d-flex align-items-center justify-content-between'>
       <div className='file-details d-flex align-items-center'>
         <div className='file-preview me-1'>{renderFilePreview(file)}</div>
@@ -74,6 +133,7 @@ const FileUploaderSingle = ({files, setFiles}) => {
   const handleRemoveAllFiles = () => {
     setFiles([])
   }
+
 
   return (
     <Card>
@@ -95,14 +155,14 @@ const FileUploaderSingle = ({files, setFiles}) => {
             </p>
           </div>
         </div>
-        {files.length ? (
+        {selectedImages.length ? (
           <Fragment>
             <ListGroup className='my-2'>{fileList}</ListGroup>
             <div className='d-flex justify-content-end'>
               <Button className='me-1' color='danger' outline onClick={handleRemoveAllFiles}>
                 Remove All
               </Button>
-              <Button type="button" color='primary'>Upload Files</Button>
+              <Button type="button" color='primary' onClick={onUpload}>Upload Files</Button>
             </div>
           </Fragment>
         ) : null}

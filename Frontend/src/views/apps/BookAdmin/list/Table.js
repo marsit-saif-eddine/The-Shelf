@@ -47,9 +47,6 @@ import './tableList.css'
 
 
 
-
-
-
 // ** Table Header
 const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   // ** Converts table to CSV

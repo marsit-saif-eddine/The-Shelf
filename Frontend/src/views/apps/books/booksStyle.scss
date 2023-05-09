@@ -7,8 +7,8 @@
     .grid-view {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 8px ;
-        margin-top: 40px;
+        gap: 1px ;
+        margin-top: 80px;
     }
     [dir] .card {
         margin-bottom: 2rem;
@@ -98,13 +98,13 @@ top: 0;
 .card {
   transition: all .4s cubic-bezier(0.175, 0.885, 0, 1);
   background-color: #fff;
-    width: 80%;
+    width: 74%;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0px 13px 10px -7px rgba(0, 0, 0,0.1);
   display: flex;
-    height: 85%;
+    height: 77%;
     justify-content: space-between;
 }
 .card:hover {

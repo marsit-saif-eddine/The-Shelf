@@ -9,6 +9,27 @@ export const getProducts = createAsyncThunk('appEcommerce/getProducts', async pa
   return { params, data: response.data }
 })
 
+export const getData = createAsyncThunk('appEcommerce/getAllAcceptedData', async params => {
+  
+  const response = await axios.get('/book/user_filter_books', 
+  {params: {
+    q: params.q,
+    sortColumn: params.sortColumn,
+    sort: params.sort,
+    page: params.page,
+    perPage: params.perPage,
+    genre: params.genre
+  }})
+  
+  return {
+    params,
+    data: response.data.books,
+    totalPages: response.data.total
+    
+  }
+})
+
+
 export const addToCart = createAsyncThunk('appEcommerce/addToCart', async (id, { dispatch, getState }) => {
   const response = await axios.post('/apps/ecommerce/cart', { productId: id })
   await dispatch(getProducts(getState().ecommerce.params))
@@ -50,6 +71,7 @@ export const deleteCartItem = createAsyncThunk('appEcommerce/deleteCartItem', as
 export const appEcommerceSlice = createSlice({
   name: 'appEcommerce',
   initialState: {
+    data: [],
     cart: [],
     params: {},
     products: [],
@@ -65,6 +87,14 @@ export const appEcommerceSlice = createSlice({
         state.products = action.payload.data.products
         state.totalProducts = action.payload.data.total
       })
+
+      .addCase(getData.fulfilled, (state, action) => {
+        
+        state.data = action.payload.data
+        state.params = action.payload.params
+        state.total = action.payload.totalPages
+      })
+      
       .addCase(getWishlistItems.fulfilled, (state, action) => {
         state.wishlist = action.payload.products
       })
