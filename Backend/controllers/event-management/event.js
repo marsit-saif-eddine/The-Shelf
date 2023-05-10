@@ -53,7 +53,7 @@ exports.addEvent = async (req, res) => {
 
   try {
  
-    const { name, startDate,endDate, description, location ,img,owner} = req.body;
+    const { name, startDate,endDate, description, location ,img,owner, club_id} = req.body;
    const updatepath=await img.split('//').join('/');
    console.log(updatepath)
     const event = new Event({
@@ -64,8 +64,8 @@ exports.addEvent = async (req, res) => {
       location,
       participants: [],
       image: updatepath,
-      owner
-
+      owner,
+      club_id
 
     });
 console.log(event)

@@ -15,10 +15,18 @@ import { Card, CardHeader, Form, Label, InputGroup, Input, InputGroupText, Butto
 // ** Images
 import profilePic from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
+const Filter = require('bad-words');
+
+const filter = new Filter();
+
+const words = require('../../../extra-words.json');
+filter.addWords(...words);
+
 // ** Styles
 import '@styles/base/pages/app-chat-list.scss'
-import { useDispatch } from 'react-redux'
-import { addChatBubble, closeChatBox } from '../../../redux/chat'
+import { useDispatch, useSelector } from 'react-redux'
+import { addChatBubble, closeChatBox, getPrivateConversation, onPrivateMessageSent } from '../../../redux/chat'
+
 
 const data = {
   chat: {
@@ -64,71 +72,39 @@ const data = {
 
 const ChatBox = (props) => {
   // ** States
-  const [msg, setMsg] = useState('')
-  const [chatRef, setChatRef] = useState(null)
+  const [msg, setMsg] = useState('');
+  const [chatRef, setChatRef] = useState(null);
   const dispatch = useDispatch();
-  const [chatData, setChatData] = useState(data)
+  const [chatData, setChatData] = useState(data);
+  const currentUser = JSON.parse(localStorage.getItem('userData'));
+  const socket = useSelector((state) => state.chat.socket);
+  const conversation = useSelector(state => state.chat.privateConversations.find(x => x.participant == props.chatData._id));
+  useEffect(() => {
+      dispatch(getPrivateConversation(props.chatData._id));
+  }, [])
 
-  //** Formats chat data based on sender
-  const formattedChatData = () => {
-    let chatLog = []
-    if (chatData) {
-      chatLog = chatData.chat.chat
-    }
-
-    const formattedChatLog = []
-    let chatMessageSenderId = chatLog[0] ? chatLog[0].senderId : undefined
-    let msgGroup = {
-      senderId: chatMessageSenderId,
-      messages: []
-    }
-    chatLog.forEach((msg, index) => {
-      if (chatMessageSenderId === msg.senderId) {
-        msgGroup.messages.push({
-          msg: msg.message,
-          time: msg.time
-        })
-      } else {
-        chatMessageSenderId = msg.senderId
-        formattedChatLog.push(msgGroup)
-        msgGroup = {
-          senderId: msg.senderId,
-          messages: [
-            {
-              msg: msg.message,
-              time: msg.time
-            }
-          ]
-        }
-      }
-      if (index === chatLog.length - 1) formattedChatLog.push(msgGroup)
-    })
-    return formattedChatLog
-  }
 
   //** Renders user chat
   const renderChats = () => {
-    return formattedChatData().map((item, index) => {
+    return conversation?.messages.map((item, index) => {
       return (
         <div
           key={index}
           className={classnames('chat', {
-            'chat-left': item.senderId !== 11
+            'chat-left': item.sender._id != currentUser._id
           })}
         >
           <div className='chat-avatar'>
             <Avatar
               className='box-shadow-1 cursor-pointer'
-              img={item.senderId === 11 ? profilePic : chatData.contact.avatar}
+              img={'http://localhost:5000/' + item.sender.photo}
             />
           </div>
 
           <div className='chat-body'>
-            {item.messages.map(chat => (
-              <div key={chat.msg} className='chat-content'>
-                <p>{chat.msg}</p>
+              <div className='chat-content'>
+                <p>{item.message}</p>
               </div>
-            ))}
           </div>
         </div>
       )
@@ -144,34 +120,30 @@ const ChatBox = (props) => {
     if (chatRef !== null) {
       scrollToBottom()
     }
-  }, [chatRef, chatData.chat.chat.length])
+  }, [chatRef, conversation?.messages?.length])
+
 
   const handleSendMsg = e => {
     e.preventDefault()
     if (msg.trim().length) {
-      const newMsg = chatData
+      const msgToSend = filter.clean(msg);
+      socket.emit('private-message-sent', {receiver: props.chatData, message: msgToSend});
+      dispatch(onPrivateMessageSent({participant: props.chatData._id, sender: {_id: currentUser._id, lastname: currentUser.lastname, firstname: currentUser.firstname, photo: currentUser.photo}, message: msgToSend}));
 
-      newMsg.chat.chat.push({
-        message: msg,
-        time: new Date(),
-        senderId: 11
-      })
-
-      setChatData(newMsg)
       setMsg('')
     }
   }
 
   return (
-    <Card className='chat-widget'>
+    <Card className='chat-widget bg-white' style={{'zIndex': 500}}>
       <CardHeader>
         <div className='d-flex align-items-center'>
-          <Avatar status='online' className='me-2' img={chatData.contact.avatar} imgHeight='34' imgWidth='34' />
-          <h5 className='mb-0'>Carrie Hawkins</h5>
+          <Avatar status='online' className='me-2' img={'http://localhost:5000/' + props.chatData.photo} imgHeight='34' imgWidth='34' />
+          <h5 className='mb-0'>{props.chatData.lastname + ' ' + props.chatData.firstname}</h5>
         </div>
         <div className='col-auto d-flex flex-row'>
-        <Minus size={18} className='cursor-pointer me-1' onClick={() => {dispatch(closeChatBox(props.boxIndex)); dispatch(addChatBubble(props.chatData))}} />
-        <X size={18} className='cursor-pointer' onClick={() => {dispatch(closeChatBox(props.boxIndex))}} />
+        <Minus size={18} className='cursor-pointer me-1' onClick={() => {dispatch(closeChatBox()); dispatch(addChatBubble(props.chatData))}} />
+        <X size={18} className='cursor-pointer' onClick={() => {dispatch(closeChatBox())}} />
         </div>
       </CardHeader>
       <div className='chat-app-window'>

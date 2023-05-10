@@ -16,6 +16,11 @@
       ref:'users'
     }],
 
+    club_id: {
+      type: String,
+      require: false
+    },
+
 
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     favorites: [{

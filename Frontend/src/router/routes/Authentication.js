@@ -61,6 +61,15 @@ const AuthenticationRoutes = [
     }
   },
   {
+    path: '/admin/sign-up/:id',
+    element: <Register />,
+    meta: {
+      layout: 'blank',
+      publicRoute: true,
+      restricted: true
+    }
+  },
+  {
     path: '/pages/register-basic',
     element: <RegisterBasic />,
     meta: {

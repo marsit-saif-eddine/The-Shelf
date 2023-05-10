@@ -135,7 +135,7 @@ const Register = () => {
     axios
       .post("http://localhost:5000/signUp/adminSignUp", formData)
       .then((response) => {
-        if (response.ok) {
+        if (response.data) {
           setSignedUp(true);
           setSubmitted(false);
         }

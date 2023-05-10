@@ -10,50 +10,28 @@ import { Card, CardTitle, CardBody, CardText } from "reactstrap";
 
 // ** Images
 import illustration from "@src/assets/images/pages/email.svg";
+import { useNavigate } from "react-router-dom";
 
 const EventsCard = ({event}) => {
   const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  const data = [
-    {
-      title: "Billy Hopkins",
-      placement: "bottom",
-      img: require("@src/assets/images/portrait/small/avatar-s-7.jpg").default,
-      imgHeight: 33,
-      imgWidth: 33,
-    },
-    {
-      title: "Amy Carson",
-      placement: "bottom",
-      img: require("@src/assets/images/portrait/small/avatar-s-11.jpg").default,
-      imgHeight: 33,
-      imgWidth: 33,
-    },
-    {
-      title: "Brandon Miles",
-      placement: "bottom",
-      img: require("@src/assets/images/portrait/small/avatar-s-11.jpg").default,
-      imgHeight: 33,
-      imgWidth: 33,
-    },
-    {
-      title: "Daisy Weber",
-      placement: "bottom",
-      img: require("@src/assets/images/portrait/small/avatar-s-7.jpg").default,
-      imgHeight: 33,
-      imgWidth: 33,
-    },
-    {
-      title: "Jenny Looper",
-      placement: "bottom",
-      img: require("@src/assets/images/portrait/small/avatar-s-11.jpg").default,
-      imgHeight: 33,
-      imgWidth: 33,
-    },
-    {
-      meta: "+42",
-    },
-  ];
+  const currentUser = JSON.parse(localStorage.getItem('userData'));
 
+
+  const navigate = useNavigate();
+
+  const participants = event.participants.map(x => {
+    return {
+      title: x.lastname + ' ' + x.firstname,
+      placement: "bottom",
+      img: 'http://localhost:5000/' + x.photo,
+      imgHeight: 33,
+      imgWidth: 33,
+    }
+  });
+
+  const toClubDetails = () => {
+      navigate('/eventsdetail/' + event._id);
+  }
   return (
     <div className="col-lg-4 col-md-6 col-12">
       <Card className="card-developer-meetup">
@@ -97,11 +75,13 @@ const EventsCard = ({event}) => {
               <small>{event.location}</small>
             </div>
           </div>
-          <AvatarGroup data={data} />
-
-          <button className="btn btn-gradient-primary w-100 mt-1">
+          <AvatarGroup data={participants} />
+          {
+            currentUser.role != 'admin' && <button className="btn btn-gradient-primary w-100 mt-1" onClick={toClubDetails}>
             More details
           </button>
+          }
+          
         </CardBody>
       </Card>
     </div>

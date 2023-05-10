@@ -10,6 +10,10 @@ import { format } from 'date-fns';
 import { Fragment } from 'react'
 import {  UncontrolledTooltip} from 'reactstrap'
 import Avatar from '@components/avatar'
+import { BsFillCameraVideoFill} from 'react-icons/bs';
+import avatar5 from '@src/assets/images/portrait/small/avatar-s-5.jpg'
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 import axios from 'axios';
 import UpdateEventForm from "../Events/UpdateEventForm"
@@ -22,6 +26,7 @@ import {  CardBody, CardText, Button, Badge } from 'reactstrap'
 import { isUserLoggedIn } from '@utils'
 
 import { AvatarGroup } from '@mui/material';
+import { Bold } from 'react-feather';
 
 function EventsCards() {
   const [cookies, _]=useCookies(['access_token'])
@@ -79,26 +84,7 @@ function EventsCards() {
       
     });
   }, []);
-  // const getEvents = async () => {
-  //   try {
-  //     const response = await axios.get("http://localhost:5000/events");
-  //     const events = response.data;
-  
-  //     // Fetch participants for each event and store them in the participants state variable
-  //     const participants = [];
-  //     for (const event of events) {
-  //       const participantsResponse = await axios.get(`http://localhost:5000/events/participants/${event._id}`);
-  //       participants[event._id] = participantsResponse.data;
-  //     }
-  //     setParticipants(participants);
-  
-  //     setEvents(events);
-  //   } catch (error) {
-  //     console.error(error);
-  //     setErrorMessage("Failed to fetch events");
-  //   }
-  // }; 
-
+ 
   
   const getEvents = async () => {
     try {
@@ -123,57 +109,12 @@ function EventsCards() {
     }
   },[events])
 
-  // const fetcheventusers = async () =>{
-  //   events.map((element,index)=>{
-  //     let datax = []
-  //     let event = {
-  //       eventdata:element
-  //     }
-  //     for (const key in element.participants) {
-  //       let temparray = []; 
-  //       let user = await ('http://localhost:5000/users/')
 
-  //     }
-
-  //   })
-
-
-
-
-
-  // }
-
-
-  // useEffect(() => {
-  //   // Fetch the event object from the API
-  //   fetch(`http://localhost:5000/events/${eventId}`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setEvent(data);
-  //       // Retrieve the user's participation status from localStorage
-  //       const isParticipating = localStorage.getItem(`event_${eventId}_isParticipating`) === "true";
-  //       setIsParticipating(isParticipating);
-  //     })
-  //     .catch((error) => console.error(error));
-  // }, [eventId]);
   const handleUserInput = (event) => {
     setUser(event.target.value);
   }
   
-  // const patchParticipate = useCallback(async (eventId) => {
-  //   const response = await fetch(`http://localhost:5000/events/participateEvent/${eventId}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: Cookies.access_token
-  //     },
-  //     body: JSON.stringify({ userId: user }),
-  //   });
-  
-  //   setChange(true)
-  //   setIsParticipated(!isparticipated);
-  // }, [user, isparticipated]);
-    
+ 
   const patchParticipate = async (eventId) => {
     let userId = userData._id;
     try {
@@ -210,18 +151,7 @@ function EventsCards() {
     }
   };
 
-    // const partcipatee = async ( eventId,userId) => {
-    //   userId=userData.id;
-      
-    //   console.log(eventId)
-    //   try {
-    //     const response = await axios.post(`/events/participate/${eventId}/${userId}`);
-    //     return response.data;
-    //   } catch (err) {
-    //     console.error(err);
-    //     return null;
-    //   }
-    // };
+   
   
     const partcipatee = async (eventId) => {
       console.log(userData.id);
@@ -268,15 +198,7 @@ function EventsCards() {
   }, [eventData]);
 
 
-  // const handleUpdate = async (_id) => {
-  //     try {
-  //         const res = await axios.put(`/events/update/${_id}`, { /* update data */ });
-  //         console.log(res.data);
-  //     } catch (err) {
-  //         console.error(err);
-  //         // Implement logic to show an error message
-  //     }
-  // };
+ 
 
   const handleDelete = async (_id) => {
     try {
@@ -378,7 +300,9 @@ function EventsCards() {
   };
   // setParticipatedCount( Object.keys(data.participants).length);
 
+
   return (
+    
 
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
     {/* Render the error message if it exists */}
@@ -387,6 +311,7 @@ function EventsCards() {
         {errorMessage}
       </div>
     )}
+    
     
 <div className="card-container">
   
@@ -399,7 +324,7 @@ return (
           src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`}
           alt={event.name}
           loading="lazy"
-          style={{ width: '100%', height: '60%', borderRadius: '10px' }}
+          style={{ width: '60%', height: '60%', borderRadius: '10px' }}
         />
       </div>
       <Card className='ecommerce-card'>
@@ -408,20 +333,14 @@ return (
             <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
             <CardText tag='span' className='item-company'></CardText>
           </h6>
-          {/* <p>Participants:</p>
-          <AvatarGroup max={4}>
-            {event.participants.map((participant) => (
-              <Avatar
-                key={participant.id}
-                alt={participant.name}
-                src={participant.avatarUrl}
-              />
-            ))}
-          </AvatarGroup> */}
-          <CardText className='item-description'>In {event.location}</CardText>
+       
           <CardText className='item-description'>
-            {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} TO {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
-          </CardText>
+  <FaMapMarkerAlt style={{ marginRight: 5 ,color:"grey",font:Bold}} />
+   {event.location}
+</CardText>          <CardText className='item-description'>
+  <FontAwesomeIcon icon={faCalendar} className="mr-2" style={{color:"grey"}} />
+  {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} TO {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
+</CardText>
 
           <button
             className="participate-btn"
@@ -434,47 +353,27 @@ return (
             {/* <div>{userData.Avatar}</div> */}
 
           </button>
+         
 
-
+  
+ 
           <div className='d-flex justify-items-center mr-auto '>
-          <AvatarGroup max={4}>
+            
+          <AvatarGroup  className="avatargroup" max={7}>
   {event.participants.map(participantt => (
-     <Avatar key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />
+     <Avatar className="avatar" key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />
     
-  ))
+  ))    
   }
+
+ 
+
+
   
 </AvatarGroup>
 
-            {/* <div className='avatar-group ms-1'>{avatars}</div> */}
     </div>
-          {/* <p>Participants: {participants[event._id]?.map((participant) => participant.name).join(", ") || "None"}</p> */}
-
-          {/* <div className='d-flex align-items-center'>
-                  <div className='avatar-group ms-1'>
-                   <Fragment>
-                        {/* <Fragment key={userData.name}> */}
-                          {/* <Avatar
-                            className='pull-up' 
-                            img={userData.image}
-                            id={userData.name.toLowerCase().split(' ').join('-')}
-                            imgHeight='26'
-                            imgWidth='26'
-                          /> */}
-                          {/* <UncontrolledTooltip
-                             target={userData.name.toLowerCase().split(' ').join('-')}
-                            placement='top'
-                          >
-                            {userData.name} */} 
-                          {/* </UncontrolledTooltip>
-                        </Fragment>
-                      
-{/*                     
-                  </div>
-                  <a href='/' className='text-muted text-nowrap ms-50' onClick={e => e.preventDefault()}>
-                    +{count}  more
-                  </a>
-            </div> */}
+       
         
         </CardBody>
       </Card>

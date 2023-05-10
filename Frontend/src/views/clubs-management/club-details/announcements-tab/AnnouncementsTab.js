@@ -9,7 +9,17 @@ import { Label } from "reactstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
 import { publishAnnouncement } from "../../../../redux/clubs";
+
+const Filter = require('bad-words');
+
+const filter = new Filter();
+const words = require('../../../../extra-words.json');
+
+filter.addWords(...words);
+
+
 const AnnouncementsTab = () => {
   const [newAnnouncement, setNewAnnouncement] = useState(
     EditorState.createEmpty()
@@ -32,8 +42,8 @@ const AnnouncementsTab = () => {
   const addAnnouncement = () => {
     const rawContentState = convertToRaw(newAnnouncement.getCurrentContent());
     const text = draftToHtml(rawContentState);
-
-    dispatch(publishAnnouncement({ club_id, text }));
+    
+    dispatch(publishAnnouncement({ club_id, text: filter.clean(text) }));
     
     setNewAnnouncement(EditorState.createEmpty());
     setShowEditor(false);

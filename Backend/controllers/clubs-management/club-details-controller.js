@@ -33,7 +33,22 @@ exports.getClubMembers = async (req, res) => {
 exports.getClubEvents = async (req, res) => {
   try {
     const dbClubEvents = getDb().collection("events");
-    const events = await dbClubEvents.find().toArray();
+    const pipeline = [
+      {
+        $match: {
+          club_id: req.query.club_id,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "participants",
+          foreignField: "_id",
+          as: "participants",
+        },
+      },
+    ];
+    const events = await dbClubEvents.aggregate(pipeline).toArray();
 
     return res.status(200).send(events);
   } catch (ex) {
