@@ -18,7 +18,6 @@ const requireAuth = (req, res, next) => {
             } else {
                 res.locals.user = decodedToken;
                 req.user = decodedToken;
-                console.log({_id: decode._id, lastname: decode.lastname, firstname: decode.firstname});
                 next();
             }
         });
