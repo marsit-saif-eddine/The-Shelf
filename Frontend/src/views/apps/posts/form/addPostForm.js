@@ -68,7 +68,7 @@ const AddPostForm = () => {
     const [titleForm, setTitleForm] = useState('');
     const [mode, setMode] = useState();
     
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState();
     const [selsctedType, setSelsctedType] = useState(false);
     const { register, getValues, setValue } = useForm();
     const refImg = useRef('image');
@@ -104,6 +104,7 @@ const AddPostForm = () => {
           if (Object.values(data).every(field => field.length > 0)) {
             console.log('dataa list', data)
             data.owner= user.username;
+            data.image=files
             data.owner_Id= ownerId;
             console.log('dataa list with modif', data)
             if(mode ==='edit') {

@@ -192,28 +192,49 @@ const affRes = (authorBooks) => {
     </Button> */}
 
 <div>
-<UncontrolledButtonDropdown>
+{/* <UncontrolledButtonDropdown>
       <DropdownToggle color='primary' caret>
       Genre
-      </DropdownToggle>
-      <DropdownMenu value={genre} onChange={handleGenreChange}>
-      {/* <select value={genre} onChange={handleGenreChange}> */}
-        <DropdownItem value=''>
-          All
+      </DropdownToggle> */}
+
+
+        {/* <select value={genre} onChange={handleGenreChange}>
+          <option value="">All</option>
+          <option value='Action'>Action</option>
+          <option value='Romance'>Romance</option>
+          <option value='Fantasy'>Fantasy</option>
+          <option value='Drama'>Drama</option>
+          <option value='Crime'>Crime</option>
+          <option value='Adventure'>Adventure</option>
+          <option value='Thriller'>Thriller</option>
+          <option value='Sci-fi'>Sci-fi</option>
+          <option value='Music'>Music</option>
+          <option value='Family'>Family</option>            
+          <option value="Fiction">Fiction</option>
+          <option value="Nonfiction">Nonfiction</option>
+        </select>  */}
+
+       {/* <DropdownMenu value= " " > 
+           All */}
+      
+        {/* <DropdownItem>
+        <option value="">All</option> */}
         {/* <option value="">All</option> */}
-        </DropdownItem>
-        <DropdownItem value='Action'>
-          Action
+        {/* </DropdownItem> */}
+        {/* <DropdownItem>
+        <option value='Action'>Action</option> */}
         {/* <option value='Action'>Action</option> */}
-        </DropdownItem>
+        {/* </DropdownItem>
         <DropdownItem  value='Romance'>
-          Romance
+          Romance */}
         {/* <option value='Romance'>Romance</option> */}
-        </DropdownItem>
+        {/* </DropdownItem> */}
         {/* </select> */}
-      </DropdownMenu>
-    </UncontrolledButtonDropdown>
-      {/* <label>
+      {/* </DropdownMenu>
+    </UncontrolledButtonDropdown>  */}
+
+{/* 
+      <label>
         Genre:
         <select value={genre} onChange={handleGenreChange}>
           <option value="">All</option>
@@ -230,7 +251,8 @@ const affRes = (authorBooks) => {
           <option value="Fiction">Fiction</option>
           <option value="Nonfiction">Nonfiction</option>
         </select>
-      </label> */}
+      </label>  */}
+
      {/* <button onClick={handleClearClick}>Clear</button> */}
     </div>
 

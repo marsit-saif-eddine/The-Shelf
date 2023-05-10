@@ -42,6 +42,7 @@ router.get("/:id", booksController.getById);
 router.put("/:id", booksController.updateBook);
 router.delete("/:id", booksController.deleteBook);
 router.get("/books_genre", booksController.getByGenre);
+router.get("/books_name", booksController.getByName);
 router.put("/switch_accepted/:id", booksController.switchBookToaccepted);
 router.get("/user_book/:id", booksController.getByUserId);
 

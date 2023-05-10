@@ -715,9 +715,10 @@ const getByGenre = async (req, res, next) => {
 
 const getByName = async (req, res, next) => {
   const name = req.query.name;
+  
   let books;
   try {
-  books = await Book.find({name : name});
+  books = await Book.find({name : name, for_sale:true});
 
   } catch (err) {
     console.log(err);
