@@ -78,16 +78,16 @@ const Profile = () => {
                 <ProfileAbout selectedUser={store.selectedUser} />
                 <ProfileLatestEvents data={data.suggestedPages} />
                 {/* <ProfileTwitterFeeds data={data.twitterFeeds} /> */}
-                <ProfileSuggestedPages data={data.suggestedPages} />
-                <ProfileTwitterFeeds data={data.twitterFeeds} />
+                {/* <ProfileSuggestedPages data={data.suggestedPages} /> */}
+                {/* <ProfileTwitterFeeds data={data.twitterFeeds} /> */}
               </Col>
               <Col lg={{ size: 6, order: 2 }} sm={{ size: 12 }} xs={{ order: 1 }}>
                 <ProfilePosts data={data.post} />
               </Col>
               <Col lg={{ size: 3, order: 3 }} sm={{ size: 12 }} xs={{ order: 3 }}>
                 <ProfileLatestQuizzes data={data.latestPhotos} />
-                {/* <ProfileFriendsSuggestions data={data.suggestions} />
-                <ProfilePoll data={data.polls} /> */}
+                <ProfileFriendsSuggestions data={data.suggestions} />
+                {/* <ProfilePoll data={data.polls} /> */}
               </Col>
               
             </Row>

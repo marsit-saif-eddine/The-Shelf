@@ -16,7 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 const AddPostForm = () => {
     var user = JSON.parse(localStorage.getItem('userData'));
-    const ownerId = user.id;
+    const ownerId = user._id;
     //owner1 = user.email
     
     const {id} =useParams();

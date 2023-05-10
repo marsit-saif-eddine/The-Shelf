@@ -27,37 +27,47 @@ import Quiz from "./quiz"
 import {  useSelector } from "react-redux";
 
 import { useParams } from 'react-router-dom'
-
+import QuizNav from "./myQuizNav"
+import { io } from "socket.io-client"
 //////////////  this is the quizzes of each profile ////////////////
+
+
 function QuizDisplay () {
 
 
 const [Quizs, setQuizs] = useState([])
 const[change,setChange]=useState(false)
 
-// const approved="approved";
-//   useEffect(() => {
-//     axios.get(`/quiz/allquiz?status=${approved}`)
-//       .then(response => setQuizs(response.data))
-//       .catch(error => console.error(error));
-//       console.log(Quizs)
-//       setChange(false)
+// useEffect(() => {
+//   const socket = io("http://localhost:5000");
+//   socket.on("me", (msg) => {
+//     console.log("sockeet"+msg);
+//   });
+  
+//   // Clean up the event listener when the component unmounts
+//   return () => {
+//     socket.off("me");
+//   };
+// }, []);
 
-//   }, [change]);
+
 const [userData, setUserData] = useState(null)
 useEffect(() => {
 
   setUserData(JSON.parse(localStorage.getItem('userData')));
 
 }, []);
+
+const store = useSelector(state => state.users)
+console.log("sss  "+ store.selectedUser)
 const userid = useParams().id
 var user = JSON.parse(localStorage.getItem('userData'));
-var userId = user.id;
+var userId = user._id;
 const approved="approved";
 
 useEffect(() => {
   if (userid !== null) {
-    fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userId}&status=${approved}`)
+    fetch(`http://localhost:5000/quiz/allquiz?userconnected=${userid}&status=${approved}`)
       .then(response => response.json())
       .then(data => setQuizs(data))
       .catch(error => console.log(error));
@@ -67,12 +77,8 @@ useEffect(() => {
 
 const [show, setShow] = useState(false)
 
-//const history = useHistory();
 
-// function navigate_to(quizname){
-//   var qname=quizname.split(".");
-//   history.push("/"+qname[0])
-// }
+
 return (
 
 
@@ -84,12 +90,13 @@ return (
     }}
   >
     <CardBody className='text-center'>
-      <h2 className='text-primary'>Welcome to your quizzes { user.username}</h2>
+      <h2 className='text-primary'>Welcome to  { store.selectedUser }  quizzes </h2>
       <CardText className='mb-2'>
          <span className='fw-bolder'>here you will find all the quizzes that you created and the admins approved</span>
       </CardText>
       </CardBody>
       </Card>
+      
   <div className="containers">
     <Row>
     {Quizs.map(quiz => (

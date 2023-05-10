@@ -49,6 +49,8 @@ const MyQuizzes=lazy(() => import('../../views/pages/profile/MyQuizzes'))
 const QuizAdmin=lazy(() => import('../../views/apps/quiz/admin/quizTable.js'))
 const MyEvents=lazy(() => import('../../views/pages/profile/MyEvents'))
 const VideoCall = lazy(() => import("../../views/apps/Events/VideoCall"));
+const HomePage = lazy(() => import("../../views/apps/Events/HomePage"));
+const RoomPage = lazy(() => import("../../views/apps/Events/RoomPage"));
 
 const EventsMore = lazy(() =>
   import("../../views/pages/profile/ProfileshowMoreEvents")
@@ -161,6 +163,28 @@ const AppRoutes = [
   {
     element: <VideoConferance />,
     path: "/apps/videoconf",
+    meta: {
+      appLayout: false,
+      className: "chat-application",
+      layout: "horizontal",
+      action: "client",
+      resource: "client",
+    },
+  },
+  {
+    element: <HomePage />,
+    path: "/apps/homepage",
+    meta: {
+      appLayout: false,
+      className: "chat-application",
+      layout: "horizontal",
+      action: "client",
+      resource: "client",
+    },
+  },
+  {
+    element: <RoomPage />,
+    path: "/room/:roomID",
     meta: {
       appLayout: false,
       className: "chat-application",
@@ -377,7 +401,7 @@ const AppRoutes = [
 
   // },
   {
-    path: "/apps/myquiz",
+    path: "/apps/myquiz/:id",
     element: <Quiz />,
     meta: {
       appLayout: false,

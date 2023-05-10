@@ -49,7 +49,7 @@ useEffect(() => {
 
   useEffect(() => {
     if (userData !== null) {
-      fetch(`http://localhost:5000/events?userconnected=${userData.id}`)
+      fetch(`http://localhost:5000/events?userconnected=${userData._id}`)
         .then(response => response.json())
         .then(data => {
           console.log(data); // Log the response data to the console

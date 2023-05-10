@@ -36,21 +36,21 @@ passport.use(new GoogleStrategy({
           email: profile.emails[0].value,
           profile_photo: profile.photos[0].value,
           secret: accessToken,
-          role: "client",
-          ability: [
-            {
-              action: 'read',
-              subject: 'ACL'
-            },
-            {
-              action: 'read',
-              subject: 'Auth'
-            },
-            {
-              action: 'client',
-              subject: 'client'
-            }
-          ],
+          // role: "client",
+          // ability: [
+          //   {
+          //     action: 'read',
+          //     subject: 'ACL'
+          //   },
+          //   {
+          //     action: 'read',
+          //     subject: 'Auth'
+          //   },
+          //   {
+          //     action: 'client',
+          //     subject: 'client'
+          //   }
+          // ],
           
           isConfirmed:true,
           username:`${profile.name.givenName} ${profile.name.familyName}`

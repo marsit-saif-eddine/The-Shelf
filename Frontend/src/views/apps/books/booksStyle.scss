@@ -1,12 +1,13 @@
 
+
 .books_page {
     .content-body {
         margin-left: 0 !important;
     }
     .grid-view {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 65px 40px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px ;
         margin-top: 40px;
     }
     [dir] .card {
@@ -21,7 +22,7 @@
         height: 100% !important;
     }
     .card-header {
-        height: 350px;
+        height: 50px;
         overflow: hidden;
     }
     .card-desc {
@@ -97,13 +98,13 @@ top: 0;
 .card {
   transition: all .4s cubic-bezier(0.175, 0.885, 0, 1);
   background-color: #fff;
-    width: 100%;
+    width: 80%;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0px 13px 10px -7px rgba(0, 0, 0,0.1);
   display: flex;
-    height: 100%;
+    height: 85%;
     justify-content: space-between;
 }
 .card:hover {
@@ -167,6 +168,127 @@ border-bottom-right-radius: 12px;
 .card:hover .card__info-hover {
     opacity: 1;
 }
+
+
+
+}
+$size: 100px;
+$primary: #f5821f;
+$secondary: #d8d8d8;
+.modalSearchVoice {
+  text-align: center;
+  padding: 20px 15px;
+  .btn {
+    border: none;
+    padding: 0;
+    border-radius: 100%;
+    width: $size;
+    height: $size;
+    font-size: 3em;
+    color: #fff;
+    padding: 0;
+    margin: 0;
+    background: red;
+    position: relative;
+    z-index: 999;
+    display: inline-block;
+      line-height: $size;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background-image: none;
+  }
+  
+  .pulse-ring {
+    content: '';
+    width: $size;
+    height: $size;
+    background: $primary;
+    border: 5px solid $primary;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    //animation: pulsate infinite 1.5s;
+  }
+  .isListening {
+      animation: animationFrames infinite 1.5s;
+  }
+  
+  .pulse-ring.delay{
+    // animation-delay: 1s;
+  }
+
+  
+  .type2{
+    background: $primary;
+  }
+  
+  .type2 .pulse-ring{
+    background: transparent;
+  }
+}
+
+@keyframes animationFrames {
+  0% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1.3, 1.3);
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes animationFrames {
+  0% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1.3, 1.3);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes animationFrames {
+  0% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1.3, 1.3);
+    opacity: 0;
+  }
+}
+
+@-o-keyframes animationFrames {
+  0% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1.3, 1.3);
+    opacity: 0;
+  }
+}
+
+@-ms-keyframes animationFrames {
+  0% {
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: scale(1.3, 1.3);
+    opacity: 0;
+  }
 }
 
 

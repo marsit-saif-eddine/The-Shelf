@@ -25,6 +25,7 @@ function Home() {
   const fetchHandler = async () => {
     try {
       const books = await axios.get('/book/someBooks').then((res) => res.data);
+      
       setBooks(books)
       return books;
     } catch (err) {

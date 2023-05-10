@@ -185,7 +185,7 @@ function addAnswer(i){
  
 var user = JSON.parse(localStorage.getItem('userData'));
 //console.log("your user id is :"+user.id);
-var userId = user.id;
+var userId = user._id;
 var userName = user.username;
 var userpic = user.avatar;
 /////// show book in select /////////////

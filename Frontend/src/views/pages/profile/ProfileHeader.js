@@ -15,7 +15,7 @@ import Avatar from '@components/avatar'
 const ProfileHeader = ({ data,selectedUser }) => {
   // ** States
   const [isOpen, setIsOpen] = useState(false)
-
+console.log("sss   "+ selectedUser)
   const toggle = () => setIsOpen(!isOpen)
  // ** render user img
  const renderUserImg = () => {
@@ -77,8 +77,10 @@ const { pathname } = location;
           <Collapse isOpen={isOpen} navbar>
             <div className='profile-tabs d-flex justify-content-between flex-wrap mt-1 mt-md-0'>
               <Nav className='mb-0' pills>
+
               <NavItem>
                   <NavLink href={`/pages/profile/${selectedUser._id}`} className='fw-bold' active>
+
                     <span className='d-none d-md-block'>Events</span>
                     <Rss className='d-block d-md-none' size={14} />
                   </NavLink>
@@ -110,22 +112,23 @@ const { pathname } = location;
                 </NavItem>
                
                 </NavItem> */}
-                <NavItem>
-                  <NavLink to="/pages/profile/quiz" className='fw-bold'>
-                    <span className='d-none d-md-block'>Quizzes</span>
-                    <Users className='d-block d-md-none' size={14} />
-                  </NavLink>
-                </NavItem>
+              
 
                 <NavItem>
-                  <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' active>
+                  <NavLink href={`/pages/profile/mybooks/${selectedUser._id}`} className='fw-bold' >
                     <span className='d-none d-md-block'>Books</span>
                     <Users className='d-block d-md-none' size={14} />
                   </NavLink>
                 </NavItem>
+                <NavItem>
+                  <NavLink href={`/pages/profile/myquizzes/${selectedUser._id}`} className='fw-bold'>
+                    <span className='d-none d-md-block'>Quizzes</span>
+                    <Users className='d-block d-md-none' size={14} />
+                  </NavLink>
+                </NavItem>
               </Nav>
-              <Button color='primary'>
-              <Link to='/eventsform'> Add a new event</Link>
+              <Button className='btn btn-outline-primary'>
+              <Link to='/eventsform' style={{color:'white'}}> Add a new event</Link>
               <Plus size={14} > Add a new event</Plus>
             </Button>
             </div>

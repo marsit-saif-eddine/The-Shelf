@@ -50,11 +50,14 @@ const bookSchema = new Schema(
         default: false
     },
 
+    genre: {
+        type: [String],
+        required: false
+    },
+
     owner: {},
     owner_Id: {},
-    owner_pic:{
-        type: String
-    }
+   
 
 });
 

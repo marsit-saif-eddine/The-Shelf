@@ -53,20 +53,9 @@ const ProfileBooks = ({ data }) => {
 // ** ComponentDidMount : Get product
     useEffect(() => {
       fetchHandler().then((data) => {
-          //console.log('this is data', data)
           setBooks(data)
       });
     }, [])
-
-  // const handleUpdate = async (_id) => {
-  //     try {
-  //         const res = await axios.put(`/events/update/${_id}`, { /* update data */ });
-  //         console.log(res.data);
-  //     } catch (err) {
-  //         console.error(err);
-  //         // Implement logic to show an error message
-  //     }
-  // };
 
   const handleDelete = async (_id) => {
     try {
@@ -140,7 +129,6 @@ const ProfileBooks = ({ data }) => {
   const unparticipateEvent = async (_id) => {
     try {
       const res = await axios.post(`/events/unparticipate/${_id}`);
-      console.log(res.data);
       setEvents(events.map(event => {
         if (event._id === _id) {
           return { ...event, participants: res.data.participants }
@@ -153,46 +141,14 @@ const ProfileBooks = ({ data }) => {
 
     }
   };
-  const handleEventUpdate = (updatedEvent) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) =>
-        event._id === updatedEvent._id ? updatedEvent : event
-      )
-      
-    );
-    setShowForm(false); // Hide the form after submitting it
-
-
-  };
-  const updateEvent = (updatedEvent) => {
-    setEvents((prevEvents) => {
-      const index = prevEvents.findIndex((event) => event._id === updatedEvent._id);
-      console.log(index)
-      if (index !== -1) {
-        const newEvents = [...prevEvents];
-        newEvents[index] = updatedEvent;
-        return newEvents;
-      } else {
-        return prevEvents;
-      }
-    });
-    setSelectedEvent(null); // Clear the selectedEvent state to hide the update form
-
-     // Hide the form
-  console.log('Before setShowForm:', showForm);
-  setShowForm(false);
-  console.log('After setShowForm:', showForm);
-
-
-
-  };
 
   
   //isOwner*********************
-  const isTheOwner=() => {
-    if(id === userData._id) {
-        return true
-    }
+  const isOwner =() => {
+    let isOwner;
+      (id === userData._id) ?  isOwner = true : isOwner = false;
+        return isOwner;
+    
   }
   const renderPosts = () => {
     return books.length > 0 ? books.map(item => {
@@ -215,7 +171,7 @@ const ProfileBooks = ({ data }) => {
           <Link to={`/bookdetail/${item._id}`} className="card_link">
             <div className="card__img--hover" style={{backgroundImage:`url('${item.image ? item.image : 'http://localhost:3000/image/cover_book.png'}')`}}></div>
           </Link>
-          {isTheOwner &&  (
+          {isOwner()  && 
                               <div className="card__actions">
                               <Link to={`/addbook/${item._id}`}>
                                 <Button color='primary'className='btn-cart move-cart' >
@@ -241,7 +197,9 @@ const ProfileBooks = ({ data }) => {
                                 
                                   </Button>
                               </div>
-                              )}
+                              
+                            
+                            }
           
           <div className="card__info">
             <h3 className="card__title">{item.name}</h3>

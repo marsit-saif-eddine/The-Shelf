@@ -10,6 +10,8 @@ import { format } from 'date-fns';
 import { Fragment } from 'react'
 import {  UncontrolledTooltip} from 'reactstrap'
 import Avatar from '@components/avatar'
+import { BsFillCameraVideoFill} from 'react-icons/bs';
+import avatar5 from '@src/assets/images/portrait/small/avatar-s-5.jpg'
 
 import axios from 'axios';
 import UpdateEventForm from "../Events/UpdateEventForm"
@@ -378,7 +380,9 @@ function EventsCards() {
   };
   // setParticipatedCount( Object.keys(data.participants).length);
 
+
   return (
+    
 
     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
     {/* Render the error message if it exists */}
@@ -387,6 +391,7 @@ function EventsCards() {
         {errorMessage}
       </div>
     )}
+    
     
 <div className="card-container">
   
@@ -399,7 +404,7 @@ return (
           src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`}
           alt={event.name}
           loading="lazy"
-          style={{ width: '100%', height: '60%', borderRadius: '10px' }}
+          style={{ width: '60%', height: '60%', borderRadius: '10px' }}
         />
       </div>
       <Card className='ecommerce-card'>
@@ -408,16 +413,7 @@ return (
             <Link to={`/eventsdetail/${event._id}`}>{event.name}</Link>
             <CardText tag='span' className='item-company'></CardText>
           </h6>
-          {/* <p>Participants:</p>
-          <AvatarGroup max={4}>
-            {event.participants.map((participant) => (
-              <Avatar
-                key={participant.id}
-                alt={participant.name}
-                src={participant.avatarUrl}
-              />
-            ))}
-          </AvatarGroup> */}
+       
           <CardText className='item-description'>In {event.location}</CardText>
           <CardText className='item-description'>
             {event?.startDate ? format(new Date(event.startDate), "dd MMM yyyy") : ""} TO {event?.endDate ? format(new Date(event.endDate), "dd MMM yyyy") : ""}
@@ -434,15 +430,22 @@ return (
             {/* <div>{userData.Avatar}</div> */}
 
           </button>
+         
 
-
-          <div className='d-flex align-items-center'>
-          <AvatarGroup max={4}>
+  
+ 
+          <div className='d-flex justify-items-center mr-auto '>
+            
+          <AvatarGroup  className="avatargroup" max={7}>
   {event.participants.map(participantt => (
-     <Avatar key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />
+     <Avatar className="avatar" key={participantt._id}  alt={participantt.firstname} img={participantt.profile_photo} />
     
-  ))
+  ))    
   }
+
+ 
+
+
   
 </AvatarGroup>
 
