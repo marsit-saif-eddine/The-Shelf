@@ -26,6 +26,7 @@ import {
   import { getUser} from '../../user/store'
   import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
   import "../../quiz/quiz.css"
+  import { useSelector } from "react-redux";
 
 
 
@@ -42,7 +43,8 @@ const postTable = () => {
     const [totalPostsCount, setPostsCount] = useState(0);
     const [posts,setPosts]= useState([]);
     const [post,setPost]= useState([]);
-   
+    const socket = useSelector((state) => state.chat.socket);
+
    
 
     const get = async ()=>{
@@ -71,7 +73,7 @@ const postTable = () => {
       }, [change]);
        
   
-      const Delete = (id) => {
+      const Delete = (post) => {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You will not be able to recover this item!',
@@ -81,12 +83,18 @@ const postTable = () => {
             cancelButtonText: 'No, cancel',
           }).then((result) => {
             if (result.isConfirmed) {
-        axios.delete(`http://localhost:5000/post/${id}`)
+        axios.delete(`http://localhost:5000/post/${post._id}`)
         .then(() => {
+          socket.emit("post-deleted", post)
           // Remove the deleted post from the posts array
-          const updatedPosts = posts.filter((post) => post.id !== id);
+          console.log("d eeteeee ellll post emittted ")
+
+          const updatedPosts = posts.filter((post) => post.id !== post._id);
           setPosts(updatedPosts);
           setChange(true)
+          console.log("d eeteeee ellll post "+ post._id);
+          console.log("ellll post "+ post.owner_Id)
+
         });
     }
 });
@@ -103,8 +111,10 @@ const postTable = () => {
           }).then((result) => {
             if (result.isConfirmed) {
         axios.put(`http://localhost:5000/post/switch_accepted/${item._id}`,{is_accepted: !item.is_accepted})
-     
+
        .then(response => {
+        socket.emit("post-approved", item)
+
         console.log(response.data);
         setChange(true)   
         console.log(response);
@@ -261,7 +271,7 @@ const postTable = () => {
                                     <DropdownItem
                                     
                                       className='w-100'
-                                      onClick={() => Delete(post._id)}
+                                      onClick={() => Delete(post)}
                                     >
                                       <Trash2 size={14} className='me-50' />
                                       <span className='align-middle'>Delete</span>

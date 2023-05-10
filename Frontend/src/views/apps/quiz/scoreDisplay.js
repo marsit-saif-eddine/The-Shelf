@@ -65,9 +65,9 @@ console.log("creatorid:"+ quiz.user_id)
 
         <h3 className='mb-75 mt-2 pt-50'>
           <p>
-            5/5
-            {quiz.submissions.score}
-          </p>
+            
+          {quiz.submissions[quiz.submissions.length-1].score} 
+                   </p>
         </h3>
         <Link to={`/quiz/${quiz._id}`}>  
         <Button className='round' color='primary' outline>Take quiz</Button> 

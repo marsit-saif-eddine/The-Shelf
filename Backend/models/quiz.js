@@ -76,10 +76,8 @@ submissions: [
     {
       answers: [],
       score: Number,
-      taker_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
+      taker_id: {},
+      
     },
   ],
 

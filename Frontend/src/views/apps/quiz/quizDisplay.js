@@ -41,14 +41,19 @@ const[change,setChange]=useState(false)
 // useEffect(() => {
 //   const socket = io("http://localhost:5000");
 //   socket.on("me", (msg) => {
-//     console.log("sockeet"+msg);
+//     console.log("sockeet msg test " + msg);
 //   });
   
-//   // Clean up the event listener when the component unmounts
-//   return () => {
-//     socket.off("me");
-//   };
+ 
 // }, []);
+// const socket = io('http://localhost:5000');
+
+// socket.on('quizApproved', (quiz) => {
+//   // display a notification to the user
+//   console.log(`Quiz ${quiz._id} has been approved`);
+// });
+
+
 
 
 const [userData, setUserData] = useState(null)
@@ -59,7 +64,7 @@ useEffect(() => {
 }, []);
 
 const store = useSelector(state => state.users)
-console.log("sss  "+ store.selectedUser)
+// console.log("sss  "+ store.selectedUser)
 const userid = useParams().id
 var user = JSON.parse(localStorage.getItem('userData'));
 var userId = user._id;

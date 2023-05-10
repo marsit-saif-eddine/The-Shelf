@@ -35,6 +35,7 @@ import axios from "axios";
 import { Fragment, useState, useEffect } from 'react'
 import { Trash2, MoreVertical, FileText, Archive,Layers } from 'react-feather';
 import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
+import { useSelector } from "react-redux";
 
 const eventTable = () => {
 
@@ -46,6 +47,7 @@ const eventTable = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const offersPerPage = 5;
     const pagesVisited = pageNumber * offersPerPage;
+    const socket = useSelector((state) => state.chat.socket);
 
 
     const get = ()=>{
@@ -69,7 +71,7 @@ const eventTable = () => {
     }, [change]);
 
 
-    const Delete = (id) => {
+    const Delete = (event) => {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You will not be able to recover this item!',
@@ -79,9 +81,10 @@ const eventTable = () => {
             cancelButtonText: 'No, cancel',
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:5000/events/delete/${id}`)
+                axios.delete(`http://localhost:5000/events/delete/${event._id}`)
                     .then(() => {
-                        const updatedEvents = Events.filter((event) => event.id !== id);
+                        socket.emit("event-deleted", {event});
+                        const updatedEvents = Events.filter((event) => event.id !== event._id);
                         setEvents(updatedEvents);
                         setChange(true)
                     });
@@ -216,7 +219,7 @@ const eventTable = () => {
                                                                                                                               <DropdownItem
 
                                                                     className='w-100'
-                                                                    onClick={() => Delete(event._id)}
+                                                                    onClick={() => Delete(event)}
                                                                 >
                                                                     <Trash2 size={14} className='me-50' />
                                                                     <span className='align-middle'>Delete</span>

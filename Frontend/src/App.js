@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect } from "react";
 
 // ** Router Import
 import Router from './router/Router'
@@ -25,13 +25,13 @@ const App = () => {
   }, [socket]);
   return (
     <>
-    <Suspense fallback={null}>
-      <Router />
-    </Suspense>
+      <Suspense fallback={null}>
+        <Router />
+      </Suspense>
 
-    <ChatBubbles/>
+      <ChatBubbles />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

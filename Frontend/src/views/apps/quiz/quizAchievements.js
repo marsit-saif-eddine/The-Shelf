@@ -49,8 +49,7 @@ useEffect(() => {
 const userid = useParams().id
 var user = JSON.parse(localStorage.getItem('userData'));
 var userId = user._id;
-//const approved="approved";
-//const publicc="public";
+
 
 useEffect(() => {
   if (userid !== null) {
@@ -76,7 +75,7 @@ return (
     }}
   >
     <CardBody className='text-center'>
-      <h2 className='text-primary'>Welcome to  { Quizs.creator} achivments </h2>
+      <h2 className='text-primary'>Welcome to achivments </h2>
       <CardText className='mb-2'>
          <span className='fw-bolder'>here you will find all the quizzes that you took choose to publish </span>
       </CardText>
