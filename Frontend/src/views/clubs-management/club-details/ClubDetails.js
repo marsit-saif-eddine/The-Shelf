@@ -166,7 +166,7 @@ const ClubDetails = () => {
                             </div>
                             <img
                               className="rounded"
-                              src={"http://localhost:5000/" + x.profile_photo}
+                              src={"http://localhost:5000/" + x.photo}
                             />
                           </div>
                         </div>
