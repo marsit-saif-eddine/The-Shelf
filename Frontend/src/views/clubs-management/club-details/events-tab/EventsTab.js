@@ -37,14 +37,14 @@ const EventsTab = () => {
           </InputGroup>
         </div>
         <div className="col-auto mb-1">
-          <Button
+          <button className="btn btn-gradient-primary"
             onClick={() => {
               setOpenAddModal(true);
               console.log(openAddModal);
             }}
           >
             Add event
-          </Button>
+          </button>
         </div>
       </div>
 
