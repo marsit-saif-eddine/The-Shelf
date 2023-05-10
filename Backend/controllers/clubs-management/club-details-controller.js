@@ -57,7 +57,7 @@ exports.publishAnnouncement = async (req, res) => {
             _id: req.user._id,
             lastname: req.user.lastname,
             firstname: req.user.firstname,
-            profile_photo: req.user.profile_photo
+            photo: req.user.photo
         }
 
         req.body.creation_date = new Date();

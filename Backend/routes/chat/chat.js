@@ -1,8 +1,9 @@
-var express = require('express');
+const router = require('express').Router();
+const chatController = require('../../controllers/chat-management/chat-controller');
+const { requireAuth } = require('../../middleware/auth');
 
-var router = express.Router();
-const chatController = require('../../controllers/chat/chat');
 
+router.get('/getPrivateConversation', requireAuth, chatController.getPrivateConversation);
+router.get('/getLatestMessages', requireAuth, chatController.getLatestMessages);
 
-router.get('/getChatContacts', chatController.getChatAndContacts)
 module.exports = router;

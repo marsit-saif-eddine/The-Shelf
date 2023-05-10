@@ -15,7 +15,7 @@ const AnnouncementsCard = ({ announcement }) => {
         <div className="row m-0">
           <div className="col-auto card p-50 m-0 ms-1">
             <img
-              src={"http://localhost:5000/" + announcement.publisher.profile_photo}
+              src={"http://localhost:5000/" + announcement.publisher.photo}
               height="85px"
               width="85px"
             />

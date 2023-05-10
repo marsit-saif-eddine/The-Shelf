@@ -6,7 +6,7 @@ import { addChatBox, closeChatBubble } from "../../../redux/chat";
 import ChatBox from "./ChatBox";
 const ChatBubbles = () => {
   const chatBubbles = useSelector((state) => state.chat.chatBubbles);
-  const chatBoxes = useSelector((state) => state.chat.chatBoxes);
+  const chatBox = useSelector((state) => state.chat.chatBox);
   const dispatch = useDispatch();
 
   return (
@@ -24,7 +24,7 @@ const ChatBubbles = () => {
               </div>
               <img
               onClick={() => {dispatch(addChatBox(x)); dispatch(closeChatBubble(index))}}
-                src={'http://localhost:5000/' + x.profile_photo}
+                src={'http://localhost:5000/' + x.photo}
                 height="50px"
                 width="50px"
               />
@@ -44,11 +44,8 @@ const ChatBubbles = () => {
         );
       })}
       {
-        chatBoxes.map((x, index) => {
-          return (
-            <ChatBox chatData={x} boxIndex={index} key={index}/>
-          )
-        })
+        chatBox && 
+        <ChatBox chatData={chatBox}/>
       }
     </div>
   );

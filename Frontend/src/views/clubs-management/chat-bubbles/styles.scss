@@ -1,4 +1,5 @@
 .chat-bubbles-container {
+  z-index: 500;
   .bubble {
     position: fixed;
     right: 10px;
@@ -75,12 +76,12 @@
       right: 0;
       padding: 15px;
       box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
-      z-index: 1;
+      z-index: 51;
     }
 
     .dialog-bubble-arrow {
       position: absolute;
-      z-index: -1;
+      z-index: 50;
       width: 5px;
       height: 5px;
       display: none;

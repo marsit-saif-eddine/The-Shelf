@@ -3,8 +3,8 @@ const logger = require("morgan");
 const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
+const {getDb} = require('./services/database/connection');
 
-const chatRouter = require("./routes/chat/chat.js")
 const userssRouter = require("./routes/user.js");
 const eventsRouter= require("./routes/event");
 const quizRouter = require("./routes/quiz/quiz.js");
@@ -56,19 +56,18 @@ app.use(express.urlencoded({ extended: false }));
 ////// BEGIN ROUTES ///////
 const signUpRoutes = require("./routes/sign-up/sign-up");
 const clubsRoutes = require('./routes/clubs');
-
+const chatRoutes = require('./routes/chat/chat.js');
 
 app.use("/signUp",signUpRoutes);
 app.use("/user",userssRouter);
 app.use("/events",eventsRouter)
 app.use("/book",booksRouter);
 app.use("/quiz",quizRouter);
-app.use("/appChat",chatRouter);
 app.use("/post",postsRouter);
 
 app.use("/clubs",clubsRoutes);
 app.use('/uploads/avatars', express.static('uploads/avatars'));
-
+app.use('/chat', chatRoutes);
 
 
 
@@ -94,6 +93,10 @@ mongoose
   .catch((err) => {
     console.log(err.message);
   });
+
+app.get('/', async (req, res) => {
+
+});
 
   
 

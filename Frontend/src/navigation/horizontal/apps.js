@@ -180,6 +180,14 @@ export default [
         icon: <Circle />,
         navLink: "users/list",
       },
+      {
+        id: "appChat",
+        title: "Chat",
+        icon: <Mail />,
+        navLink: "/apps/chatt",
+        action: "client",
+        resource: "client",
+      },
       // ,
       // {
       //   id: 'view',

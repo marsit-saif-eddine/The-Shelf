@@ -169,7 +169,7 @@ export const clubsSlice = createSlice({
             _id: user._id,
             lastname: user.lastname,
             firstname: user.firstname,
-            profile_photo: user.profile_photo
+            photo: user.photo
           };
           action.payload.creation_date = new Date();
           state.clubAnnouncements.unshift(action.payload);

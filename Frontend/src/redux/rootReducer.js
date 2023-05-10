@@ -16,6 +16,7 @@ import clubs from './clubs';
 import calendar from '../views/clubs-management/club-details/calendar-tab/store'
 import chat from './chat';
 import appChat from '../views/clubs-management/chat/store';
+import messenger from './messenger';
 
 const rootReducer = {
   auth,
@@ -32,6 +33,7 @@ const rootReducer = {
   permissions,
   clubs,
   chat,
+  messenger,
   calendar,
   appChat,
 };

@@ -41,7 +41,6 @@ const ClubDetails = () => {
         params: { club_id: params.id },
       })
       .then((resp) => {
-        console.log(resp.data);
         setClub(resp.data);
         dispatch(setCurrentClub(resp.data));
       })
@@ -167,7 +166,7 @@ const ClubDetails = () => {
                             </div>
                             <img
                               className="rounded"
-                              src={"http://localhost:5000/" + x.profile_photo}
+                              src={"http://localhost:5000/" + x.photo}
                             />
                           </div>
                         </div>

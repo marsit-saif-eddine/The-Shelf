@@ -14,6 +14,12 @@ import classnames from "classnames";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Menu, Mic, Image, Send } from "react-feather";
 
+const words = require('../../../extra-words.json');
+const Filter = require('bad-words');
+const filter = new Filter();
+
+filter.addWords(...words);
+
 // ** Reactstrap Imports
 import {
   Form,
@@ -55,8 +61,11 @@ const ChatLog = (props) => {
     socket.on("club-message-received", (data) => {
       dispatch(clubMessageReceived(data));
     });
+
+    return () => socket.off('club-message-received');
     
   }, []);
+
 
   // ** Renders user chat
   const renderChats = () => {
@@ -73,7 +82,7 @@ const ChatLog = (props) => {
               imgWidth={36}
               imgHeight={36}
               className="box-shadow-1 cursor-pointer"
-              img={item.user._id === 'gpt' ? item.user.profile_photo : ('http://localhost:5000/' + item.user.profile_photo)}
+              img={item.user._id === 'gpt' ? item.user.photo : ('http://localhost:5000/' + item.user.photo)}
             />
           </div>
 
@@ -95,17 +104,18 @@ const ChatLog = (props) => {
   // ** Sends New Msg
   const handleSendMsg = async (e) => {
     e.preventDefault();
+
+    if (messageToSend.trim().length){
     sendClubMessage({
-      message: messageToSend,
+      message: filter.clean(messageToSend),
       club_id: params.id,
       user: {
         _id: currentUser._id,
         lastname: currentUser.lastname,
         firstname: currentUser.firstname,
-        profile_photo: currentUser.profile_photo
-      },
+        photo: currentUser.photo
+      }
     });
-
 
     if (messageToSend.includes("hey gpt")) {
       const text = messageToSend.replace("hey gpt", "");
@@ -118,7 +128,7 @@ const ChatLog = (props) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${"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"}`,
+            Authorization: `Bearer ${"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"}`,
             "Content-Type": "application/json",
           },
         }
@@ -128,10 +138,12 @@ const ChatLog = (props) => {
       sendClubMessage({
         message,
         club_id: currentClub._id,
-        user: { lastname: 'Chat', firstname: 'GPT', profile_photo: 'https://i.pinimg.com/originals/02/c5/a8/02c5a82909a225411008d772ee6b7d62.png', _id: "gpt" },
+        user: { lastname: 'Chat', firstname: 'GPT', photo: 'https://i.pinimg.com/originals/02/c5/a8/02c5a82909a225411008d772ee6b7d62.png', _id: "gpt" },
       });
     }
+
     setMessageToSend("");
+  }
   };
 
   // ** ChatWrapper tag based on chat's length
@@ -157,7 +169,7 @@ const ChatLog = (props) => {
                 <Avatar
                   imgHeight="36"
                   imgWidth="36"
-                  img={conversation?.messages.at(-1).user._id != 'gpt' ? ('http://localhost:5000/' + conversation?.messages.at(-1).user.profile_photo) : conversation?.messages.at(-1).user.profile_photo}
+                  img={conversation?.messages.at(-1).user._id != 'gpt' ? ('http://localhost:5000/' + conversation?.messages.at(-1).user.photo) : conversation?.messages.at(-1).user.photo}
                   status={"online"}
                   className="avatar-border user-profile-toggle m-0 me-1"
                   onClick={() => {}}

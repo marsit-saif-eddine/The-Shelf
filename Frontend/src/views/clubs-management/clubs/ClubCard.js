@@ -102,7 +102,7 @@ const ClubCard = (props) => {
                       .map((x) => {
                         return {
                           title: x.lastname + " " + x.firstname,
-                          img: "http://localhost:5000/" + x.profile_photo,
+                          img: "http://localhost:5000/" + x.photo,
                         };
                       })
                       .splice(0, 8)}

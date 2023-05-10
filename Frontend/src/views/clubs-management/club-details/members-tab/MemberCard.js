@@ -23,7 +23,7 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
             <div className="profile-image-wrapper">
               <div className="profile-image">
                 <div className="avatar">
-                  <img src={'http://localhost:5000/' + member.profile_photo} />
+                  <img src={'http://localhost:5000/' + member.photo} />
                 </div>
               </div>
             </div>
@@ -46,7 +46,7 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
               </button>
             </div> : 
             <div className="d-flex justify-content-center align-items-center">
-            <button onClick={() => dispatch(addChatBox({_id: '', user: 'abidi wajih', newContent: null}))} className="btn btn-outline-success expandable-btn me-1">
+            <button onClick={() => dispatch(addChatBox(member))} className="btn btn-outline-success expandable-btn me-1">
               <Mail className="font-medium-2"></Mail>
               <span>Message</span>
             </button>

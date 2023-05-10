@@ -88,18 +88,16 @@ exports.rateUser = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-
-        let user = await User.findOne({ email }, 'lastname firstname email profile_photo role password ability phone_number ability address');
-        console.log(user.email)
-
+        let user = await User.findOne({ email }, 'lastname firstname photo role password ability');
         if (user) {
             if (user.isConfirmed === false) {return res.status(409).json({ "message": "please check your email to confirm your account !" });}
             if (user.status === 'banned') {
                 return res.status(409).json({ "message": "Your account is banned. Please contact the admin!" });
             } else {
                 const auth = await bcrypt.compare(password, user.password);
+
                 if (auth) {
-                    // user = {...user._doc};
+                    user = {...user._doc};
                     user._id = user._id.toString();
                     delete user.password;
                     const accessToken = createToken(user);

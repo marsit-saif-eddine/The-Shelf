@@ -9,7 +9,7 @@ exports.addClub = async (req, res) => {
       _id: req.user._id,
       lastname: req.user.lastname,
       firstname: req.user.firstname,
-      profile_photo: req.user.profile_photo
+      photo: req.user.photo
     };
 
     req.body.creation_date = new Date();
@@ -93,7 +93,7 @@ exports.getAdminsToSelect = async (req, res) => {
           projection: {
             lastname: 1,
             firstname: 1,
-            profile_photo: 1
+            photo: 1
           },
         }
       )
