@@ -23,18 +23,28 @@ const ClubCard = (props) => {
 
   useEffect(() => {
     setMemberShipStatus(
-      club.members
-        ? club.members.findIndex(
-            (x) => x._id === currentUser._id && !x.pending
-          ) != -1
-          ? "member"
-          : club.members.findIndex(
-              (x) => x._id === currentUser._id && x.pending
-            ) != -1
-          ? "pending"
-          : "none"
-        : "none"
+      currentUser.role == 'admin' ? 'admin':
+      club.admins?.findIndex((x) => x._id === currentUser._id) != -1 ? 'admin':
+      club.created_by._id  == currentUser._id ? 'admin' :
+      club.members?.findIndex((x) => x._id === currentUser._id && !x.pending) != -1 ? 'member':
+      club.members?.findIndex(x => x._id == currentUser._id && x.pending) != -1 ? 'pending':
+      'none'
     );
+    // setMemberShipStatus(
+    //   club.members
+    //     ? club.members.findIndex(
+    //         (x) => x._id === currentUser._id && !x.pending
+    //       ) != -1
+    //       ? "member"
+    //       : club.members.findIndex(
+    //           (x) => x._id === currentUser._id && x.pending
+    //         ) != -1
+    //       ? "pending" : club.created_by._id == currentUser._id
+    //       ? 'admin' : club.admins.findIndex(x => x._id == currentUser._id) != -1
+    //       ? 'admin'
+    //       : "none"
+    //     : "none"
+    // );
   }, []);
   return (
     <div className="col-lg-6 col-12 mb-2">
@@ -43,7 +53,7 @@ const ClubCard = (props) => {
       </div>
 
       <div className="card main-card custom-card">
-        {(club.admins.findIndex(x => x._id === currentUser._id) > -1 || club.created_by._id === currentUser._id || currentUser.role === 'admin') ? (
+        {memberShipStatus == 'admin' ? (
           <div className="action-btns-container">
             <div
               onClick={() => {
@@ -112,7 +122,7 @@ const ClubCard = (props) => {
             </div>
           </div>
 
-          {currentUser.role === "admin" || memberShipStatus === "member" ? (
+          {memberShipStatus === "admin" || memberShipStatus === "member" ? (
             <button
               className="btn btn-gradient-primary"
               onClick={() => navigate((currentUser.role === "admin" ? "/apps/clubs/details/" : "/apps/clubs/detailss/") + club._id)}
