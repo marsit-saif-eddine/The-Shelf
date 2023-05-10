@@ -404,7 +404,7 @@ return (
           src={`http://localhost:5000/uploads/${event?.image?.substr(8)}`}
           alt={event.name}
           loading="lazy"
-          style={{ width: '100%', height: '60%', borderRadius: '10px' }}
+          style={{ width: '60%', height: '60%', borderRadius: '10px' }}
         />
       </div>
       <Card className='ecommerce-card'>
