@@ -16,8 +16,6 @@
 // router.put("/switch_accepted/:id", booksController.switchBookToaccepted);
 
 
-
-
 // module.exports = router;
 
 
@@ -28,6 +26,8 @@ const booksController = require("../../controllers/book-management/bookControlle
 //const middlewareuploader = require('../../middleware/uploadimage');
 const upload= require ('../../middleware/multer-config');
 const uploadController = require('../../controllers/book-management/upload-controller');
+
+
 router.get("/searchForBook", booksController.searchForBook);
 router.get("/books", booksController.getAllBooks);
 router.get("/filter_books", booksController.getAllBooksFilter);
@@ -41,6 +41,8 @@ router.get("/someBooks", booksController.getSomeBooks);
 router.get("/:id", booksController.getById);
 router.put("/:id", booksController.updateBook);
 router.delete("/:id", booksController.deleteBook);
+router.get("/books_genre", booksController.getByGenre);
+router.get("/books_name", booksController.getByName);
 router.put("/switch_accepted/:id", booksController.switchBookToaccepted);
 router.get("/user_book/:id", booksController.getByUserId);
 

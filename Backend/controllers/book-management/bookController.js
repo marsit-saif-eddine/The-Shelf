@@ -569,7 +569,7 @@ const getByAuthor = async (req, res, next) => {
 //getByAuthor
 
 const addBook = async (req, res, next) => {
-  const { name, author, description, price, available, for_sale, owner, owner_Id, accepted, genre , bookId } = req.body;
+  const { name, image, author, description, price, available, for_sale, owner, owner_Id, accepted, genre , bookId } = req.body;
   let book;
   let BookMap;
   try {
@@ -581,6 +581,7 @@ const addBook = async (req, res, next) => {
       description,
       price,
       available,
+      image,
       // image: req.protocol + "://" + req.get("host") + "/upload/bookimg/" + req.file,
       for_sale,
       owner,
@@ -697,6 +698,40 @@ const searchForBook = async (req, res, next) => {
   }
 };
 
+const getByGenre = async (req, res, next) => {
+  const genre = req.query.genre;
+  let books;
+  try {
+  books = await Book.find({genre : genre});
+  
+  } catch (err) {
+    console.log(err);
+  }
+  if (!books) {
+    return res.status(404).json({ message: "No books found" });
+  }
+  return res.status(200).json(books);
+};
+
+const getByName = async (req, res, next) => {
+  const name = req.query.name;
+  
+  let books;
+  try {
+  books = await Book.find({name : name, for_sale:true});
+
+  } catch (err) {
+    console.log(err);
+  }
+  if (!books) {
+    return res.status(404).json({ message: "No books found" });
+  }
+  return res.status(200).json(books);
+};
+
+
+
+
 exports.searchForBook = searchForBook;
 exports.getSomeBooks = getSomeBooks;
 exports.getAllBooks = getAllBooks;
@@ -709,5 +744,7 @@ exports.updateBook = updateBook;
 exports.deleteBook = deleteBook;
 exports.switchBookToaccepted = switchBookToaccepted;
 exports.getByUserId = getByUserId;
+exports.getByGenre = getByGenre;
+exports.getByName = getByName;
 //exports.getUserBooksFilter = getUserBooksFilter;
 exports.getUserBooksFilter = getUserBooksFilter;

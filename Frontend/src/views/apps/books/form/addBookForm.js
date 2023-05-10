@@ -54,7 +54,7 @@ const AddBookForm = () => {
     const [titleForm, setTitleForm] = useState('');
     const [mode, setMode] = useState();
     
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState();
     const [selsctedType, setSelsctedType] = useState(false);
     const { register, getValues, setValue } = useForm();
     const refImg = useRef('image');
@@ -187,6 +187,7 @@ const handleSearch = async (query) => {
           if (Object.values(data)) {
             console.log('dataa list', data)
             data.owner= user.username;
+            data.image=files;
             data.owner_Id= ownerId;
             data.bookId = searchResultSelectedItem.id;
             console.log('dataa list with modif', data)
@@ -220,6 +221,7 @@ const handleSearch = async (query) => {
             //     </div>
             //   </div>
             // )
+
           } else console.log('error')
       }
       const handleReset = () => {
@@ -328,25 +330,7 @@ const handleSearch = async (query) => {
             </Col>
           </Row>
 
-    {shoPrice && (
-        <>
-        <Row className='mb-1'>
-            <Label sm='3' for='Price'>
-            Price
-            </Label>
-            <Col sm='9'>
-            <Controller
-            defaultValue={defaultValues.price}
-            control={control}
-            name='price'
-            id='price'
-            placeholder='Price'
-            render={({ field }) => <Input {...field} type='number' id="price"  name='price'/>}
-            />
-            </Col>
-        </Row>
-        </>
-    )}
+    
           <Row className='mb-1'>
             <Label sm='3' for='for_sale'>
             Rent/ Sale
@@ -372,7 +356,24 @@ const handleSearch = async (query) => {
                         />
             </Col>
           </Row>
-                    
+
+              
+        <Row className='mb-1'>
+            <Label sm='3' for='Price'>
+            Price
+            </Label>
+            <Col sm='9'>
+            <Controller
+            defaultValue={defaultValues.price}
+            control={control}
+            name='price'
+            id='price'
+            placeholder='Price'
+            render={({ field }) => <Input {...field} type='number' placeholder='Price' id="price"  name='price'/>}
+            />
+            </Col>
+        </Row>  
+
           <Row className='mb-1'>
             <Label sm='3' for='for_sale'>
             Genre
