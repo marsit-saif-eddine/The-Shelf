@@ -72,7 +72,7 @@ const [score, setScore] = useState(0);
 
 
 
-const submitQuiz = (answers) => {
+const submitQuiz = (answers, taker_id) => {
   let score = 0;
   const totalPoints = quiz.questions.reduce((acc, question) => {
     return acc + question.points;
@@ -103,17 +103,11 @@ const submitQuiz = (answers) => {
   });
 
   axios
-    .post(`http://localhost:5000/quiz/${quiz._id}/submit`, { answers, score })
+    .post(`http://localhost:5000/quiz/${quiz._id}/submit`, { answers, score , taker_id})
     .then((response) => {
       // Show the user's score to the user
       const userScore = response.data.score;
-      // Swal.fire({
-      //   title: 'Quiz Submitted!',
-      //   text: `Your score is ${userScore} out of ${totalPoints} points.`,
-  
-      //   icon: "success",
-      //   confirmButtonText: "Ok",
-      // });
+   
       Swal.fire({
         title: 'Quiz Submitted!',
         text: `Your score is ${userScore} out of ${totalPoints} points.`,
@@ -156,13 +150,16 @@ const handleSubmit = (event) => {
   const form = event.target;
   const formData = new FormData(form);
   const answers = {};
+  var user = JSON.parse(localStorage.getItem('userData'));
+
+  const taker_id = user._id;
   formData.forEach((value, key) => {
     const [prefix, questionIndex] = key.split('_');
     if (prefix === 'question') {
       answers[questionIndex] = value;
     }
   });
-  submitQuiz(answers);   
+  submitQuiz(answers,taker_id);   
 
 };
 if (!quiz) {

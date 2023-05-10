@@ -9,7 +9,7 @@ exports.addClub = async (req, res) => {
       _id: req.user._id,
       lastname: req.user.lastname,
       firstname: req.user.firstname,
-      photo: req.user.photo
+      photo: req.user.photo,
     };
 
     req.body.creation_date = new Date();
@@ -78,7 +78,7 @@ exports.getClubs = async (req, res) => {
 
     return res.status(200).send(clubs);
   } catch (ex) {
-    console.log(ex)
+    console.log(ex);
     return res.status(500).send();
   }
 };
@@ -93,7 +93,7 @@ exports.getAdminsToSelect = async (req, res) => {
           projection: {
             lastname: 1,
             firstname: 1,
-            photo: 1
+            photo: 1,
           },
         }
       )
@@ -111,7 +111,7 @@ exports.sendJoinClubRequest = async (req, res) => {
       { _id: new ObjectID(req.query.club_id) },
       {
         $push: {
-          members: {...req.user, pending: true},
+          members: { ...req.user, pending: true },
         },
       }
     );
@@ -128,7 +128,7 @@ exports.acceptJoinRequest = async (req, res) => {
     const result = await dbClubs.updateOne(
       { _id: new ObjectID(req.query.club_id) },
       { $unset: { "members.$[member].pending": 1 } },
-      { arrayFilters: [{ 'member._id': req.body.user_id }] }
+      { arrayFilters: [{ "member._id": req.body.user_id }] }
     );
     console.log(result);
 
@@ -143,7 +143,7 @@ exports.cancelJoinRequest = async (req, res) => {
     const dbClubs = getDb().collection("clubs");
     const result = await dbClubs.updateOne(
       { _id: new ObjectID(req.query.club_id) },
-      { $pull: {members: {_id: req.body.user_id} } }
+      { $pull: { members: { _id: req.body.user_id } } }
     );
 
     return res.status(200).send(true);
