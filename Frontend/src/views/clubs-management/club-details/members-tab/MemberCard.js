@@ -23,7 +23,7 @@ const MemberCard = ({member, acceptRequest, rejectRequest}) => {
             <div className="profile-image-wrapper">
               <div className="profile-image">
                 <div className="avatar">
-                  <img src={'http://localhost:5000/' + member.photo} />
+                  <img src={'http://localhost:5000/' + member.profile_photo} />
                 </div>
               </div>
             </div>

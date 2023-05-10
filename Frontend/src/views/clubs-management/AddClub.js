@@ -29,7 +29,7 @@ const OptionComponent = ({ data, ...props }) => {
     <components.Option {...props}>
       <img
         className="rounded me-50"
-        src={"http://localhost:5000/" + data.photo}
+        src={"http://localhost:5000/" + data.profile_photo}
         width="35"
         height="35"
       />
@@ -65,7 +65,7 @@ const AddClub = ({}) => {
         if (resp.data) {
           setAvatar("http://localhost:5000/" + resp.data.logo);
           setSelectedAdmins(resp.data.admins.map(x => {
-            return {value: x._id, label: x.lastname + ' ' + x.firstname, photo: x.photo}
+            return {value: x._id, label: x.lastname + ' ' + x.firstname, profile_photo: x.profile_photo}
           }));
           setClubName(resp.data.club_name);
           const _contentState = ContentState.createFromText(
@@ -175,7 +175,7 @@ const AddClub = ({}) => {
     //     if (x.value) {
     //       return x;
     //     }
-    //     return {_id: x._id, label: x.lastname + ' ' + x.firstname, photo: x.photo, value: x._id}
+    //     return {_id: x._id, label: x.lastname + ' ' + x.firstname, profile_photo: x.profile_photo, value: x._id}
     //   });
     //   console.log(choices);
     //   setSelectedAdmins([...choices])
@@ -271,7 +271,7 @@ const AddClub = ({}) => {
                   value={selectedAdmins}
                   options={adminsToSelect.map((x) => {
                     return {
-                      photo: x.photo,
+                      profile_photo: x.profile_photo,
                       value: x._id,
                       label: x.lastname + " " + x.firstname,
                     };

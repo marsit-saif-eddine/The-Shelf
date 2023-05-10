@@ -44,7 +44,7 @@ export const ChatSlice = createSlice({
     //   _id: ''
     //   lastname: '',
     //   firstname: '',
-    //   photo: '',
+    //   profile_photo: '',
     //   newContent: ''
     // }
     addChatBubble: (state, action) => {

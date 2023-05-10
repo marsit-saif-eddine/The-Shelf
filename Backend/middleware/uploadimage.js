@@ -57,9 +57,9 @@ const upload = multer({
         }
         req.body = JSON.parse(req.body.user);
         if (req.file) {
-          req.body.photo = req.file.path; // set the service_logo field of the request body to the uploaded file path
+          req.body.profile_photo = req.file.path; // set the service_logo field of the request body to the uploaded file path
         } else {
-          req.body.photo = '/'
+          req.body.profile_photo = '/'
         }
         next();
       });

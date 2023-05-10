@@ -25,7 +25,7 @@ const AdminsListModal = (props) => {
             <div className="row mb-1">
               <div className="col-auto">
                 <img
-                  src={"http://localhost:5000/" + x.photo}
+                  src={"http://localhost:5000/" + x.profile_photo}
                   className="rounded"
                   width="40px"
                   height="40px"

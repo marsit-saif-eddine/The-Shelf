@@ -24,7 +24,7 @@ const ChatBubbles = () => {
               </div>
               <img
               onClick={() => {dispatch(addChatBox(x)); dispatch(closeChatBubble(index))}}
-                src={'http://localhost:5000/' + x.photo}
+                src={'http://localhost:5000/' + x.profile_photo}
                 height="50px"
                 width="50px"
               />

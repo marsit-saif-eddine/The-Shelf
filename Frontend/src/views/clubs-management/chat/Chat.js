@@ -73,7 +73,7 @@ const ChatLog = (props) => {
               imgWidth={36}
               imgHeight={36}
               className="box-shadow-1 cursor-pointer"
-              img={item.user._id === 'gpt' ? item.user.photo : ('http://localhost:5000/' + item.user.photo)}
+              img={item.user._id === 'gpt' ? item.user.profile_photo : ('http://localhost:5000/' + item.user.profile_photo)}
             />
           </div>
 
@@ -102,7 +102,7 @@ const ChatLog = (props) => {
         _id: currentUser._id,
         lastname: currentUser.lastname,
         firstname: currentUser.firstname,
-        photo: currentUser.photo
+        profile_photo: currentUser.profile_photo
       },
     });
 
@@ -128,7 +128,7 @@ const ChatLog = (props) => {
       sendClubMessage({
         message,
         club_id: currentClub._id,
-        user: { lastname: 'Chat', firstname: 'GPT', photo: 'https://i.pinimg.com/originals/02/c5/a8/02c5a82909a225411008d772ee6b7d62.png', _id: "gpt" },
+        user: { lastname: 'Chat', firstname: 'GPT', profile_photo: 'https://i.pinimg.com/originals/02/c5/a8/02c5a82909a225411008d772ee6b7d62.png', _id: "gpt" },
       });
     }
     setMessageToSend("");
@@ -157,7 +157,7 @@ const ChatLog = (props) => {
                 <Avatar
                   imgHeight="36"
                   imgWidth="36"
-                  img={conversation?.messages.at(-1).user._id != 'gpt' ? ('http://localhost:5000/' + conversation?.messages.at(-1).user.photo) : conversation?.messages.at(-1).user.photo}
+                  img={conversation?.messages.at(-1).user._id != 'gpt' ? ('http://localhost:5000/' + conversation?.messages.at(-1).user.profile_photo) : conversation?.messages.at(-1).user.profile_photo}
                   status={"online"}
                   className="avatar-border user-profile-toggle m-0 me-1"
                   onClick={() => {}}
