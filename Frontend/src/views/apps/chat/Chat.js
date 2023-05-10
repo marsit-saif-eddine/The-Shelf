@@ -6,8 +6,7 @@ import { useState, useEffect, useRef } from 'react'
 import Avatar from '@components/avatar'
 
 // ** Store & Actions
-import { sendMsg } from './store'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // ** Third Party Components
 import classnames from 'classnames'
@@ -27,11 +26,22 @@ import {
   InputGroupText,
   UncontrolledDropdown
 } from 'reactstrap'
+const Filter = require('bad-words');
+
+const filter = new Filter();
+
+const words = require('../../../extra-words.json');
+filter.addWords(...words);
+import { addMessage, getLatestMessages, getPrivateConversation } from '../../../redux/messenger'
+
 
 const ChatLog = props => {
-  // ** Props & Store
-  const { handleUser, handleUserSidebarRight, handleSidebar, store, userSidebarLeft } = props
-  const { userProfile, selectedUser } = store
+
+  const conversation = useSelector(state => state.messenger.conversation);
+  const selectedUser = useSelector(state => state.messenger.selectedUser);
+  const socket = useSelector(state => state.chat.socket);
+
+  const currentUser = JSON.parse(localStorage.getItem('userData'));
 
   // ** Refs & Dispatch
   const chatArea = useRef(null)
@@ -43,63 +53,35 @@ const ChatLog = props => {
   // ** Scroll to chat bottom
   const scrollToBottom = () => {
     const chatContainer = ReactDOM.findDOMNode(chatArea.current)
-    chatContainer.scrollTop = Number.MAX_SAFE_INTEGER
+    if (chatContainer) {
+      chatContainer.scrollTop = Number.MAX_SAFE_INTEGER
+    }
   }
 
   // ** If user chat is not empty scrollToBottom
   useEffect(() => {
-    const selectedUserLen = Object.keys(selectedUser).length
 
-    if (selectedUserLen) {
-      scrollToBottom()
-    }
-  }, [selectedUser])
-
-  // ** Formats chat data based on sender
-  const formattedChatData = () => {
-    let chatLog = []
-    if (selectedUser.chat) {
-      chatLog = selectedUser.chat.chat
+    if (selectedUser != null) {
+      dispatch(getPrivateConversation(selectedUser._id));
     }
 
-    const formattedChatLog = []
-    let chatMessageSenderId = chatLog[0] ? chatLog[0].senderId : undefined
-    let msgGroup = {
-      senderId: chatMessageSenderId,
-      messages: []
+  }, [selectedUser]);
+
+  useEffect(() => {
+    if (conversation && chatArea) {
+      scrollToBottom();
     }
-    chatLog.forEach((msg, index) => {
-      if (chatMessageSenderId === msg.senderId) {
-        msgGroup.messages.push({
-          msg: msg.message,
-          time: msg.time
-        })
-      } else {
-        chatMessageSenderId = msg.senderId
-        formattedChatLog.push(msgGroup)
-        msgGroup = {
-          senderId: msg.senderId,
-          messages: [
-            {
-              msg: msg.message,
-              time: msg.time
-            }
-          ]
-        }
-      }
-      if (index === chatLog.length - 1) formattedChatLog.push(msgGroup)
-    })
-    return formattedChatLog
-  }
+  },[conversation]);
+
 
   // ** Renders user chat
   const renderChats = () => {
-    return formattedChatData().map((item, index) => {
+    return conversation?.map((item, index) => {
       return (
         <div
           key={index}
           className={classnames('chat', {
-            'chat-left': item.senderId !== 11
+            'chat-left': item.sender._id != currentUser._id
           })}
         >
           <div className='chat-avatar'>
@@ -107,16 +89,14 @@ const ChatLog = props => {
               imgWidth={36}
               imgHeight={36}
               className='box-shadow-1 cursor-pointer'
-              img={item.senderId === 11 ? userProfile.avatar : selectedUser.contact.avatar}
+              img={'http://localhost:5000/' + item.sender.photo}
             />
           </div>
 
           <div className='chat-body'>
-            {item.messages.map(chat => (
-              <div key={chat.msg} className='chat-content'>
-                <p>{chat.msg}</p>
+              <div className='chat-content'>
+                <p>{item.message}</p>
               </div>
-            ))}
           </div>
         </div>
       )
@@ -125,32 +105,31 @@ const ChatLog = props => {
 
   // ** Opens right sidebar & handles its data
   const handleAvatarClick = obj => {
-    handleUserSidebarRight()
-    handleUser(obj)
+
   }
 
   // ** On mobile screen open left sidebar on Start Conversation Click
   const handleStartConversation = () => {
-    if (!Object.keys(selectedUser).length && !userSidebarLeft && window.innerWidth < 992) {
-      handleSidebar()
-    }
+
   }
 
   // ** Sends New Msg
   const handleSendMsg = e => {
     e.preventDefault()
     if (msg.trim().length) {
-      dispatch(sendMsg({ ...selectedUser, message: msg }))
+      const msgToSend = filter.clean(msg);
+      socket.emit('private-message-sent', {receiver: selectedUser, message: msgToSend});
+      dispatch(addMessage({sender: {_id: currentUser._id, lastname: currentUser.lastname, firstname: currentUser.firstname, photo: currentUser.photo}, message: msgToSend}));
       setMsg('')
     }
   }
 
   // ** ChatWrapper tag based on chat's length
-  const ChatWrapper = Object.keys(selectedUser).length && selectedUser.chat ? PerfectScrollbar : 'div'
+  const ChatWrapper = selectedUser ? PerfectScrollbar : 'div'
 
   return (
     <div className='chat-app-window'>
-      <div className={classnames('start-chat-area', { 'd-none': Object.keys(selectedUser).length })}>
+      <div className={classnames('start-chat-area', { 'd-none': selectedUser })}>
         <div className='start-chat-icon mb-1'>
           <MessageSquare />
         </div>
@@ -158,23 +137,23 @@ const ChatLog = props => {
           Start Conversation
         </h4>
       </div>
-      {Object.keys(selectedUser).length ? (
+      {selectedUser ? (
         <div className={classnames('active-chat', { 'd-none': selectedUser === null })}>
           <div className='chat-navbar'>
             <header className='chat-header'>
               <div className='d-flex align-items-center'>
-                <div className='sidebar-toggle d-block d-lg-none me-1' onClick={handleSidebar}>
+                <div className='sidebar-toggle d-block d-lg-none me-1' onClick={() => console.log('I M CLICKED')}>
                   <Menu size={21} />
                 </div>
                 <Avatar
                   imgHeight='36'
                   imgWidth='36'
-                  img={selectedUser.contact.avatar}
-                  status={selectedUser.contact.status}
+                  img={'http://localhost:5000/' + selectedUser.photo}
+                  status={'online'}
                   className='avatar-border user-profile-toggle m-0 me-1'
-                  onClick={() => handleAvatarClick(selectedUser.contact)}
+                  onClick={() => console.log('2 ME TOO')}
                 />
-                <h6 className='mb-0'>{selectedUser.contact.fullName}</h6>
+                <h6 className='mb-0'>{selectedUser.lastname + ' ' + selectedUser.firstname}</h6>
               </div>
               <div className='d-flex align-items-center'>
                 <PhoneCall size={18} className='cursor-pointer d-sm-block d-none me-1' />
@@ -207,7 +186,7 @@ const ChatLog = props => {
           </div>
 
           <ChatWrapper ref={chatArea} className='user-chats' options={{ wheelPropagation: false }}>
-            {selectedUser.chat ? <div className='chats'>{renderChats()}</div> : null}
+            {selectedUser ? <div className='chats'>{renderChats()}</div> : null}
           </ChatWrapper>
 
           <Form className='chat-app-form' onSubmit={e => handleSendMsg(e)}>

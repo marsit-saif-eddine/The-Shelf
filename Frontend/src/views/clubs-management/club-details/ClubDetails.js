@@ -41,7 +41,6 @@ const ClubDetails = () => {
         params: { club_id: params.id },
       })
       .then((resp) => {
-        console.log(resp.data);
         setClub(resp.data);
         dispatch(setCurrentClub(resp.data));
       })

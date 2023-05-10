@@ -10,6 +10,7 @@ const requireAuth = (req, res, next) => {
     let token = req.header('Authorization').split(' ')[1];
     token = token.replace(`"`, "");
     token = token.replace(`"`, "");
+    console.log(token);
 
     if (token) {
         jwt.verify(token,process.env.JWT_SECRET, async (err, decodedToken) => {

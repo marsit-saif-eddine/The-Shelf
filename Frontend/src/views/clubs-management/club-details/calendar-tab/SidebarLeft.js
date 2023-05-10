@@ -33,9 +33,9 @@ const SidebarLeft = props => {
     <Fragment>
       <div className='sidebar-wrapper'>
         <CardBody className='card-body d-flex justify-content-center my-sm-0 mb-3'>
-          <Button color='primary' block onClick={handleAddEventClick}>
+          {/* <Button color='primary' block onClick={handleAddEventClick}>
             <span className='align-middle'>Add Event</span>
-          </Button>
+          </Button> */}
         </CardBody>
         <CardBody style={{display: "none"}}>
           <h5 className='section-label mb-1'>

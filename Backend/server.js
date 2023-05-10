@@ -3,6 +3,8 @@ const http = require("http");
 const server = http.createServer(app);
 const socketService = require("./services/socket/socket");
 const jwt = require("jsonwebtoken");
+const chatController = require('./controllers/chat-management/chat-controller.js');
+
 
 const io = require("socket.io")(server, {
   cors: {
@@ -43,8 +45,6 @@ server.listen(process.env.PORT, () => {
 
 // WAJIH'S CODE
 
-let currentSocket;
-
 
 io.use((socket, next) => {
   try {
@@ -58,17 +58,14 @@ io.use((socket, next) => {
     process.env.JWT_SECRET,
     (err, decoded) => {
       if (err) {
-        return next(new Error("UNAUTHORIZED"));
+        throw new Error("UNAUTHORIZED");
       }
-      socket.user_id = decoded._id;
+      socket.user = decoded;
       next();
     }
   );
-
-  next();
   } catch(ex) {}
-}).on("connection", async (socket) => {
-  currentSocket = socket;
+}).on("connect", (socket) => {
   socket.on("club-message-sent", (data) => {
     data.creation_date = new Date();
     io.to(data.club_id).emit("club-message-received", data);
@@ -76,9 +73,25 @@ io.use((socket, next) => {
   });
 
   setTimeout(async () => {
-    const clubsIds = await socketService.getUsersClubs(socket.user_id);
+    const clubsIds = await socketService.getUserClubs(socket.user);
     socket.join(clubsIds);
   }, 8000);
+
+
+  socket.on("private-message-sent", async (data) => {
+    const sender = {_id: socket.user._id, lastname: socket.user.lastname, firstname: socket.user.firstname, photo: socket.user.photo};
+    const receiver = data.receiver;
+
+    const result = await chatController.addMessage({message: data.message, sender, receiver});
+    if (result.acknowledged) {
+      const connectedSockets = await io.fetchSockets();
+      const receiverSocketId = connectedSockets.find(x => x.user._id == receiver._id);
+      io.to(receiverSocketId.id).emit('private-message-received', ({message: data.message, sender}));
+    }
+
+
+
+  });
+
 });
 
-exports.getSocket = () => {console.log(currentSocket); return currentSocket}

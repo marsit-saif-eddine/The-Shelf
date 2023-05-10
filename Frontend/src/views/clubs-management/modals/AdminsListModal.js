@@ -20,9 +20,9 @@ const AdminsListModal = (props) => {
         Administrators
       </ModalHeader>
       <ModalBody>
-        {props.admins?.map((x) => {
+        {props.admins?.map((x, index) => {
           return (
-            <div className="row mb-1">
+            <div className="row mb-1" key={index}>
               <div className="col-auto">
                 <img
                   src={"http://localhost:5000/" + x.photo}

@@ -1,5 +1,5 @@
 // ** Icons Import
-import { FileText, Circle, Award, Book, Coffee, Layers } from 'react-feather'
+import { FileText, Circle, Award, Book, Coffee, Layers, Mail } from 'react-feather'
 
 export default [
   {
@@ -56,6 +56,22 @@ export default [
     title: "Clubs",
     icon: <Coffee />,
     navLink: "/apps/clubs/list",
+    action: "admin",
+    resource: "admin",
+  },
+  {
+    id: "inviteAdmin",
+    title: "Invite admin",
+    icon: <Circle />,
+    navLink: "/apps/invite-admin",
+    action: "admin",
+    resource: "admin",
+  },
+  {
+    id: "appChat",
+    title: "Chat",
+    icon: <Mail />,
+    navLink: "/apps/chat",
     action: "admin",
     resource: "admin",
   },

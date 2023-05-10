@@ -1,6 +1,8 @@
 // ** React Imports
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
+import InviteAdmin from "../../views/pages/authentication/InviteAdmin";
+import AppChat from "../../views/apps/chat";
 
 const Chat = lazy(() => import("../../views/apps/chat"));
 const Todo = lazy(() => import("../../views/apps/todo"));
@@ -282,10 +284,6 @@ const AppRoutes = [
     }
     
   },
-
-
-
-
 
   {
     element: < VideoConferance/>,
@@ -657,6 +655,39 @@ const AppRoutes = [
     meta: {
       appLayout: false,
       className: "zererg-application",
+      layout: "horizontal",
+      action: "client",
+      resource: "client",
+    },
+  },
+  {
+    element: <InviteAdmin />,
+    path: "/apps/invite-admin",
+    meta: {
+      appLayout: false,
+      className: "zerefrg-application",
+      layout: "vertical",
+      action: "admin",
+      resource: "admin",
+    },
+  },
+  {
+    element: <AppChat />,
+    path: "/apps/chat",
+    meta: {
+      appLayout: false,
+      className: "chat-application",
+      layout: "vertical",
+      action: "admin",
+      resource: "admin",
+    },
+  },
+  {
+    element: <AppChat />,
+    path: "/apps/chatt",
+    meta: {
+      appLayout: false,
+      className: "chat-application",
       layout: "horizontal",
       action: "client",
       resource: "client",

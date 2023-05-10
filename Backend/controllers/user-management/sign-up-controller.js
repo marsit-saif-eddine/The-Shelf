@@ -139,9 +139,6 @@ exports.confirmEmail = async (req, res) => {
 exports.inviteAdmin = async (req, res) => {
   const dbUsers = getDb().collection("users");
 
-  req.user = {
-    user_id: req.body.user_id,
-  };
   req.body.email = req.body.email.toLowerCase();
   req.body.creation_date = new Date();
   req.body.isAdmin = true;
@@ -151,7 +148,7 @@ exports.inviteAdmin = async (req, res) => {
     .then(async (result) => {
       try {
         const sender = await dbUsers.findOne(
-          { _id: new ObjectID(req.user.user_id) },
+          { _id: new ObjectID(req.user._id) },
           { projection: { firstname: 1, lastname: 1 } }
         );
         emailController.inviteUserEmail(

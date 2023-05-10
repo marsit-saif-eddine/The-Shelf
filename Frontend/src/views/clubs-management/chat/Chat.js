@@ -14,6 +14,12 @@ import classnames from "classnames";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Menu, Mic, Image, Send } from "react-feather";
 
+const words = require('../../../extra-words.json');
+const Filter = require('bad-words');
+const filter = new Filter();
+
+filter.addWords(...words);
+
 // ** Reactstrap Imports
 import {
   Form,
@@ -55,8 +61,11 @@ const ChatLog = (props) => {
     socket.on("club-message-received", (data) => {
       dispatch(clubMessageReceived(data));
     });
+
+    return () => socket.off('club-message-received');
     
   }, []);
+
 
   // ** Renders user chat
   const renderChats = () => {
@@ -95,17 +104,18 @@ const ChatLog = (props) => {
   // ** Sends New Msg
   const handleSendMsg = async (e) => {
     e.preventDefault();
+
+    if (messageToSend.trim().length){
     sendClubMessage({
-      message: messageToSend,
+      message: filter.clean(messageToSend),
       club_id: params.id,
       user: {
         _id: currentUser._id,
         lastname: currentUser.lastname,
         firstname: currentUser.firstname,
         photo: currentUser.photo
-      },
+      }
     });
-
 
     if (messageToSend.includes("hey gpt")) {
       const text = messageToSend.replace("hey gpt", "");
@@ -118,7 +128,7 @@ const ChatLog = (props) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${"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"}`,
+            Authorization: `Bearer ${"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"}`,
             "Content-Type": "application/json",
           },
         }
@@ -131,7 +141,9 @@ const ChatLog = (props) => {
         user: { lastname: 'Chat', firstname: 'GPT', photo: 'https://i.pinimg.com/originals/02/c5/a8/02c5a82909a225411008d772ee6b7d62.png', _id: "gpt" },
       });
     }
+
     setMessageToSend("");
+  }
   };
 
   // ** ChatWrapper tag based on chat's length
