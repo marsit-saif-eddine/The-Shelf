@@ -207,14 +207,9 @@ io.use((socket, next) => {
     });
     if (result.acknowledged) {
       const connectedSockets = await io.fetchSockets();
-      const receiverSocketId = connectedSockets.find(
-        (x) => x.user._id == receiver._id
-      );
+      const receiverSocketId = connectedSockets.find(x => x.user._id == receiver._id);
       if (receiverSocketId) {
-        io.to(receiverSocketId.id).emit("private-message-received", {
-          message: data.message,
-          sender,
-        });
+        io.to(receiverSocketId.id).emit('private-message-received', ({message: data.message, sender}));
       }
     }
   });
