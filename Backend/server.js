@@ -85,7 +85,9 @@ io.use((socket, next) => {
     if (result.acknowledged) {
       const connectedSockets = await io.fetchSockets();
       const receiverSocketId = connectedSockets.find(x => x.user._id == receiver._id);
-      io.to(receiverSocketId.id).emit('private-message-received', ({message: data.message, sender}));
+      if (receiverSocketId) {
+        io.to(receiverSocketId.id).emit('private-message-received', ({message: data.message, sender}));
+      }
     }
 
 
