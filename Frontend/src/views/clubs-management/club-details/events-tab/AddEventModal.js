@@ -1,0 +1,470 @@
+// import React, { useState } from 'react';
+// import axios from 'axios';
+
+// function EventForm() {
+//   const [name, setName] = useState('');
+//   const [startDate, setStartDate] = useState('');
+//   const [endDate, setEndDate] = useState('');
+//   const [description, setDescription] = useState('');
+//   const [location, setLocation] = useState('');
+//   const [image, setImage] = useState(null);
+
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+//     const formData = new FormData();
+//     formData.append('name', name);
+//     formData.append('startDate', startDate);
+//     formData.append('endDate', endDate);
+//     formData.append('description', description);
+//     formData.append('location', location);
+//     formData.append('image', image);
+
+//     fetch('http://localhost:5000/events/add', {
+//       method: 'POST',
+//       body: formData
+//     })
+//       .then(response => response.json())
+//       .then(data => console.log(data))
+//       .catch(error => console.log(error));
+//   }
+
+//   const handleImageChange = (event) => {
+//     setImage(event.target.files[0]);
+//   }
+
+//   return (
+//     <form onSubmit={handleSubmit} encType="multipart/form-data">
+//       <label>Name:</label>
+//       <input type="text" name="name" value={name} onChange={e => setName(e.target.value)} /><br />
+//       <label>Start Date:</label>
+//       <input type="date" name="startDate" value={startDate} onChange={e => setStartDate(e.target.value)} /><br />
+//       <label>End Date:</label>
+//       <input type="date" name="endDate" value={endDate} onChange={e => setEndDate(e.target.value)} /><br />
+//       <label>Description:</label>
+//       <input type="text" name="description" value={description} onChange={e => setDescription(e.target.value)} /><br />
+//       <label>Location:</label>
+//       <input type="text" name="location" value={location} onChange={e => setLocation(e.target.value)} /><br />
+//       <label>Image:</label>
+//       <input type="file" name="image" onChange={handleImageChange} /><br />
+//       <input type="submit" value="Submit" />
+//     </form>
+//   );
+// }
+
+// export default EventForm;
+
+// import { React, useState,useEffect } from 'react';
+// import axios from 'axios';
+// import { useNavigate } from 'react-router-dom';
+// import { format } from 'date-fns';
+// import { isUserLoggedIn } from '@utils'
+
+// import '../Events/add.css'
+// import '../Events/new.css'
+
+// const NewEventForm = () => {
+
+//   const [name, setName] = useState('');
+//   const [description, setDescription] = useState('');
+//   const [startDate, setStartDate] = useState('');
+//   const [endDate, setEndDate] = useState('');
+//   const [location, setLocation] = useState('');
+//   const [image, setImage] = useState(null);
+
+//   const [nameError, setNameError] = useState('');
+//   const [startDateError, setStartDateError] = useState('');
+//   const [endDateError, setEndDateError] = useState('');
+//   const [locationError, setLocationError] = useState('');
+//   const [userData, setUserData] = useState(null)
+
+//   useEffect(() => {
+//     if (isUserLoggedIn() !== null) {
+//       setUserData(JSON.parse(localStorage.getItem('userData')));
+//     }
+//   }, []);
+
+//   const handleNameChange = (e) => {
+//     setName(e.target.value);
+//     setNameError('');
+//   };
+//     const handleDescriptionChange = e => setDescription(e.target.value);
+//   const handleStartDateChange = (event) => {
+//     const formattedDate = format(new Date(event.target.value), 'yyyy-MM-dd');
+//     setStartDate(formattedDate);
+//   };
+
+//   const handleEndDateChange = (event) => {
+//     const formattedDate = format(new Date(event.target.value), 'yyyy-MM-dd');
+//     setEndDate(formattedDate);
+//   };
+//   // const handleStartDateChange = e => setStartDate(e.target.value).toLocaleDateString('en-US');
+//   // const handleEndDateChange = e => setEndDate(e.target.value).toLocaleDateString('en-US');
+//   const handleLocationChange = e => setLocation(e.target.value);
+//   const handleImageChange = e => setImage(e.target.files[0]);
+//   const navigate = useNavigate();
+//   const [submitted, setSubmitted] = useState(false);
+
+// //   //   const handleSubmit = e => {
+// //   //     e.preventDefault();
+// //   //     const formData = new FormData();
+// //   //     formData.append('name', name);
+// //   //     formData.append('description', description);
+// //   //     formData.append('startDate', startDate);
+// //   //     formData.append('endDate', endDate);
+// //   //     formData.append('location', location);
+// //   //     formData.append('image', image);
+// //   //     axios.post('/events/add', formData)
+// //   //       .then(res => console.log(res))
+// //   //       .catch(err => console.log(err));
+// //   //   };
+
+// //   //   return (
+// //   //     <form onSubmit={handleSubmit}>
+// //   //       <div className="form-group">
+// //   //         <label htmlFor="name">Name:</label>
+// //   //         <input type="text" className="form-control" id="name" value={name} onChange={handleNameChange} required />
+// //   //       </div>
+// //   //       <div className="form-group">
+// //   //         <label htmlFor="description">Description:</label>
+// //   //         <textarea className="form-control" id="description" value={description} onChange={handleDescriptionChange}></textarea>
+// //   //       </div>
+// //   //       <div className="form-group">
+// //   //         <label htmlFor="startDate">Start Date:</label>
+// //   //         <input type="date" className="form-control" id="startDate" value={startDate} onChange={handleStartDateChange} required />
+// //   //       </div>
+// //   //       <div className="form-group">
+// //   //         <label htmlFor="endDate">End Date:</label>
+// //   //         <input type="date" className="form-control" id="endDate" value={endDate} onChange={handleEndDateChange} required />
+// //   //       </div>
+// //   //       <div className="form-group">
+// //   //         <label htmlFor="location">Location:</label>
+// //   //         <input type="text" className="form-control" id="location" value={location} onChange={handleLocationChange} required />
+// //   //       </div>
+// //   //       <div className="form-group">
+// //   //         <label htmlFor="image">Image:</label>
+// //   //         <input type="file" className="form-control-file" id="image" accept=".jpg, .jpeg, .png" onChange={handleImageChange} />
+// //   // </div>
+// //   // <button type="submit" className="btn btn-primary">Submit</button>
+
+// //   // </form>
+
+// //   // );
+// //   // };
+// const handleSubmit = (event) => {
+
+//   event.preventDefault();
+//      // validate inputs
+//      let errors = false;
+
+//      if (name.trim() === "") {
+//       window.alert("Name is required");
+//       setNameError("Name is required");
+//       return;
+//     }
+//   const formData = new FormData();
+//   formData.append('name', name);
+//   formData.append('startDate', startDate);
+//   formData.append('endDate', endDate);
+//   formData.append('description', description);
+//   formData.append('location', location);
+//   formData.append('image', image);
+//   formData.append('owner', userData.id);
+
+//   fetch('http://localhost:5000/events/add', {
+//     method: 'POST',
+//     body: formData
+//   })
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log(data);
+//       navigate('/pages/profile');
+//     })
+//     .catch(error => console.log(error));
+// }
+
+// // const handleSubmit = (event) => {
+// //   event.preventDefault();
+// //   const formData = new FormData();
+// //   formData.append('name', name);
+// //   formData.append('startDate', startDate);
+// //   formData.append('endDate', endDate);
+// //   formData.append('description', description);
+// //   formData.append('location', location);
+// //   formData.append('image', image);
+// //   setSubmitted(true);
+
+// //   fetch('http://localhost:5000/events/add', {
+// //     method: 'POST',
+// //     body: formData
+
+// //   })
+// //     .then(response => response.json())
+// //     .then(data => console.log(data))
+// //     .catch(error => console.log(error));
+// //     if (submitted) {
+// //       navigate('/eventcards');
+// //     }
+// // }
+//   // const handleSubmit = async (e) => {
+//   //   e.preventDefault();
+//   //   const event = { name, description, startDate, endDate, location, image };
+//   //   const res = await axios.post('/events/add', event);
+//   //   setSubmitted(true);
+//   //   console.log(res.data);
+//   //   console.log(event.image)
+//   // };
+//   // if (submitted) {
+//   //   navigate('/eventcards');
+//   // }
+
+//   return (
+//     <div className="container">
+//     <form onSubmit={handleSubmit} encType="multipart/form-data" className="form-wrapper">
+//       <div className="form-group">
+//         <label htmlFor="name">Name:</label>
+//         <input type="text" className="form-control" id="name" value={name} onChange={handleNameChange} required />
+//         {nameError && <div className="error">{nameError}</div>}
+
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="description">Description:</label>
+//         <textarea className="form-control" id="description" value={description} onChange={handleDescriptionChange}></textarea>
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="startDate">Start Date:</label>
+//         <input type="date" className="form-control" id="startDate" value={startDate} onChange={handleStartDateChange} required />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="endDate">End Date:</label>
+//         <input type="date" className="form-control" id="endDate" value={endDate} onChange={handleEndDateChange} required />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="location">Location:</label>
+//         <input type="text" className="form-control" id="location" value={location} onChange={handleLocationChange} required />
+//       </div>
+//       <div className="form-group">
+//         <label htmlFor="image">Image:</label>
+//         <input type="file" name="image" onChange={handleImageChange} /><br />
+//       </div>
+//       <button type="submit" className="btn btn-primary">Submit</button>
+
+//     </form>
+//     </div>
+//   );
+// };
+
+// export default NewEventForm;
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { isUserLoggedIn } from "@utils";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { useParams } from "react-router-dom";
+
+import "../../../apps/Events/add.css";
+import "../../../apps/Events/new.css";
+import { useDispatch } from "react-redux";
+import { getClubEvents } from "../../../../redux/clubs";
+
+const AddClubEventModal = (props) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [image, setImage] = useState(null);
+  const [descriptionError, setDescriptionError] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [startDateError, setStartDateError] = useState("");
+  const [endDateError, setEndDateError] = useState("");
+  const [locationError, setLocationError] = useState("");
+  const [userData, setUserData] = useState(null);
+  const { id } = useParams();
+
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    console.log('ADD CLUB EVENT MODAL USEEFFECT EXECUTED');
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem("userData")));
+    }
+  }, [props]);
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    setNameError("");
+  };
+  const handleDescriptionChange = (e) => setDescription(e.target.value);
+  const handleStartDateChange = (event) => {
+    const formattedDate = format(new Date(event.target.value), "yyyy-MM-dd");
+    setStartDate(formattedDate);
+  };
+
+  const handleEndDateChange = (event) => {
+    const formattedDate = format(new Date(event.target.value), "yyyy-MM-dd");
+    setEndDate(formattedDate);
+  };
+
+  const handleLocationChange = (e) => setLocation(e.target.value);
+  const handleImageChange = (e) => setImage(e.target.files[0]);
+  const navigate = useNavigate();
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let errors = false;
+
+    // validate inputs
+    if (name.trim().length < 4 || name.trim().length > 20) {
+      setNameError("Name must be between 4 and 20 characters");
+      errors = true;
+    } else {
+      setNameError("");
+    }
+
+    if (description.trim().length < 8) {
+      setDescriptionError("Description must be at least 8 characters");
+      errors = true;
+    } else {
+      setDescriptionError("");
+    }
+
+    if (new Date(startDate) < new Date()) {
+      setStartDateError("Start date must be today or later");
+      errors = true;
+    } else {
+      setStartDateError("");
+    }
+    if (location.trim() === "") {
+      setLocationError("Location is required");
+      errors = true;
+    } else if (location.trim().length < 3) {
+      setLocationError("Location should be at least 3 characters");
+      errors = true;
+    } else {
+      setLocationError("");
+    }
+
+    if (errors) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    formData.append("description", description);
+    formData.append("location", location);
+    formData.append("image", image);
+    formData.append("owner", userData._id);
+    formData.append("club_id", props.club_id);
+
+    fetch("http://localhost:5000/events/add", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        props.setOpenModal(false);
+        console.log('POST DONE');
+        props.getEvents();
+      })
+      .catch((error) => console.log(error));
+  };
+
+  return (
+    <Modal isOpen={props.isOpen} toggle={() => props.setOpenModal(false)} className="modal-dialog-centered modal-md"
+    modalClassName="modal-primary">
+      <ModalHeader  toggle={() => props.setOpenModal(false)}>
+        New Event
+      </ModalHeader>
+      <ModalBody>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Name:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              value={name}
+              onChange={handleNameChange}
+              required
+            />
+            {nameError && <div className="text-danger">{nameError}</div>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Description:</label>
+            <textarea
+              className="form-control"
+              id="description"
+              value={description}
+              onChange={handleDescriptionChange}
+              required
+            />
+            {descriptionError && (
+              <div className="text-danger">{descriptionError}</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="startDate">Start Date:</label>
+            <input
+              type="date"
+              className="form-control"
+              id="startDate"
+              value={startDate}
+              onChange={handleStartDateChange}
+              required
+            />
+            {startDateError && (
+              <div className="text-danger">{startDateError}</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="endDate">End Date:</label>
+            <input
+              type="date"
+              className="form-control"
+              id="endDate"
+              value={endDate}
+              onChange={handleEndDateChange}
+              required
+            />
+            {endDateError && <div className="text-danger">{endDateError}</div>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="location">Location:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="location"
+              value={location}
+              onChange={handleLocationChange}
+              required
+            />
+            {locationError && (
+              <div className="text-danger">{locationError}</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="image">Image:</label>
+            <input
+              type="file"
+              className="form-control"
+              id="image"
+              onChange={handleImageChange}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </form>
+      </ModalBody>
+    </Modal>
+  );
+};
+
+export default AddClubEventModal;

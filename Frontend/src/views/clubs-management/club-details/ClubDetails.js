@@ -117,7 +117,7 @@ const ClubDetails = () => {
 
                   <div className="col-md-4 d-flex align-items-start">
                     <img
-                      src={"http://localhost:5000/" + club.created_by.profile_photo}
+                      src={"http://localhost:5000/" + club.created_by.photo}
                       className="rounded"
                       width="40px"
                       height="40px"

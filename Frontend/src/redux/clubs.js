@@ -91,6 +91,7 @@ export const deleteClubAnnouncement = createAsyncThunk(
 
 export const getClubEvents = createAsyncThunk("clubs/getClubEvents", payload =>
   axios.get("clubs/getClubEvents", {params: payload}).then((resp) => {
+    console.log('PAYLOOAADD GET EVENTS ', payload);
     return resp.data;
   })
 );
