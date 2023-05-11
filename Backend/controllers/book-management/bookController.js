@@ -266,6 +266,7 @@
 const goodread = require("../../models/goodread.js");
 const Book = require("../../models/book.js")
 const likedBook = require("../../models/liked_books_fulls.js")
+var mongoose = require('mongoose');
 
 
 
@@ -521,16 +522,28 @@ const getAcceptedBooks = async (req, res, next) => {
 const getById = async (req, res, next) => {
   const id = req.params.id;
   let book;
+  let profile;
   try {
     book = await Book.findById(id);
-    
+        
+    profile = {
+      ...book
+  }
+  profile = {
+      ...profile['_doc'],
+      rate: 0
+  };
+  profile.rate = profile.ratings.reduce((a, b) => a + b.value, 0);
+  profile.rate = profile.rate / profile.ratings.length;
+  delete profile.ratings;
+
   } catch (err) {
     console.log(err);
   }
   if (!book) {
     return res.status(404).json({ message: "No Book found" });
   }
-  return res.status(200).json({book} );
+  return res.status(200).json({book:profile} );
 };
 
 const getByUserId = async (req, res, next) => {
@@ -614,10 +627,10 @@ const rateBook = async (req, res) => {
           user_id: req.body.profileId,
           value: req.body.value
       }
-
+console.log('hi')
       const updatedBook = await Book.updateOne(
           {
-              _id: new mongoose.Types.ObjectId(req.body.profileId),
+              _id: new mongoose.Types.ObjectId(req.body.BookId),
               "ratings.user_id": ratings.user_id
           },
           {
@@ -629,7 +642,7 @@ const rateBook = async (req, res) => {
 
 
           });
-
+          console.log('hi')
 
 
       if (updatedBook.matchedCount == 0) {
@@ -642,7 +655,7 @@ const rateBook = async (req, res) => {
               });
       }
 
-
+      console.log('hi')
       let likedbook = new likedBook({
         book_id:req.body.BookId,
         rating:req.body.value,

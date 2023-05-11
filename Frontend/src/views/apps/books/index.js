@@ -101,6 +101,14 @@ const [genre, setGenre] = useState({});
     setGenre(event.target.value);
   };
 
+  const [userData, setUserData] = useState(null)
+
+  //** ComponentDidMount
+  useEffect(() => {
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')))
+    }
+  }, [])
 
 
   useEffect(() => {

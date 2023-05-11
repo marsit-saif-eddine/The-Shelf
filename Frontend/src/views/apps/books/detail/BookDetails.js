@@ -36,11 +36,11 @@ const BookDetails = props => {
   }, [])
 
   const rateBookRate = async (data) => {
-    await axios.put("http://localhost:5000/book/user/rateUser", data)
-    return profileId
+    await axios.put("http://localhost:5000/book/rateBook", data)
+    return true
   };
   // ** Props
-  const { data, deleteWishlistItem, dispatch, addToWishlist, getProduct, productId, addToCart , rateBook} = props
+  const { data, deleteWishlistItem, dispatch, addToWishlist, getProduct, productId, addToCart , recommendedBooks} = props
 
   // ** State
   const [selectedColor, setSelectedColor] = useState('primary')
@@ -163,7 +163,7 @@ useEffect(() => {
                       },
                     }} value={data.rate} max={5}
 
-                      onChange={(event, value) => {  console.log( userData._id, value ,data._id,data.name);rateBook({ profileId: userData._id, value , Book_id:data._id,title:data.name }) }}
+                      onChange={(event, value) => {  console.log( userData._id, value ,data._id,data.name);rateBookRate({ profileId: userData._id, value , BookId:data._id,title:data.name }) }}
 
                     />
                     </span>
