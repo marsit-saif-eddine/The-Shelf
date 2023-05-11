@@ -27,6 +27,7 @@ import { useVoice } from "./voiceSearch/useVoice";
 //import Mic from "./voiceSearch/microphone-black-shape.svg";
 import { useBookFetch } from "./voiceSearch/useBookFetch";
 
+import { isUserLoggedIn } from '@utils'
 
 
 
@@ -95,21 +96,39 @@ const [genre, setGenre] = useState({});
       setBooks(response.data);
     };
     fetchBooks();
+    getrecommendations()
   }, [genre]);
 
   const handleGenreChange = (event) => {
     setGenre(event.target.value);
   };
-
-  const [userData, setUserData] = useState(null)
+  const [userData, setUserData] = useState(localStorage.getItem('userData'))
+  const [recom, setrecomm] = useState(localStorage.getItem('userData'))
 
   //** ComponentDidMount
+
+
+  async function getrecommendations() {
+    try {
+      if (userData){
+        const response = await axios.get(`https://4397-41-62-156-252.ngrok-free.app/recommend?user_id=`+userData._id);
+        console.log(response)
+        const data = response.data;
+        setrecomm(data);
+      }
+    
+    } catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
     if (isUserLoggedIn() !== null) {
       setUserData(JSON.parse(localStorage.getItem('userData')))
     }
   }, [])
 
+
+  
 
   useEffect(() => {
     if (text !== "") {
