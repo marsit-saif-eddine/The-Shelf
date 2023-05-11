@@ -67,14 +67,44 @@ const PostCards = props => {
   }
 
   //isOwner*********************
-  const isTheOwner= async(id) => {
+  const isTheOwner = (id, item) => {
     let isOwner;
     console.log('id param',id);
     console.log('id param user',userData._id );
 
-    (id === userData._id) ?  isOwner = true : isOwner = false;
-    console.log('id isOwner',isOwner);
-      return isOwner;
+    (id === userData._id) ?  isOwner =     
+    <UncontrolledDropdown>
+    <DropdownToggle tag='div' className='btn btn-sm'>
+      <MoreVertical size={14} className='cursor-pointer' />
+    </DropdownToggle>
+    <DropdownMenu>
+      <DropdownItem
+      className='w-100'
+      >
+        <Link
+      to={`/addpost/${item._id}`}
+      className='w-100'
+    > 
+      <FileText size={14} className='me-50' />
+      <span className='align-middle'>Edit</span>
+        </Link> 
+      </DropdownItem>
+      <DropdownItem
+        tag='a'
+        className='w-100'
+        onClick={e => {
+          e.preventDefault();
+          handleDelete(item._id)
+        }}
+      >
+        <Trash2 size={14} className='me-50' />
+        <span className='align-middle'>Delete</span>
+      </DropdownItem>
+    </DropdownMenu>
+  </UncontrolledDropdown>: isOwner = null;
+      return (
+        isOwner
+      );
   }
 // handele delete post
 const handleDelete = async (_id) => {
@@ -131,37 +161,7 @@ const handleDelete = async (_id) => {
                   </h6>
                 </div>
               </div>
-              {userData && isTheOwner(item.owner_Id) === false &&   (
-              <UncontrolledDropdown>
-                  <DropdownToggle tag='div' className='btn btn-sm'>
-                    <MoreVertical size={14} className='cursor-pointer' />
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem
-                    className='w-100'
-                    >
-                      <Link
-                    to={`/addpost/${item._id}`}
-                    className='w-100'
-                  > 
-                    <FileText size={14} className='me-50' />
-                    <span className='align-middle'>Edit</span>
-                      </Link> 
-                    </DropdownItem>
-                    <DropdownItem
-                      tag='a'
-                      className='w-100'
-                      onClick={e => {
-                        e.preventDefault();
-                        handleDelete(item._id)
-                      }}
-                    >
-                      <Trash2 size={14} className='me-50' />
-                      <span className='align-middle'>Delete</span>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-                )}
+              {userData && isTheOwner(item.owner_Id, item)}
             </div>
            
             <CardText className='mb-2'> {item.content} </CardText>
