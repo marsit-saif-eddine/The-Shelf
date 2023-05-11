@@ -34,7 +34,6 @@ const NotificationDropdown = () => {
   const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
-    // console.log("socket from appjs", socket);
 
     if (socket) {
       ///// approve quizz
