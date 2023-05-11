@@ -57,8 +57,24 @@ const bookSchema = new Schema(
 
     owner: {},
     owner_Id: {},
-   
+    book_id: {
+        type: String,
+        required: true,
+    },
+    ratings:
+        { type:[Rate],
+            default:[]
+          },
+    
+
 
 });
+
+var Rate = new Schema(
+    {
+        user_id: String,
+        rate: Number
+    }
+)
 
 module.exports = mongoose.model("Book", bookSchema);

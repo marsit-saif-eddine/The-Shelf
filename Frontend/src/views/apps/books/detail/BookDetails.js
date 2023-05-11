@@ -8,6 +8,11 @@ import classnames from 'classnames'
 import { Star, ShoppingCart, DollarSign, Heart, Share2, Facebook, Twitter, Youtube, Instagram, Award } from 'react-feather'
 import QuizByBook from '../../quiz/quizByBook'
 import './book_detail.scss'
+import SwiperCentered from '../../../components/carousel/SwiperCenteredRecommendation';
+import Rating from '@mui/material/Rating'
+import Typography from '@mui/material/Typography'
+import { isUserLoggedIn } from '@utils'
+
 // ** Reactstrap Imports
 import {
   Row,
@@ -21,14 +26,43 @@ import {
 } from 'reactstrap'
 
 const BookDetails = props => {
+  const [userData, setUserData] = useState(null)
+
+  //** ComponentDidMount
+  useEffect(() => {
+    if (isUserLoggedIn() !== null) {
+      setUserData(JSON.parse(localStorage.getItem('userData')))
+    }
+  }, [])
+
+  const rateBookRate = async (data) => {
+    await axios.put("http://localhost:5000/book/user/rateUser", data)
+    return profileId
+  };
   // ** Props
-  const { data, deleteWishlistItem, dispatch, addToWishlist, getProduct, productId, addToCart } = props
+  const { data, deleteWishlistItem, dispatch, addToWishlist, getProduct, productId, addToCart , rateBook} = props
 
   // ** State
   const [selectedColor, setSelectedColor] = useState('primary')
 
-  // ** Renders color options
+  const [books, setBooks] = useState([]);
+  const fetch = async () => {
+    try {
+      const books = await axios.get('/book/Books').then((res) => res.data);
+      
+      setBooks(books)
+      return books;
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
+  useEffect(() => {
+
+    books.length == 0 ?
+      fetch()
+      : null
+  }, [books])
 
   // ** Handle Wishlist item toggle
   const handleWishlist = val => {
@@ -58,6 +92,8 @@ const BookDetails = props => {
     }
     dispatch(getProduct(productId))
   }
+
+
 
  ///////////quiz work //////
  const [showSection, setShowSection] = useState(false);
@@ -112,6 +148,26 @@ useEffect(() => {
               <CardText>
                 {data.available  ? <h5 className='text-success ms-25'>Available</h5> : <h5 className='text-danger ms-25'>Not Available</h5>}
               </CardText>
+            <CardText className='fw-bolder me-25'>rate:</CardText>
+                  <span>
+                    <Typography component="legend"></Typography>
+                    <Rating name="customized-10" sx={{
+                      '& .MuiRating-iconFilled': {
+                        color: '#ffd966',
+                      },
+                      '& .MuiRating-iconFocus': {
+                        color: '#ffd966',
+                      },
+                      '& .MuiRating-iconHover': {
+                        color: '#ffd966',
+                      },
+                    }} value={data.rate} max={5}
+
+                      onChange={(event, value) => {  console.log( userData._id, value ,data._id,data.name);rateBook({ profileId: userData._id, value , Book_id:data._id,title:data.name }) }}
+
+                    />
+                    </span>
+                
               </div>
    
               <CardText>{data.description}</CardText>
@@ -198,6 +254,27 @@ useEffect(() => {
               <QuizByBook/>
             </div>
           }
+            </div>
+            </Col>
+            </Row>
+            <Row>
+
+            </Row>
+        </div>
+
+
+        <div className='item-features'>
+            <Row className='text-center'>
+                <Col className='mb-12 mb-md-0' md='12' xs='12'>
+              <div className='w-75 mx-auto'>
+                <Award  className='mt-3'/>
+                <h4 className='mt-2 mb-1'>Recommended Books :</h4>
+                  <div style={{width:'80%'}}>
+                    <SwiperCentered  direction='rtl' books={books} />
+                  </div>  
+                  
+          
+          
             </div>
             </Col>
             </Row>

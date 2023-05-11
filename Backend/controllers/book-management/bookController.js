@@ -263,9 +263,10 @@
 // exports.getByUserId = getByUserId;
 
 
-const bookMap = require("../../models/book_id_map.js");
 const goodread = require("../../models/goodread.js");
 const Book = require("../../models/book.js")
+const likedBook = require("../../models/liked_books_fulls.js")
+
 
 
 const getAllBooks = async (req, res, next) => {
@@ -522,6 +523,7 @@ const getById = async (req, res, next) => {
   let book;
   try {
     book = await Book.findById(id);
+    
   } catch (err) {
     console.log(err);
   }
@@ -587,16 +589,11 @@ const addBook = async (req, res, next) => {
       owner,
       owner_Id,
       accepted,
-      genre
+      genre,
+      book_id:bookId
     });
     await book.save();
 
-    BookMap = new bookMap({
-      book_id:bookId,
-      book_id_csv:book._id
-    })
-    await BookMap.save();
-   
   } catch (err) {
     console.log(err);
   }
@@ -606,6 +603,61 @@ const addBook = async (req, res, next) => {
   }
   return res.status(201).json({book} );
 };
+
+const rateBook = async (req, res) => {
+  try {
+
+      // req.user = {
+      //     user_id: '640720cc768d6ab308f5f72b'
+      // }
+      const ratings = {
+          user_id: req.body.profileId,
+          value: req.body.value
+      }
+
+      const updatedBook = await Book.updateOne(
+          {
+              _id: new mongoose.Types.ObjectId(req.body.profileId),
+              "ratings.user_id": ratings.user_id
+          },
+          {
+              $set: { "ratings.$[element]": ratings },
+          },
+          { arrayFilters: [{ "element.user_id": ratings.user_id }] },
+          {
+              new: true
+
+
+          });
+
+
+
+      if (updatedBook.matchedCount == 0) {
+          await Book.updateOne(
+              {
+                  _id: new mongoose.Types.ObjectId(req.body.BookId)
+              },
+              {
+                  $push: { ratings: ratings }
+              });
+      }
+
+
+      let likedbook = new likedBook({
+        book_id:req.body.BookId,
+        rating:req.body.value,
+        title:req.body.title,
+        user_id:req.body.profileId
+      });
+      await likedbook.save();
+
+      res.status(200).send(true);
+  } catch (err) {
+      console.log(err.message)
+      res.status(500).send(err.code);
+  }
+}
+
 
 const updateBook = async (req, res, next) => {
   const id = req.params.id;
@@ -664,8 +716,28 @@ const deleteBook = async (req, res, next) => {
 
 const getSomeBooks = async (req, res, next) => {
   let books;
+  let updatedBooks = [];
   try {
     books = await Book.find().limit(6);
+    
+
+    books.map(user => {
+  
+          let profile = {
+              ...user
+          }
+          profile = {
+              ...profile['_doc'],
+              rate: 0
+          };
+          profile.rate = profile.ratings.reduce((a, b) => a + b.value, 0);
+          profile.rate = profile.rate / profile.ratings.length;
+          delete profile.ratings;
+  
+          updatedBooks.push(profile);
+  
+  });
+  
     
     if (!books) {
     return res.status(404).json({ message: "No Books found" });
@@ -675,7 +747,7 @@ const getSomeBooks = async (req, res, next) => {
   }
 
   
-  return res.status(200).json(books);
+  return res.status(200).json(updatedBooks);
 };
 
 const searchForBook = async (req, res, next) => {
@@ -690,9 +762,28 @@ const searchForBook = async (req, res, next) => {
       
     }
     const books = await goodread.find(filter).limit(6);
+    let updatedBooks = [];
+
+    books.map(user => {
+  
+          let profile = {
+              ...user
+          }
+          profile = {
+              ...profile['_doc'],
+              rate: 0
+          };
+          profile.rate = profile.ratings.reduce((a, b) => a + b.value, 0);
+          profile.rate = profile.rate / profile.ratings.length;
+          delete profile.ratings;
+  
+          updatedBooks.push(profile);
+  
+  });
+  
     const arrayOfBooks = [{groupTitle: 'Is that your Book ?',
     searchLimit:6 ,
-    data: books}]
+    data: updatedBooks}]
     return res.status(200).json(arrayOfBooks);
   } catch (error) {
     console.error(error);
@@ -703,8 +794,28 @@ const searchForBook = async (req, res, next) => {
 const getByGenre = async (req, res, next) => {
   const genre = req.query.genre;
   let books;
+  let updatedBooks = [];
   try {
   books = await Book.find({genre : genre});
+ 
+
+  books.map(user => {
+
+        let profile = {
+            ...user
+        }
+        profile = {
+            ...profile['_doc'],
+            rate: 0
+        };
+        profile.rate = profile.ratings.reduce((a, b) => a + b.value, 0);
+        profile.rate = profile.rate / profile.ratings.length;
+        delete profile.ratings;
+
+        updatedBooks.push(profile);
+
+});
+
   
   } catch (err) {
     console.log(err);
@@ -712,15 +823,34 @@ const getByGenre = async (req, res, next) => {
   if (!books) {
     return res.status(404).json({ message: "No books found" });
   }
-  return res.status(200).json(books);
+  return res.status(200).json(updatedBooks);
 };
 
 const getByName = async (req, res, next) => {
   const name = req.query.name;
   
   let books;
+  let updatedBooks = [];
   try {
   books = await Book.find({name : name});
+  
+
+  books.map(user => {
+
+        let profile = {
+            ...user
+        }
+        profile = {
+            ...profile['_doc'],
+            rate: 0
+        };
+        profile.rate = profile.ratings.reduce((a, b) => a + b.value, 0);
+        profile.rate = profile.rate / profile.ratings.length;
+        delete profile.ratings;
+
+        updatedBooks.push(profile);
+
+});
 
   } catch (err) {
     console.log(err);
@@ -728,12 +858,12 @@ const getByName = async (req, res, next) => {
   if (!books) {
     return res.status(404).json({ message: "No books found" });
   }
-  return res.status(200).json(books);
+  return res.status(200).json(updatedBooks);
 };
 
 
 
-
+exports.rateBook = rateBook;
 exports.searchForBook = searchForBook;
 exports.getSomeBooks = getSomeBooks;
 exports.getAllBooks = getAllBooks;

@@ -33,8 +33,7 @@ const addBook = () => {
         accepted: Boolean("false"),
         owner: user.username,
         owner_Id: ownerId,
-        for_sale:null
-        
+        for_sale:null        
     });
     //useEffect(()=>{},[inputs.for_sale])
    
