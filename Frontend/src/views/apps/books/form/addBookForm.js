@@ -306,9 +306,9 @@ const handleSearch = async (query) => {
                 )}
               />
         
-              // <Input {...field} placeholder='Name' invalid={errors.name && true} />
-            
+          // <Input {...field} placeholder='Name' invalid={errors.name && true} />
             }
+            
             />
             {errors.name && <FormFeedback>Please enter a book name</FormFeedback>}
             </Col>
@@ -375,7 +375,7 @@ const handleSearch = async (query) => {
         </Row>  
 
           <Row className='mb-1'>
-            <Label sm='3' for='for_sale'>
+            <Label sm='3' for='genre'>
             Genre
             </Label>
             <Col sm='9'>

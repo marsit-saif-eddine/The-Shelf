@@ -43,6 +43,7 @@ const UserDropdown = () => {
   }, [])
 
   //** Vars
+  const userAvatar = userData ?  userData.photo : defaultAvatar
 
   return (
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
