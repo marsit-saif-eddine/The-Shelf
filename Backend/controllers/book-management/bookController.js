@@ -589,12 +589,14 @@ const addBook = async (req, res, next) => {
       accepted,
       genre
     });
+    await book.save();
+
     BookMap = new bookMap({
       book_id:bookId,
       book_id_csv:book._id
     })
     await BookMap.save();
-    await book.save();
+   
   } catch (err) {
     console.log(err);
   }
@@ -718,7 +720,7 @@ const getByName = async (req, res, next) => {
   
   let books;
   try {
-  books = await Book.find({name : name, for_sale:true});
+  books = await Book.find({name : name});
 
   } catch (err) {
     console.log(err);

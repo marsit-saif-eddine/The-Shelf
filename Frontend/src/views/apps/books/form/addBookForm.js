@@ -73,7 +73,7 @@ const AddBookForm = () => {
         setTitleForm("Add new book"); 
     }
 
-    },[files])
+    },[])
 
     const SignupSchema = yup.object().shape({
         name: yup.string().required(),
